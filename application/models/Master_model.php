@@ -70,6 +70,16 @@ class Master_model extends CI_Model
         $query = $this->db->get('kelas')->result();
         return $query;
     }
+
+    public function getAllKelas()
+    {
+        $this->db->select('id_kelas, nama_kelas, nama_jurusan');
+        $this->db->from('kelas');
+        $this->db->join('jurusan', 'jurusan_id=id_jurusan');
+        $this->db->order_by('nama_kelas');
+        return $this->db->get()->result();
+    }
+
     /**
      * Data Jurusan
      */
@@ -86,6 +96,41 @@ class Master_model extends CI_Model
         $this->db->order_by('nama_jurusan');
         $query = $this->db->get('jurusan')->result();
         return $query;
+    }
+    public function getJurusan()
+    {
+        $this->db->select('id_jurusan, nama_jurusan');
+        $this->db->from('kelas');
+        $this->db->join('jurusan', 'jurusan_id=id_jurusan');
+        $this->db->order_by('nama_jurusan', 'ASC');
+        $this->db->group_by('id_jurusan');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getAllJurusan($id = null)
+    {
+        if ($id === null) {
+            $this->db->order_by('nama_jurusan', 'ASC');
+            return $this->db->get('jurusan')->result();
+        } else {
+            $this->db->select('jurusan_id');
+            $this->db->from('jurusan_mapel');
+            $this->db->where('mapel_id', $id);
+            $jurusan = $this->db->get()->result();
+            $id_jurusan = [];
+            foreach ($jurusan as $j) {
+                $id_jurusan[] = $j->jurusan_id;
+            }
+            if ($id_jurusan === []) {
+                $id_jurusan = null;
+            }
+
+            $this->db->select('*');
+            $this->db->from('jurusan');
+            $this->db->where_not_in('id_jurusan', $id_jurusan);
+            $mapel = $this->db->get()->result();
+            return $mapel;
+        }
     }
 
 
@@ -113,42 +158,8 @@ class Master_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    public function getJurusan()
-    {
-        $this->db->select('id_jurusan, nama_jurusan');
-        $this->db->from('kelas');
-        $this->db->join('jurusan', 'jurusan_id=id_jurusan');
-        $this->db->order_by('nama_jurusan', 'ASC');
-        $this->db->group_by('id_jurusan');
-        $query = $this->db->get();
-        return $query->result();
-    }
 
-    public function getAllJurusan($id = null)
-    {
-        if ($id === null) {
-            $this->db->order_by('nama_jurusan', 'ASC');
-            return $this->db->get('jurusan')->result();
-        } else {
-            $this->db->select('jurusan_id');
-            $this->db->from('jurusan_mapel');
-            $this->db->where('mapel_id', $id);
-            $jurusan = $this->db->get()->result();
-            $id_jurusan = [];
-            foreach ($jurusan as $j) {
-                $id_jurusan[] = $j->jurusan_id;
-            }
-            if ($id_jurusan === []) {
-                $id_jurusan = null;
-            }
 
-            $this->db->select('*');
-            $this->db->from('jurusan');
-            $this->db->where_not_in('id_jurusan', $id_jurusan);
-            $mapel = $this->db->get()->result();
-            return $mapel;
-        }
-    }
 
     public function getKelasByJurusan($id)
     {
@@ -202,6 +213,29 @@ class Master_model extends CI_Model
         return $query;
     }
 
+    public function getmapel($id = null)
+    {
+        $this->db->select('mapel_id');
+        $this->db->from('jurusan_mapel');
+        if ($id !== null) {
+            $this->db->where_not_in('mapel_id', [$id]);
+        }
+        $mapel = $this->db->get()->result();
+        $id_mapel = [];
+        foreach ($mapel as $d) {
+            $id_mapel[] = $d->mapel_id;
+        }
+        if ($id_mapel === []) {
+            $id_mapel = null;
+        }
+
+        $this->db->select('id_mapel, nama_mapel');
+        $this->db->from('mapel');
+        $this->db->where_not_in('id_mapel', $id_mapel);
+        return $this->db->get()->result();
+    }
+
+
     /**
      * Data Kelas guru
      */
@@ -239,14 +273,6 @@ class Master_model extends CI_Model
     }
 
 
-    public function getAllKelas()
-    {
-        $this->db->select('id_kelas, nama_kelas, nama_jurusan');
-        $this->db->from('kelas');
-        $this->db->join('jurusan', 'jurusan_id=id_jurusan');
-        $this->db->order_by('nama_kelas');
-        return $this->db->get()->result();
-    }
 
     public function getKelasByGuru($id)
     {
@@ -271,27 +297,6 @@ class Master_model extends CI_Model
         return $this->datatables->generate();
     }
 
-    public function getmapel($id = null)
-    {
-        $this->db->select('mapel_id');
-        $this->db->from('jurusan_mapel');
-        if ($id !== null) {
-            $this->db->where_not_in('mapel_id', [$id]);
-        }
-        $mapel = $this->db->get()->result();
-        $id_mapel = [];
-        foreach ($mapel as $d) {
-            $id_mapel[] = $d->mapel_id;
-        }
-        if ($id_mapel === []) {
-            $id_mapel = null;
-        }
-
-        $this->db->select('id_mapel, nama_mapel');
-        $this->db->from('mapel');
-        $this->db->where_not_in('id_mapel', $id_mapel);
-        return $this->db->get()->result();
-    }
 
     public function getJurusanByIdmapel($id)
     {

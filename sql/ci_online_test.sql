@@ -80,10 +80,10 @@ INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `h_ujian`
+-- Table structure for table `hasil_ujian`
 --
 
-CREATE TABLE `h_ujian` (
+CREATE TABLE `hasil_ujian` (
   `id` int(11) NOT NULL,
   `ujian_id` int(11) NOT NULL,
   `siswa_id` int(11) NOT NULL,
@@ -98,10 +98,10 @@ CREATE TABLE `h_ujian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `h_ujian`
+-- Dumping data for table `hasil_ujian`
 --
 
-INSERT INTO `h_ujian` (`id`, `ujian_id`, `siswa_id`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
+INSERT INTO `hasil_ujian` (`id`, `ujian_id`, `siswa_id`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
 (1, 1, 1, '1,2,3', '1:B:N,2:A:N,3:D:N', 3, '100.00', '100.00', '2019-02-16 08:35:05', '2019-02-16 08:36:05', 'N'),
 (2, 2, 1, '3,2,1', '3:D:N,2:C:N,1:D:N', 1, '33.00', '100.00', '2019-02-16 10:11:14', '2019-02-16 10:12:14', 'N'),
 (3, 3, 1, '5,6', '5:C:N,6:D:N', 2, '100.00', '100.00', '2019-02-16 11:06:25', '2019-02-16 11:07:25', 'N');
@@ -259,10 +259,10 @@ INSERT INTO `mapel` (`id_mapel`, `nama_mapel`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `m_ujian`
+-- Table structure for table `ujian`
 --
 
-CREATE TABLE `m_ujian` (
+CREATE TABLE `ujian` (
   `id_ujian` int(11) NOT NULL,
   `guru_id` int(11) NOT NULL,
   `mapel_id` int(11) NOT NULL,
@@ -276,10 +276,10 @@ CREATE TABLE `m_ujian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `m_ujian`
+-- Dumping data for table `ujian`
 --
 
-INSERT INTO `m_ujian` (`id_ujian`, `guru_id`, `mapel_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
+INSERT INTO `ujian` (`id_ujian`, `guru_id`, `mapel_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
 (1, 1, 1, 'First Test', 3, 1, 'acak', '2019-02-15 17:25:40', '2019-02-20 17:25:44', 'DPEHL'),
 (2, 1, 1, 'Second Test', 3, 1, 'acak', '2019-02-16 10:05:08', '2019-02-17 10:05:10', 'GOEMB'),
 (3, 3, 5, 'Try Out 01', 2, 1, 'acak', '2019-02-16 07:00:00', '2019-02-28 14:00:00', 'IFSDH');
@@ -404,9 +404,9 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `h_ujian`
+-- Indexes for table `hasil_ujian`
 --
-ALTER TABLE `h_ujian`
+ALTER TABLE `hasil_ujian`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ujian_id` (`ujian_id`),
   ADD KEY `siswa_id` (`siswa_id`);
@@ -462,9 +462,9 @@ ALTER TABLE `mapel`
   ADD PRIMARY KEY (`id_mapel`);
 
 --
--- Indexes for table `m_ujian`
+-- Indexes for table `ujian`
 --
-ALTER TABLE `m_ujian`
+ALTER TABLE `ujian`
   ADD PRIMARY KEY (`id_ujian`),
   ADD KEY `mapel_id` (`mapel_id`),
   ADD KEY `guru_id` (`guru_id`);
@@ -513,9 +513,9 @@ ALTER TABLE `groups`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `h_ujian`
+-- AUTO_INCREMENT for table `hasil_ujian`
 --
-ALTER TABLE `h_ujian`
+ALTER TABLE `hasil_ujian`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -561,9 +561,9 @@ ALTER TABLE `mapel`
   MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `m_ujian`
+-- AUTO_INCREMENT for table `ujian`
 --
-ALTER TABLE `m_ujian`
+ALTER TABLE `ujian`
   MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -595,11 +595,11 @@ ALTER TABLE `guru`
   ADD CONSTRAINT `guru_ibfk_1` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`);
 
 --
--- Constraints for table `h_ujian`
+-- Constraints for table `hasil_ujian`
 --
-ALTER TABLE `h_ujian`
-  ADD CONSTRAINT `h_ujian_ibfk_1` FOREIGN KEY (`ujian_id`) REFERENCES `m_ujian` (`id_ujian`),
-  ADD CONSTRAINT `h_ujian_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
+ALTER TABLE `hasil_ujian`
+  ADD CONSTRAINT `hasil_ujian_ibfk_1` FOREIGN KEY (`ujian_id`) REFERENCES `ujian` (`id_ujian`),
+  ADD CONSTRAINT `hasil_ujian_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
 
 --
 -- Constraints for table `jurusan_mapel`
@@ -622,11 +622,11 @@ ALTER TABLE `siswa`
   ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id_kelas`);
 
 --
--- Constraints for table `m_ujian`
+-- Constraints for table `ujian`
 --
-ALTER TABLE `m_ujian`
-  ADD CONSTRAINT `m_ujian_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
-  ADD CONSTRAINT `m_ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`);
+ALTER TABLE `ujian`
+  ADD CONSTRAINT `ujian_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
+  ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`);
 
 --
 -- Constraints for table `soal`

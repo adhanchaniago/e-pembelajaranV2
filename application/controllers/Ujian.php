@@ -166,10 +166,10 @@ class Ujian extends CI_Controller
 				$input['guru_id']	= $guru_id;
 				$input['mapel_id'] = $mapel_id;
 				$input['token']		= $token;
-				$action = $this->master->create('m_ujian', $input);
+				$action = $this->master->create('ujian', $input);
 			} else if ($method === 'edit') {
 				$id_ujian = $this->input->post('id_ujian', true);
-				$action = $this->master->update('m_ujian', $input, 'id_ujian', $id_ujian);
+				$action = $this->master->update('ujian', $input, 'id_ujian', $id_ujian);
 			}
 			$data['status'] = $action ? TRUE : FALSE;
 		}
@@ -183,7 +183,7 @@ class Ujian extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('m_ujian', $chk, 'id_ujian')) {
+			if ($this->master->delete('ujian', $chk, 'id_ujian')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -193,7 +193,7 @@ class Ujian extends CI_Controller
 	{
 		$this->load->helper('string');
 		$data['token'] = strtoupper(random_string('alpha', 5));
-		$refresh = $this->master->update('m_ujian', $data, 'id_ujian', $id);
+		$refresh = $this->master->update('ujian', $data, 'id_ujian', $id);
 		$data['status'] = $refresh ? TRUE : FALSE;
 		$this->output_json($data);
 	}
@@ -273,9 +273,9 @@ class Ujian extends CI_Controller
 		$soal 		= $this->ujian->getSoal($id);
 
 		$mhs		= $this->mhs;
-		$h_ujian 	= $this->ujian->HslUjian($id, $mhs->id_siswa);
+		$hasil_ujian 	= $this->ujian->HslUjian($id, $mhs->id_siswa);
 
-		$cek_sudah_ikut = $h_ujian->num_rows();
+		$cek_sudah_ikut = $hasil_ujian->num_rows();
 
 		if ($cek_sudah_ikut < 1) {
 			$soal_urut_ok 	= array();
@@ -321,13 +321,13 @@ class Ujian extends CI_Controller
 				'tgl_selesai'	=> $waktu_selesai,
 				'status'		=> 'Y'
 			];
-			$this->master->create('h_ujian', $input);
+			$this->master->create('hasil_ujian', $input);
 
 			// Setelah insert wajib refresh dulu
 			redirect('ujian/?key=' . urlencode($key), 'location', 301);
 		}
 
-		$q_soal = $h_ujian->row();
+		$q_soal = $hasil_ujian->row();
 
 		$urut_soal 		= explode(",", $q_soal->list_jawaban);
 		$soal_urut_ok	= array();
@@ -417,7 +417,7 @@ class Ujian extends CI_Controller
 		];
 
 		// Simpan jawaban
-		$this->master->update('h_ujian', $d_simpan, 'id', $id_tes);
+		$this->master->update('hasil_ujian', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status' => true]);
 	}
 
@@ -462,7 +462,7 @@ class Ujian extends CI_Controller
 			'status'		=> 'N'
 		];
 
-		$this->master->update('h_ujian', $d_update, 'id', $id_tes);
+		$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
 		$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 	}
 }
