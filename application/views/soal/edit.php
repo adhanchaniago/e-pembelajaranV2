@@ -32,7 +32,20 @@
                                     <input type="text" readonly="readonly" class="form-control" value="<?= $guru->nama_guru; ?> (<?= $guru->nama_mapel; ?>)">
                                 <?php endif; ?>
                             </div>
-
+                            <div class="col-sm-12">
+                                <label for="topik" class="control-label text-center">Topik</label>
+                                <select id="topik" multiple="multiple" name="topik_id[]" class="form-control select2" style="width: 100%!important">
+                                    <?php
+                                    $top = [];
+                                    foreach ($topik as $key => $val) {
+                                        $top[] = $val->id_topik;
+                                    }
+                                    foreach ($all_topik as $t) : ?>
+                                        <option <?= in_array($t->id_topik, $top) ? "selected" : "" ?> value="<?= $t->id_topik ?>"><?= $t->nama_topik ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <small class="help-block text-right"></small>
+                            </div>
                             <div class="col-sm-12">
                                 <label for="soal" class="control-label text-center">Soal</label>
                                 <div class="row">

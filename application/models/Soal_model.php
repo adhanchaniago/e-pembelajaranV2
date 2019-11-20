@@ -31,7 +31,7 @@ class Soal_model extends CI_Model
 
     public function getTopikMapel($mapel_id)
     {
-        $this->db->select('id, topik');
+        $this->db->select('id_topik, nama_topik');
         $this->db->from('topik')->where('mapel_id', $mapel_id);
         return $this->db->get()->result();
     }

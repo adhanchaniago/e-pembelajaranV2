@@ -17,13 +17,11 @@ class Ujian_model extends CI_Model
 
     public function getListUjian($id, $kelas)
     {
-        $this->datatables->select("a.id_ujian, e.nama_guru, d.nama_kelas, a.nama_ujian, b.nama_mapel, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu,  (SELECT COUNT(id) FROM h_ujian h WHERE h.siswa_id = {$id} AND h.ujian_id = a.id_ujian) AS ada");
+        $this->datatables->select("a.id_ujian, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_ujian, b.nama_mapel, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu, (SELECT COUNT(id) FROM h_ujian h WHERE h.siswa_id = {$id} AND h.ujian_id = a.id_ujian) AS ada");
         $this->datatables->from('m_ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
-        $this->datatables->join('kelas_guru c', "a.guru_id = c.guru_id");
-        $this->datatables->join('kelas d', 'c.kelas_id = d.id_kelas');
-        $this->datatables->join('guru e', 'e.id_guru = c.guru_id');
-        $this->datatables->where('d.id_kelas', $kelas);
+        $this->datatables->join('guru c', 'a.guru_id = c.id_guru');
+        $this->datatables->where("a.guru_id IN (select id_guru from guru where FIND_IN_SET({$kelas}, kelas_id))", null);
         return $this->datatables->generate();
     }
 

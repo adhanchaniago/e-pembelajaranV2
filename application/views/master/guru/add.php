@@ -36,6 +36,15 @@
                     </select>
                     <small class="help-block"></small>
                 </div>
+                <div class="form-group">
+                    <label>Kelas</label>
+                    <select id="kelas" multiple="multiple" name="kelas_id[]" class="form-control select2" style="width: 100%!important">
+                        <?php foreach ($kelas as $k) : ?>
+                            <option value="<?= $k->id_kelas ?>"><?= $k->nama_kelas ?> - <?= $k->nama_jurusan ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small class="help-block text-right"></small>
+                </div>
                 <div class="form-group pull-right">
                     <button type="reset" class="btn btn-flat btn-default">
                         <i class="fa fa-rotate-left"></i> Reset

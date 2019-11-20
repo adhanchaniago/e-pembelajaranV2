@@ -30,6 +30,29 @@ class Master_model extends CI_Model
         return $this->db->delete($table);
     }
     /**
+     * Data Topik
+     */
+    public function getDataTopik()
+    {
+        $this->datatables->select('id_topik, nama_topik, mapel_id, nama_mapel');
+        $this->datatables->from('topik');
+        $this->datatables->join('mapel', 'mapel_id=id_mapel');
+        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id, topik, id_mapel, nama_mapel');
+        return $this->datatables->generate();
+    }
+    public function getTopikById($id)
+    {
+        $this->db->where_in('id_topik', $id);
+        $this->db->order_by('nama_topik');
+        $query = $this->db->get('topik')->result();
+        return $query;
+    }
+
+    public function getAllTopik()
+    {
+        return $this->db->get('topik')->result();
+    }
+    /**
      * Data Kelas
      */
     public function getDataKelas()
@@ -225,7 +248,7 @@ class Master_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function getKelasByguru($id)
+    public function getKelasByGuru($id)
     {
         $this->db->select('kelas.id_kelas');
         $this->db->from('kelas_guru');

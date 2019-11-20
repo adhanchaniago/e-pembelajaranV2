@@ -88,12 +88,19 @@ class Soal extends CI_Controller
 
     public function edit($id)
     {
+        $s = $this->soal->getSoalById($id);
+        $topik = explode(',', $s->topik);
+        foreach ($topik as $topik) {
+            $top[] = (object) array("id_topik" => $topik);
+        }
         $user = $this->ion_auth->user()->row();
         $data = [
             'user'      => $user,
             'judul'        => 'Soal',
             'subjudul'  => 'Edit Soal',
             'soal'      => $this->soal->getSoalById($id),
+            'all_topik'        => $this->master->getAllTopik(),
+            'topik'            => $top
         ];
 
         if ($this->ion_auth->is_admin()) {

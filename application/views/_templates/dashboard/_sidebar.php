@@ -20,7 +20,7 @@
 			<!-- Optionally, you can add icons to the links -->
 			<?php
 			$page = $this->uri->segment(1);
-			$master = ["jurusan", "kelas", "mapel", "guru", "siswa"];
+			$master = ["kelas", "mapel", "topik", "guru", "siswa"];
 			$relasi = ["kelasguru", "jurusanmapel"];
 			$users = ["users"];
 			?>
@@ -34,12 +34,7 @@
 					</a>
 					<ul class="treeview-menu">
 
-						<!-- <li class="<?= $page === 'jurusan' ? "active" : "" ?>">
-							<a href="<?= base_url('jurusan') ?>">
-								<i class="fa fa-circle-o"></i>
-								Jurusan
-							</a>
-						</li> -->
+
 						<li class="<?= $page === 'kelas' ? "active" : "" ?>">
 							<a href="<?= base_url('kelas') ?>">
 								<i class="fa fa-circle-o"></i>
@@ -50,6 +45,12 @@
 							<a href="<?= base_url('mapel') ?>">
 								<i class="fa fa-circle-o"></i>
 								Mata Pelajaran
+							</a>
+						</li>
+						<li class="<?= $page === 'topik' ? "active" : "" ?>">
+							<a href="<?= base_url('topik') ?>">
+								<i class="fa fa-circle-o"></i>
+								Topik
 							</a>
 						</li>
 						<li class="<?= $page === 'guru' ? "active" : "" ?>">
@@ -66,7 +67,7 @@
 						</li>
 					</ul>
 				</li>
-				<li class="treeview <?= in_array($page, $relasi)  ? "active menu-open" : ""  ?>">
+				<!-- <li class="treeview <?= in_array($page, $relasi)  ? "active menu-open" : ""  ?>">
 					<a href="#"><i class="fa fa-link"></i> <span>Relasi</span>
 						<span class="pull-right-container">
 							<i class="fa fa-angle-left pull-right"></i>
@@ -86,7 +87,7 @@
 							</a>
 						</li>
 					</ul>
-				</li>
+				</li> -->
 			<?php endif; ?>
 			<?php if ($this->ion_auth->is_admin() || $this->ion_auth->in_group('guru')) : ?>
 				<li class="<?= $page === 'soal' ? "active" : "" ?>">

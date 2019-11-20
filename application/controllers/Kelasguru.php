@@ -56,6 +56,9 @@ class KelasGuru extends CI_Controller
 
 	public function edit($id)
 	{
+		$row = $this->master->getKelasByGuru($id);
+		print_r($row);
+		die;
 		$data = [
 			'user' 			=> $this->ion_auth->user()->row(),
 			'judul'			=> 'Edit Kelas Guru',

@@ -43,11 +43,13 @@ class Guru extends CI_Controller
 	public function add()
 	{
 		$data = [
-			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Tambah Guru',
-			'subjudul' => 'Tambah Data Guru',
-			'mapel'	=> $this->master->getAllmapel()
+			'user' 		=> $this->ion_auth->user()->row(),
+			'judul'		=> 'Tambah Guru',
+			'subjudul'	=> 'Tambah Data Guru',
+			'mapel'		=> $this->master->getAllmapel(),
+			'kelas'	    => $this->master->getAllKelas()
 		];
+
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/guru/add');
 		$this->load->view('_templates/dashboard/_footer.php');
@@ -55,12 +57,19 @@ class Guru extends CI_Controller
 
 	public function edit($id)
 	{
+		$k = $this->master->getguruById($id);
+		$kelas = explode(',', $k->kelas_id);
+		foreach ($kelas as $kelas) {
+			$kls[] = (object) array("id_kelas" => $kelas);
+		}
 		$data = [
 			'user' 		=> $this->ion_auth->user()->row(),
 			'judul'		=> 'Edit Guru',
 			'subjudul'	=> 'Edit Data Guru',
 			'mapel'	=> $this->master->getAllmapel(),
-			'data' 		=> $this->master->getguruById($id)
+			'data' 		=> $this->master->getguruById($id),
+			'all_kelas'	    => $this->master->getAllKelas(),
+			'kelas'		    => $kls
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/guru/edit');
@@ -75,6 +84,8 @@ class Guru extends CI_Controller
 		$nama_guru = $this->input->post('nama_guru', true);
 		$email 		= $this->input->post('email', true);
 		$mapel 	= $this->input->post('mapel', true);
+		$k = $this->input->post('kelas_id', true);
+		$kelas = implode(",", $k);
 		if ($method == 'add') {
 			$u_nip = '|is_unique[guru.nip]';
 			$u_email = '|is_unique[guru.email]';
@@ -104,7 +115,8 @@ class Guru extends CI_Controller
 				'nip'			=> $nip,
 				'nama_guru' 	=> $nama_guru,
 				'email' 		=> $email,
-				'mapel_id' 	=> $mapel
+				'mapel_id' 		=> $mapel,
+				'kelas_id' 		=> $kelas
 			];
 			if ($method === 'add') {
 				$action = $this->master->create('guru', $input);

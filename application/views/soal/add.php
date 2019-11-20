@@ -34,7 +34,7 @@
                             <label for="soal" class="control-label">Topik</label>
                             <select id="topik" multiple="multiple" name="topik_id[]" class="form-control select2" style="width: 100%!important">
                                 <?php foreach ($topik as $topik) : ?>
-                                    <option value="<?= $topik->id ?>"><?= $topik->topik ?></option>
+                                    <option value="<?= $topik->id_topik ?>"><?= $topik->nama_topik ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <small class="help-block" style="color: #dc3545"><?= form_error('topik_id[]') ?></small>
