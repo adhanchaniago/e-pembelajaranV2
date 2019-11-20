@@ -22,12 +22,12 @@ class Auth extends CI_Controller
 
 	public function index()
 	{
-		if ($this->ion_auth->logged_in()) {
+		if ($this->ion_auth->logged_in()) { //Jika sudah login diarahkan ke dashboard
 			$user_id = $this->ion_auth->user()->row()->id; // Get User ID
 			$group = $this->ion_auth->get_users_groups($user_id)->row()->name; // Get user group
 			redirect('dashboard');
 		}
-		$this->data['identity'] = [
+		$this->data['identity'] = [ //form username
 			'name' => 'identity',
 			'id' => 'identity',
 			'type' => 'text',
@@ -36,14 +36,14 @@ class Auth extends CI_Controller
 			'class' => 'form-control',
 			'autocomplete' => 'off'
 		];
-		$this->data['password'] = [
+		$this->data['password'] = [ //form password
 			'name' => 'password',
 			'id' => 'password',
 			'type' => 'password',
 			'placeholder' => 'Password',
 			'class' => 'form-control',
 		];
-		$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+		$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message'); //menampilkan validasi error
 
 		$this->load->view('_templates/auth/_header.php');
 		$this->load->view('auth/login', $this->data);
@@ -57,9 +57,9 @@ class Auth extends CI_Controller
 
 		if ($this->form_validation->run() === TRUE) {
 			$remember = (bool) $this->input->post('remember');
-			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) { //proses pencocokan login
 				$this->cek_akses();
-			} else {
+			} else { //login gagal
 				$data = [
 					'status' => false,
 					'failed' => 'Incorrect Login',
@@ -84,7 +84,7 @@ class Auth extends CI_Controller
 		if (!$this->ion_auth->logged_in()) {
 			$status = false; // jika false, berarti login gagal
 			$url = 'auth'; // url untuk redirect
-		} else {
+		} else {  //login berhasil
 			$status = true; // jika true maka login berhasil
 			$url = 'dashboard';
 		}

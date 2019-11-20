@@ -86,7 +86,7 @@ class Guru extends CI_Controller
 		$this->form_validation->set_rules('nip', 'NIP', 'required|numeric|trim|min_length[8]|max_length[12]' . $u_nip);
 		$this->form_validation->set_rules('nama_guru', 'Nama Guru', 'required|trim|min_length[3]|max_length[50]');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email' . $u_email);
-		$this->form_validation->set_rules('mapel', 'Mata Kuliah', 'required');
+		$this->form_validation->set_rules('mapel', 'Mata Pelajaran', 'required');
 
 		if ($this->form_validation->run() == FALSE) {
 			$data = [

@@ -2,15 +2,18 @@ banyak = Number(banyak);
 $(document).ready(function () {
     if (banyak < 1 || banyak > 50) {
         alert('Maksimum input 50');
-        window.location = base_url + "kelas";
+        window.location.href = base_url + "jurusan";
+    } else {
+        generate(banyak);
     }
 
-    $('form#kelas input, form#kelas select').on('change', function () {
-        $(this).closest('.form-group').removeClass('has-error');
-        $(this).next().next().text('');
+    $('#inputs input:first').select();
+    $('form#jurusan input').on('change', function () {
+        $(this).parent('.form-group').removeClass('has-error');
+        $(this).next('.help-block').text('');
     });
 
-    $('form#kelas').on('submit', function (e) {
+    $('form#jurusan').on('submit', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -31,7 +34,7 @@ $(document).ready(function () {
                         "type": "success"
                     }).then((result) => {
                         if (result.value) {
-                            window.location.href = base_url + 'kelas';
+                            window.location.href = base_url + 'jurusan';
                         }
                     });
                 } else {
@@ -39,11 +42,11 @@ $(document).ready(function () {
                     for (let i = 0; i <= data.errors.length; i++) {
                         $.each(data.errors[i], function (key, val) {
                             j = $('[name="' + key + '"]');
-                            j.closest('.form-group').addClass('has-error');
-                            j.next().next().text(val);
+                            j.parent().addClass('has-error');
+                            j.next('.help-block').text(val);
                             if (val == '') {
-                                j.closest('.form-group').removeClass('has-error');
-                                j.next().next().text('');
+                                j.parent('.form-group').removeClass('has-error');
+                                j.next('.help-block').text('');
                             }
                         });
                     }
@@ -52,3 +55,20 @@ $(document).ready(function () {
         });
     });
 });
+
+function generate(n) {
+    for (let i = 1; i <= n; i++) {
+        inputs = `
+            <tr>
+                <td>${i}</td>
+                <td>
+                    <div class="form-group">
+                        <input autocomplete="off" type="text" name="nama_jurusan[${i}]" class="input-sm form-control">
+                        <small class="help-block text-right"></small>
+                    </div>
+                </td>
+            </tr>
+            `;
+        $('#inputs').append(inputs);
+    }
+}

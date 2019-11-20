@@ -71,17 +71,17 @@ class Siswa extends CI_Controller
 	public function validasi_siswa($method)
 	{
 		$id_siswa 	= $this->input->post('id_siswa', true);
-		$nim 			= $this->input->post('nim', true);
+		$nis 			= $this->input->post('nis', true);
 		$email 			= $this->input->post('email', true);
 		if ($method == 'add') {
-			$u_nim = '|is_unique[siswa.nim]';
+			$u_nis = '|is_unique[siswa.nis]';
 			$u_email = '|is_unique[siswa.email]';
 		} else {
 			$dbdata 	= $this->master->getSiswaById($id_siswa);
-			$u_nim		= $dbdata->nim === $nim ? "" : "|is_unique[siswa.nim]";
+			$u_nis		= $dbdata->nis === $nis ? "" : "|is_unique[siswa.nis]";
 			$u_email	= $dbdata->email === $email ? "" : "|is_unique[siswa.email]";
 		}
-		$this->form_validation->set_rules('nim', 'NIM', 'required|numeric|trim|min_length[8]|max_length[12]' . $u_nim);
+		$this->form_validation->set_rules('nis', 'NIS', 'required|numeric|trim|min_length[8]|max_length[12]' . $u_nis);
 		$this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[3]|max_length[50]');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email' . $u_email);
 		$this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
@@ -100,7 +100,7 @@ class Siswa extends CI_Controller
 			$data = [
 				'status'	=> false,
 				'errors'	=> [
-					'nim' => form_error('nim'),
+					'nis' => form_error('nis'),
 					'nama' => form_error('nama'),
 					'email' => form_error('email'),
 					'jenis_kelamin' => form_error('jenis_kelamin'),
@@ -111,7 +111,7 @@ class Siswa extends CI_Controller
 			$this->output_json($data);
 		} else {
 			$input = [
-				'nim' 			=> $this->input->post('nim', true),
+				'nis' 			=> $this->input->post('nis', true),
 				'email' 		=> $this->input->post('email', true),
 				'nama' 			=> $this->input->post('nama', true),
 				'jenis_kelamin' => $this->input->post('jenis_kelamin', true),
@@ -152,14 +152,14 @@ class Siswa extends CI_Controller
 		$first_name = $nama[0];
 		$last_name = end($nama);
 
-		$username = $data->nim;
-		$password = $data->nim;
+		$username = $data->nis;
+		$password = $data->nis;
 		$email = $data->email;
 		$additional_data = [
 			'first_name'	=> $first_name,
 			'last_name'		=> $last_name
 		];
-		$group = array('3'); // Sets user to dosen.
+		$group = array('3'); // Sets user to guru.
 
 		if ($this->ion_auth->username_check($username)) {
 			$data = [
@@ -232,7 +232,7 @@ class Siswa extends CI_Controller
 			$data = [];
 			for ($i = 1; $i < count($sheetData); $i++) {
 				$data[] = [
-					'nim' => $sheetData[$i][0],
+					'nis' => $sheetData[$i][0],
 					'nama' => $sheetData[$i][1],
 					'email' => $sheetData[$i][2],
 					'jenis_kelamin' => $sheetData[$i][3],
@@ -252,7 +252,7 @@ class Siswa extends CI_Controller
 		$data = [];
 		foreach ($input as $d) {
 			$data[] = [
-				'nim' => $d->nim,
+				'nis' => $d->nis,
 				'nama' => $d->nama,
 				'email' => $d->email,
 				'jenis_kelamin' => $d->jenis_kelamin,

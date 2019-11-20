@@ -1,19 +1,22 @@
-<?php 
+<?php
 // Extend the TCPDF class to create custom Header and Footer
-class MYPDF extends TCPDF {
+class MYPDF extends TCPDF
+{
 
-    public function Header() {
-        $image_file = K_PATH_IMAGES.'logo_example.jpg';
+    public function Header()
+    {
+        $image_file = K_PATH_IMAGES . 'logo_example.jpg';
         $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         $this->SetFont('helvetica', 'B', 18);
         $this->SetY(13);
         $this->Cell(0, 15, 'Hasil Ujian', 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
-    public function Footer() {
+    public function Footer()
+    {
         $this->SetY(-15);
         $this->SetFont('helvetica', 'I', 8);
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
     }
 }
 
@@ -29,8 +32,8 @@ $pdf->SetTitle('Hasil Ujian');
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
 // set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -47,8 +50,8 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-    require_once(dirname(__FILE__).'/lang/eng.php');
+if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+    require_once(dirname(__FILE__) . '/lang/eng.php');
     $pdf->setLanguageArray($l);
 }
 
@@ -73,14 +76,14 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
     <tr>
         <th>Nama Ujian</th>
         <td>{$ujian->nama_ujian}</td>
-        <th>Mata Kuliah</th>
-        <td>{$ujian->nama_matkul}</td> 
+        <th>Mata Pelajaran</th>
+        <td>{$ujian->nama_mapel}</td> 
     </tr>
     <tr>
         <th>Jumlah Soal</th>
         <td>{$ujian->jumlah_soal}</td>
-        <th>Dosen</th>
-        <td>{$ujian->nama_dosen}</td>
+        <th>Guru</th>
+        <td>{$ujian->nama_guru}</td>
     </tr>
     <tr>
         <th>Waktu</th>
@@ -120,8 +123,8 @@ $html .= <<<EOD
 EOD;
 
 $no = 1;
-foreach($hasil as $row) {
-$html .= <<<EOD
+foreach ($hasil as $row) {
+    $html .= <<<EOD
     <tr>
         <td align="center" width="5%">{$no}</td>
         <td width="35%">{$row->nama}</td>
@@ -131,7 +134,7 @@ $html .= <<<EOD
         <td width="10%">{$row->nilai}</td>
     </tr>
 EOD;
-$no++;
+    $no++;
 }
 
 $html .= <<<EOD

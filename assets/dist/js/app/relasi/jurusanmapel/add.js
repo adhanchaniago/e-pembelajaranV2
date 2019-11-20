@@ -1,6 +1,6 @@
 function loadJurusan(id) {
     $('#jurusan option').remove();
-    $.getJSON(base_url+'jurusanmatkul/getJurusanId/' + id, function (data) {
+    $.getJSON(base_url+'jurusanmapel/getJurusanId/' + id, function (data) {
         console.log(data);
         let opsi;
         $.each(data, function (key, val) {
@@ -13,16 +13,16 @@ function loadJurusan(id) {
 }
 
 $(document).ready(function () {
-    $('[name="matkul_id"]').on('change', function () {
+    $('[name="mapel_id"]').on('change', function () {
         loadJurusan($(this).val());
     });
 
-    $('form#jurusanmatkul select').on('change', function () {
+    $('form#jurusanmapel select').on('change', function () {
         $(this).closest('.form-group').removeClass('has-error');
         $(this).nextAll('.help-block').eq(0).text('');
     });
 
-    $('form#jurusanmatkul').on('submit', function (e) {
+    $('form#jurusanmapel').on('submit', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -43,7 +43,7 @@ $(document).ready(function () {
                         "type": "success"
                     }).then((result) => {
                         if (result.value) {
-                            window.location.href = base_url+'jurusanmatkul';
+                            window.location.href = base_url+'jurusanmapel';
                         }
                     });
                 } else {

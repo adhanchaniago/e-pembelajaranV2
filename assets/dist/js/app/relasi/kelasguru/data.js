@@ -1,38 +1,44 @@
 var save_label;
 var table;
 
-$(document).ready(function() {
+$(document).ready(function () {
   ajaxcsrf();
 
-  table = $("#jurusanmatkul").DataTable({
-    initComplete: function() {
+  table = $("#kelasguru").DataTable({
+    initComplete: function () {
       var api = this.api();
-      $("#jurusanmatkul_filter input")
+      $("#kelasguru_filter input")
         .off(".DT")
-        .on("keyup.DT", function(e) {
+        .on("keyup.DT", function (e) {
           api.search(this.value).draw();
         });
     },
-    dom:
-      "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+    dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
       "<'row'<'col-sm-12'tr>>" +
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-    buttons: [
-      {
+    buttons: [{
         extend: "copy",
-        exportOptions: { columns: [1, 2] }
+        exportOptions: {
+          columns: [1, 2, 3]
+        }
       },
       {
         extend: "print",
-        exportOptions: { columns: [1, 2] }
+        exportOptions: {
+          columns: [1, 2, 3]
+        }
       },
       {
         extend: "excel",
-        exportOptions: { columns: [1, 2] }
+        exportOptions: {
+          columns: [1, 2, 3]
+        }
       },
       {
         extend: "pdf",
-        exportOptions: { columns: [1, 2] }
+        exportOptions: {
+          columns: [1, 2, 3]
+        }
       }
     ],
     oLanguage: {
@@ -41,62 +47,69 @@ $(document).ready(function() {
     processing: true,
     serverSide: true,
     ajax: {
-      url: base_url + "jurusanmatkul/data",
+      url: base_url + "kelasguru/data",
       type: "POST"
     },
-    columns: [
-      {
+    columns: [{
         data: "id",
         orderable: false,
         searchable: false
       },
-      { data: "nama_matkul" }
-    ],
-    columnDefs: [
       {
-        targets: 2,
+        data: "nip"
+      },
+      {
+        data: "nama_guru"
+      }
+    ],
+    columnDefs: [{
+        targets: 3,
         searchable: false,
         orderable: false,
-        title: "Jurusan",
-        data: "nama_jurusan",
-        render: function(data, type, row, meta) {
-          let matkul = data.split(",");
+        title: "Kelas",
+        data: "kelas",
+        render: function (data, type, row, meta) {
+          let kelas = data.split(",");
           let badge = [];
-          $.each(matkul, function(i, val) {
-            var newmatkul = `<span class="badge bg-maroon">${val}</span>`;
-            badge.push(newmatkul);
+          $.each(kelas, function (i, val) {
+            var newkelas = `<span class="badge bg-maroon">${val}</span>`;
+            badge.push(newkelas);
           });
           return badge.join(" ");
         }
       },
       {
-        targets: 3,
+        targets: 4,
         searchable: false,
         orderable: false,
-        data: "id_matkul",
-        render: function(data, type, row, meta) {
+        data: "id_guru",
+        render: function (data, type, row, meta) {
           return `<div class="text-center">
-									<a href="${base_url}jurusanmatkul/edit/${data}" class="btn btn-warning btn-xs">
+									<a href="${base_url}kelasguru/edit/${data}" class="btn btn-warning btn-xs">
 										<i class="fa fa-pencil"></i>
 									</a>
 								</div>`;
         }
       },
       {
-        targets: 4,
-        data: "id_matkul",
-        render: function(data, type, row, meta) {
+        targets: 5,
+        searchable: false,
+        orderable: false,
+        data: "id_guru",
+        render: function (data, type, row, meta) {
           return `<div class="text-center">
 									<input name="checked[]" class="check" value="${data}" type="checkbox">
 								</div>`;
         }
       }
     ],
-    order: [[1, "asc"]],
-    rowId: function(a) {
+    order: [
+      [1, "asc"]
+    ],
+    rowId: function (a) {
       return a;
     },
-    rowCallback: function(row, data, iDisplayIndex) {
+    rowCallback: function (row, data, iDisplayIndex) {
       var info = this.fnPagingInfo();
       var page = info.iPage;
       var length = info.iLength;
@@ -108,29 +121,25 @@ $(document).ready(function() {
   table
     .buttons()
     .container()
-    .appendTo("#jurusanmatkul_wrapper .col-md-6:eq(0)");
+    .appendTo("#kelasguru_wrapper .col-md-6:eq(0)");
 
-  $("#myModal").on("shown.modal.bs", function() {
-    $(':input[name="banyak"]').select();
-  });
-
-  $(".select_all").on("click", function() {
+  $(".select_all").on("click", function () {
     if (this.checked) {
-      $(".check").each(function() {
+      $(".check").each(function () {
         this.checked = true;
         $(".select_all").prop("checked", true);
       });
     } else {
-      $(".check").each(function() {
+      $(".check").each(function () {
         this.checked = false;
         $(".select_all").prop("checked", false);
       });
     }
   });
 
-  $("#jurusanmatkul tbody").on("click", "tr .check", function() {
-    var check = $("#jurusanmatkul tbody tr .check").length;
-    var checked = $("#jurusanmatkul tbody tr .check:checked").length;
+  $("#kelasguru tbody").on("click", "tr .check", function () {
+    var check = $("#kelasguru tbody tr .check").length;
+    var checked = $("#kelasguru tbody tr .check:checked").length;
     if (check === checked) {
       $(".select_all").prop("checked", true);
     } else {
@@ -138,8 +147,8 @@ $(document).ready(function() {
     }
   });
 
-  $("#bulk").on("submit", function(e) {
-    if ($(this).attr("action") == base_url + "jurusanmatkul/delete") {
+  $("#bulk").on("submit", function (e) {
+    if ($(this).attr("action") == base_url + "kelasguru/delete") {
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -147,7 +156,7 @@ $(document).ready(function() {
         url: $(this).attr("action"),
         data: $(this).serialize(),
         type: "POST",
-        success: function(respon) {
+        success: function (respon) {
           if (respon.status) {
             Swal({
               title: "Berhasil",
@@ -163,7 +172,7 @@ $(document).ready(function() {
           }
           reload_ajax();
         },
-        error: function() {
+        error: function () {
           Swal({
             title: "Gagal",
             text: "Ada data yang sedang digunakan",
@@ -176,14 +185,14 @@ $(document).ready(function() {
 });
 
 function bulk_delete() {
-  if ($("#jurusanmatkul tbody tr .check:checked").length == 0) {
+  if ($("#kelasguru tbody tr .check:checked").length == 0) {
     Swal({
       title: "Gagal",
       text: "Tidak ada data yang dipilih",
       type: "error"
     });
   } else {
-    $("#bulk").attr("action", base_url + "jurusanmatkul/delete");
+    $("#bulk").attr("action", base_url + "kelasguru/delete");
     Swal({
       title: "Anda yakin?",
       text: "Data akan dihapus!",

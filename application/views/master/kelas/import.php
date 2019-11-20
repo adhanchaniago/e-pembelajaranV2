@@ -7,13 +7,11 @@
         </div>
     </div>
     <div class="box-body">
-        <div class="row text-center">
-            <div class="col-sm-offset-3 col-sm-6">
-                <div class="alert bg-purple">
-                    <strong>Catatan!</strong> untuk import data dari file excel, silahkan download templatenya terlebih dahulu.
-                </div>
-            </div>
-        </div>
+        <ul class="alert alert-info" style="padding-left: 40px">
+            <li>Silahkan import data dari excel, menggunakan format yang sudah disediakan</li>
+            <li>Data tidak boleh ada yang kosong, harus terisi semua.</li>
+            <li>Untuk data jurusan, hanya bisa diisi menggunakan ID Jurusan. <a data-toggle="modal" href="#jurusanId" style="text-decoration:none" class="btn btn-xs btn-primary">Lihat ID</a>.</li>
+        </ul>
         <div class="text-center">
             <a href="<?= base_url('uploads/import/format/kelas.xlsx') ?>" class="btn-default btn">Download Format</a>
         </div>
@@ -39,29 +37,39 @@
                             <tr>
                                 <td>No</td>
                                 <td>Kelas</td>
+                                <td>Jurusan</td>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
+                                $status = true;
                                 if (empty($import)) {
                                     echo '<tr><td colspan="2" class="text-center">Data kosong! pastikan anda menggunakan format yang telah disediakan.</td></tr>';
                                 } else {
                                     $no = 1;
-                                    foreach ($import as $kelas) :
+                                    foreach ($import as $data) :
                                         ?>
                                     <tr>
                                         <td><?= $no++; ?></td>
-                                        <td><?= $kelas; ?></td>
+                                        <td class="<?= $data['kelas'] == null ? 'bg-danger' : ''; ?>">
+                                            <?= $data['kelas'] == null ? 'BELUM DIISI' : $data['kelas']; ?>
+                                        </td>
+                                        <td class="<?= $data['jurusan'] == null ? 'bg-danger' : ''; ?>">
+                                            <?= $data['jurusan'] == null ? 'BELUM DIISI' : $data['jurusan'];; ?>
+                                        </td>
                                     </tr>
                             <?php
+                                        if ($data['kelas'] == null || $data['jurusan'] == null) {
+                                            $status = false;
+                                        }
                                     endforeach;
                                 }
                                 ?>
                         </tbody>
                     </table>
-                    <?php if (!empty($import)) : ?>
+                    <?php if ($status) : ?>
 
-                        <?= form_open('kelas/do_import', null, ['kelas' => json_encode($import)]); ?>
+                        <?= form_open('kelas/do_import', null, ['data' => json_encode($import)]); ?>
                         <button type='submit' class='btn btn-block btn-flat bg-purple'>Import</button>
                         <?= form_close(); ?>
 
@@ -72,3 +80,43 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="jurusanId">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Data Jurusan</h4>
+            </div>
+            <div class="modal-body">
+                <table id="jurusan" class="table table-condensed table-striped">
+                    <thead>
+                        <th>ID</th>
+                        <th>Jurusan</th>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($jurusan as $j) : ?>
+                            <tr>
+                                <td><?= $j->id_jurusan; ?></td>
+                                <td><?= $j->nama_jurusan; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let table;
+        table = $("#jurusan").DataTable({
+            "lengthMenu": [
+                [5, 10, 25, 50, 100, -1],
+                [5, 10, 25, 50, 100, "All"]
+            ],
+        });
+    });
+</script>

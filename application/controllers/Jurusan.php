@@ -1,7 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Kelas extends CI_Controller
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
+class Jurusan extends CI_Controller
 {
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,85 +21,85 @@ class Kelas extends CI_Controller
 		$this->load->model('Master_model', 'master');
 		$this->form_validation->set_error_delimiters('', '');
 	}
+
 	public function output_json($data, $encode = true)
 	{
 		if ($encode) $data = json_encode($data);
 		$this->output->set_content_type('application/json')->set_output($data);
 	}
+
 	public function index()
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Kelas',
-			'subjudul' => 'Data Kelas'
+			'judul'	=> 'Jurusan',
+			'subjudul' => 'Data Jurusan'
 		];
-		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('master/kelas/data');
-		$this->load->view('_templates/dashboard/_footer.php');
+		$this->load->view('_templates/dashboard/_header', $data);
+		$this->load->view('master/jurusan/data');
+		$this->load->view('_templates/dashboard/_footer');
 	}
-	public function data()
-	{
-		$this->output_json($this->master->getDataKelas(), false);
-	}
+
 	public function add()
 	{
 		$data = [
 			'user' 		=> $this->ion_auth->user()->row(),
-			'judul'		=> 'Tambah Kelas',
-			'subjudul'	=> 'Tambah Data Kelas',
-			'banyak'	=> $this->input->post('banyak', true),
-			'jurusan'	=> $this->master->getAllJurusan()
+			'judul'		=> 'Tambah Jurusan',
+			'subjudul'	=> 'Tambah Data Jurusan',
+			'banyak'	=> $this->input->post('banyak', true)
 		];
-		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('master/kelas/add');
-		$this->load->view('_templates/dashboard/_footer.php');
+		$this->load->view('_templates/dashboard/_header', $data);
+		$this->load->view('master/jurusan/add');
+		$this->load->view('_templates/dashboard/_footer');
 	}
+
+	public function data()
+	{
+		$this->output_json($this->master->getDataJurusan(), false);
+	}
+
 	public function edit()
 	{
 		$chk = $this->input->post('checked', true);
 		if (!$chk) {
-			redirect('admin/kelas');
+			redirect('jurusan');
 		} else {
-			$kelas = $this->master->getKelasById($chk);
+			$jurusan = $this->master->getJurusanById($chk);
 			$data = [
 				'user' 		=> $this->ion_auth->user()->row(),
-				'judul'		=> 'Edit Kelas',
-				'subjudul'	=> 'Edit Data Kelas',
-				'jurusan'	=> $this->master->getAllJurusan(),
-				'kelas'		=> $kelas
+				'judul'		=> 'Edit Jurusan',
+				'subjudul'	=> 'Edit Data Jurusan',
+				'jurusan'	=> $jurusan
 			];
-			$this->load->view('_templates/dashboard/_header.php', $data);
-			$this->load->view('master/kelas/edit');
-			$this->load->view('_templates/dashboard/_footer.php');
+			$this->load->view('_templates/dashboard/_header', $data);
+			$this->load->view('master/jurusan/edit');
+			$this->load->view('_templates/dashboard/_footer');
 		}
 	}
+
 	public function save()
 	{
-		$rows = count($this->input->post('nama_kelas', true));
+		$rows = count($this->input->post('nama_jurusan', true));
 		$mode = $this->input->post('mode', true);
 		for ($i = 1; $i <= $rows; $i++) {
-			$nama_kelas 	= 'nama_kelas[' . $i . ']';
-			$jurusan_id 	= 'jurusan_id[' . $i . ']';
-			$this->form_validation->set_rules($nama_kelas, 'Kelas', 'required');
-			$this->form_validation->set_rules($jurusan_id, 'Jurusan', 'required');
+			$nama_jurusan = 'nama_jurusan[' . $i . ']';
+			$this->form_validation->set_rules($nama_jurusan, 'Jurusan', 'required');
 			$this->form_validation->set_message('required', '{field} Wajib diisi');
+
 			if ($this->form_validation->run() === FALSE) {
 				$error[] = [
-					$nama_kelas 	=> form_error($nama_kelas),
-					$jurusan_id 	=> form_error($jurusan_id),
+					$nama_jurusan => form_error($nama_jurusan)
 				];
 				$status = FALSE;
 			} else {
 				if ($mode == 'add') {
 					$insert[] = [
-						'nama_kelas' 	=> $this->input->post($nama_kelas, true),
-						'jurusan_id' 	=> $this->input->post($jurusan_id, true)
+						'nama_jurusan' => $this->input->post($nama_jurusan, true)
 					];
 				} else if ($mode == 'edit') {
 					$update[] = array(
-						'id_kelas'		=> $this->input->post('id_kelas[' . $i . ']', true),
-						'nama_kelas' 	=> $this->input->post($nama_kelas, true),
-						'jurusan_id' 	=> $this->input->post($jurusan_id, true)
+						'id_jurusan'	=> $this->input->post('id_jurusan[' . $i . ']', true),
+						'nama_jurusan' 	=> $this->input->post($nama_jurusan, true)
 					);
 				}
 				$status = TRUE;
@@ -100,10 +107,10 @@ class Kelas extends CI_Controller
 		}
 		if ($status) {
 			if ($mode == 'add') {
-				$this->master->create('kelas', $insert, true);
+				$this->master->create('jurusan', $insert, true);
 				$data['insert']	= $insert;
 			} else if ($mode == 'edit') {
-				$this->master->update('kelas', $update, 'id_kelas', null, true);
+				$this->master->update('jurusan', $update, 'id_jurusan', null, true);
 				$data['update'] = $update;
 			}
 		} else {
@@ -114,42 +121,48 @@ class Kelas extends CI_Controller
 		$data['status'] = $status;
 		$this->output_json($data);
 	}
+
 	public function delete()
 	{
 		$chk = $this->input->post('checked', true);
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('kelas', $chk, 'id_kelas')) {
+			if ($this->master->delete('jurusan', $chk, 'id_jurusan')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
 	}
-	public function kelas_by_jurusan($id)
+
+	public function load_jurusan()
 	{
-		$data = $this->master->getKelasByJurusan($id);
+		$data = $this->master->getJurusan();
 		$this->output_json($data);
 	}
+
 	public function import($import_data = null)
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Kelas',
-			'subjudul' => 'Import Kelas',
-			'jurusan' => $this->master->getAllJurusan()
+			'judul'	=> 'Jurusan',
+			'subjudul' => 'Import Jurusan'
 		];
 		if ($import_data != null) $data['import'] = $import_data;
+
 		$this->load->view('_templates/dashboard/_header', $data);
-		$this->load->view('master/kelas/import');
+		$this->load->view('master/jurusan/import');
 		$this->load->view('_templates/dashboard/_footer');
 	}
+
 	public function preview()
 	{
 		$config['upload_path']		= './uploads/import/';
 		$config['allowed_types']	= 'xls|xlsx|csv';
 		$config['max_size']			= 2048;
 		$config['encrypt_name']		= true;
+
 		$this->load->library('upload', $config);
+
 		if (!$this->upload->do_upload('upload_file')) {
 			$error = $this->upload->display_errors();
 			echo $error;
@@ -157,6 +170,7 @@ class Kelas extends CI_Controller
 		} else {
 			$file = $this->upload->data('full_path');
 			$ext = $this->upload->data('file_ext');
+
 			switch ($ext) {
 				case '.xlsx':
 					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -171,31 +185,35 @@ class Kelas extends CI_Controller
 					echo "unknown file ext";
 					die;
 			}
+
 			$spreadsheet = $reader->load($file);
 			$sheetData = $spreadsheet->getActiveSheet()->toArray();
-			$data = [];
+			$jurusan = [];
 			for ($i = 1; $i < count($sheetData); $i++) {
-				$data[] = [
-					'kelas' => $sheetData[$i][0],
-					'jurusan' => $sheetData[$i][1]
-				];
+				if ($sheetData[$i][0] != null) {
+					$jurusan[] = $sheetData[$i][0];
+				}
 			}
+
 			unlink($file);
-			$this->import($data);
+
+			$this->import($jurusan);
 		}
 	}
+
 	public function do_import()
 	{
-		$input = json_decode($this->input->post('data', true));
-		$data = [];
-		foreach ($input as $d) {
-			$data[] = ['nama_kelas' => $d->kelas, 'jurusan_id' => $d->jurusan];
+		$data = json_decode($this->input->post('jurusan', true));
+		$jurusan = [];
+		foreach ($data as $j) {
+			$jurusan[] = ['nama_jurusan' => $j];
 		}
-		$save = $this->master->create('kelas', $data, true);
+
+		$save = $this->master->create('jurusan', $jurusan, true);
 		if ($save) {
-			redirect('kelas');
+			redirect('jurusan');
 		} else {
-			redirect('kelas/import');
+			redirect('jurusan/import');
 		}
 	}
 }

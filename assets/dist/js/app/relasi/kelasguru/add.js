@@ -1,11 +1,11 @@
 $(document).ready(function () {
 
-    $('form#kelasdosen select').on('change', function () {
+    $('form#kelasguru select').on('change', function () {
         $(this).closest('.form-group').removeClass('has-error');
         $(this).nextAll('.help-block').eq(0).text('');
     });
 
-    $('form#kelasdosen').on('submit', function (e) {
+    $('form#kelasguru').on('submit', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
                         "type": "success"
                     }).then((result) => {
                         if (result.value) {
-                            window.location.href = base_url+'kelasdosen';
+                            window.location.href = base_url + 'kelasguru';
                         }
                     });
                 } else {

@@ -8,7 +8,7 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-sm-offset-3 col-sm-6 col-lg-offset-4 col-lg-4">
+            <div class="col-sm-offset-3 col-sm-6">
                 <div class="my-2">
                     <div class="form-horizontal form-inline">
                         <a href="<?= base_url('kelas') ?>" class="btn btn-default btn-xs">
@@ -25,30 +25,41 @@
                         <tr>
                             <th># No</th>
                             <th>Kelas</th>
+                            <th>Jurusan</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $no = 1;
-                        foreach ($kelas as $j) : ?>
+                        $i = 1;
+                        foreach ($kelas as $row) : ?>
                             <tr>
-                                <td><?= $no ?></td>
+                                <td><?= $i ?></td>
                                 <td>
                                     <div class="form-group">
-                                        <?= form_hidden('id_kelas[' . $no . ']', $j->id_kelas) ?>
-                                        <input autofocus="autofocus" onfocus="this.select()" autocomplete="off" value="<?= $j->nama_kelas ?>" type="text" name="nama_kelas[<?= $no ?>]" class="input-sm form-control">
+                                        <?= form_hidden('id_kelas[' . $i . ']', $row->id_kelas); ?>
+                                        <input required="required" autofocus="autofocus" onfocus="this.select()" value="<?= $row->nama_kelas ?>" type="text" name="nama_kelas[<?= $i ?>]" class="form-control">
+                                        <span class="d-none">DON'T DELETE THIS</span>
+                                        <small class="help-block text-right"></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <select required="required" name="jurusan_id[<?= $i ?>]" class="input-sm form-control select2" style="width: 100%!important">
+                                            <option value="" disabled>-- Pilih --</option>
+                                            <?php foreach ($jurusan as $j) : ?>
+                                                <option <?= $row->jurusan_id == $j->id_jurusan ? "selected='selected'" : "" ?> value="<?= $j->id_jurusan ?>"><?= $j->nama_jurusan ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                         <small class="help-block text-right"></small>
                                     </div>
                                 </td>
                             </tr>
-                        <?php
-                            $no++;
-                        endforeach;
-                        ?>
+                        <?php $i++;
+                        endforeach; ?>
                     </tbody>
                 </table>
-                <button type="submit" class="mb-4 btn btn-block btn-flat bg-purple">
-                    <i class="fa fa-save"></i> Simpan Perubahan
+                <button id="submit" type="submit" class="mb-4 btn btn-block btn-flat bg-purple">
+                    <i class="fa fa-edit"></i> Simpan Perubahan
                 </button>
                 <?= form_close() ?>
             </div>

@@ -1,37 +1,43 @@
 var table;
 
-$(document).ready(function() {
+$(document).ready(function () {
   ajaxcsrf();
 
   table = $("#soal").DataTable({
-    initComplete: function() {
+    initComplete: function () {
       var api = this.api();
       $("#soal_filter input")
         .off(".DT")
-        .on("keyup.DT", function(e) {
+        .on("keyup.DT", function (e) {
           api.search(this.value).draw();
         });
     },
-    dom:
-      "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+    dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
       "<'row'<'col-sm-12'tr>>" +
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-    buttons: [
-      {
+    buttons: [{
         extend: "copy",
-        exportOptions: { columns: [2, 3, 4, 5] }
+        exportOptions: {
+          columns: [2, 3, 4, 5]
+        }
       },
       {
         extend: "print",
-        exportOptions: { columns: [2, 3, 4, 5] }
+        exportOptions: {
+          columns: [2, 3, 4, 5]
+        }
       },
       {
         extend: "excel",
-        exportOptions: { columns: [2, 3, 4, 5] }
+        exportOptions: {
+          columns: [2, 3, 4, 5]
+        }
       },
       {
         extend: "pdf",
-        exportOptions: { columns: [2, 3, 4, 5] }
+        exportOptions: {
+          columns: [2, 3, 4, 5]
+        }
       }
     ],
     oLanguage: {
@@ -43,8 +49,7 @@ $(document).ready(function() {
       url: base_url + "soal/data",
       type: "POST"
     },
-    columns: [
-      {
+    columns: [{
         data: "id_soal",
         orderable: false,
         searchable: false
@@ -54,16 +59,23 @@ $(document).ready(function() {
         orderable: false,
         searchable: false
       },
-      { data: "nama_dosen" },
-      { data: "nama_matkul" },
-      { data: "soal" },
-      { data: "created_on" }
+      {
+        data: "nama_guru"
+      },
+      {
+        data: "nama_mapel"
+      },
+      {
+        data: "soal"
+      },
+      {
+        data: "created_on"
+      }
     ],
-    columnDefs: [
-      {
+    columnDefs: [{
         targets: 0,
         data: "id_soal",
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           return `<div class="text-center">
 									<input name="checked[]" class="check" value="${data}" type="checkbox">
 								</div>`;
@@ -72,7 +84,7 @@ $(document).ready(function() {
       {
         targets: 6,
         data: "id_soal",
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           return `<div class="text-center">
                                 <a href="${base_url}soal/detail/${data}" class="btn btn-xs btn-default">
                                     <i class="fa fa-eye"></i> Detail
@@ -84,11 +96,13 @@ $(document).ready(function() {
         }
       }
     ],
-    order: [[5, "desc"]],
-    rowId: function(a) {
+    order: [
+      [5, "desc"]
+    ],
+    rowId: function (a) {
       return a;
     },
-    rowCallback: function(row, data, iDisplayIndex) {
+    rowCallback: function (row, data, iDisplayIndex) {
       var info = this.fnPagingInfo();
       var page = info.iPage;
       var length = info.iLength;
@@ -102,21 +116,21 @@ $(document).ready(function() {
     .container()
     .appendTo("#soal_wrapper .col-md-6:eq(0)");
 
-  $(".select_all").on("click", function() {
+  $(".select_all").on("click", function () {
     if (this.checked) {
-      $(".check").each(function() {
+      $(".check").each(function () {
         this.checked = true;
         $(".select_all").prop("checked", true);
       });
     } else {
-      $(".check").each(function() {
+      $(".check").each(function () {
         this.checked = false;
         $(".select_all").prop("checked", false);
       });
     }
   });
 
-  $("#soal tbody").on("click", "tr .check", function() {
+  $("#soal tbody").on("click", "tr .check", function () {
     var check = $("#soal tbody tr .check").length;
     var checked = $("#soal tbody tr .check:checked").length;
     if (check === checked) {
@@ -126,7 +140,7 @@ $(document).ready(function() {
     }
   });
 
-  $("#bulk").on("submit", function(e) {
+  $("#bulk").on("submit", function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
 
@@ -134,7 +148,7 @@ $(document).ready(function() {
       url: $(this).attr("action"),
       data: $(this).serialize(),
       type: "POST",
-      success: function(respon) {
+      success: function (respon) {
         if (respon.status) {
           Swal({
             title: "Berhasil",
@@ -150,7 +164,7 @@ $(document).ready(function() {
         }
         reload_ajax();
       },
-      error: function() {
+      error: function () {
         Swal({
           title: "Gagal",
           text: "Ada data yang sedang digunakan",

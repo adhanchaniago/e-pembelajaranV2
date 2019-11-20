@@ -7,35 +7,26 @@
 		</div>
 	</div>
 	<div class="box-body">
-		<div class="mt-2 mb-3">
-			<button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-sm btn-flat bg-purple"><i class="fa fa-plus"></i> Tambah Data</button>
-			<a href="<?= base_url('mapel/import') ?>" class="btn btn-sm btn-flat btn-success"><i class="fa fa-upload"></i> Import</a>
+		<div class="mt-2 mb-4">
+			<button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-sm bg-purple btn-flat"><i class="fa fa-plus"></i> Tambah Data</button>
+			<a href="<?= base_url('jurusan/import') ?>" class="btn btn-sm btn-flat btn-success"><i class="fa fa-upload"></i> Import</a>
 			<button type="button" onclick="reload_ajax()" class="btn btn-sm btn-flat btn-default"><i class="fa fa-refresh"></i> Reload</button>
 			<div class="pull-right">
-				<button onclick="bulk_edit()" class="btn btn-sm btn-flat btn-warning" type="button"><i class="fa fa-edit"></i> Edit</button>
-				<button onclick="bulk_delete()" class="btn btn-sm btn-flat btn-danger" type="button"><i class="fa fa-trash"></i> Delete</button>
+				<button onclick="bulk_edit()" class="btn btn-sm btn-warning btn-flat" type="button"><i class="fa fa-edit"></i> Edit</button>
+				<button onclick="bulk_delete()" class="btn btn-sm btn-danger btn-flat" type="button"><i class="fa fa-trash"></i> Delete</button>
 			</div>
 		</div>
 		<?= form_open('', array('id' => 'bulk')) ?>
-		<table id="mapel" class="w-100 table table-striped table-bordered table-hover">
+		<table id="jurusan" class="w-100 table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
 					<th>No.</th>
-					<th>Mata Pelajaran</th>
+					<th>Jurusan</th>
 					<th class="text-center">
-						<input type="checkbox" class="select_all">
+						<input type="checkbox" id="select_all">
 					</th>
 				</tr>
 			</thead>
-			<tfoot>
-				<tr>
-					<th>No.</th>
-					<th>Mata Pelajaran</th>
-					<th class="text-center">
-						<input type="checkbox" class="select_all">
-					</th>
-				</tr>
-			</tfoot>
 		</table>
 		<?= form_close() ?>
 	</div>
@@ -49,7 +40,7 @@
 					<span aria-hidden="true">×</span></button>
 				<h4 class="modal-title">Tambah Data</h4>
 			</div>
-			<?= form_open('mapel/add', array('id', 'tambah')); ?>
+			<?= form_open('jurusan/add', array('id', 'tambah')); ?>
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="banyak">Banyaknya data</label>
@@ -67,4 +58,4 @@
 	<!-- /.modal-dialog -->
 </div>
 
-<script src="<?= base_url() ?>assets/dist/js/app/master/mapel/data.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/master/jurusan/data.js"></script>

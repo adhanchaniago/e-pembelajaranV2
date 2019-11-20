@@ -29,19 +29,17 @@ class Master_model extends CI_Model
         $this->db->where_in($pk, $data);
         return $this->db->delete($table);
     }
-
     /**
      * Data Kelas
      */
-
     public function getDataKelas()
     {
-        $this->datatables->select('id_kelas, nama_kelas');
+        $this->datatables->select('id_kelas, nama_kelas, id_jurusan, nama_jurusan');
         $this->datatables->from('kelas');
-        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_kelas, nama_kelas');
+        $this->datatables->join('jurusan', 'jurusan_id=id_jurusan');
+        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_kelas, nama_kelas, id_jurusan, nama_jurusan');
         return $this->datatables->generate();
     }
-
     public function getKelasById($id)
     {
         $this->db->where_in('id_kelas', $id);
@@ -49,6 +47,24 @@ class Master_model extends CI_Model
         $query = $this->db->get('kelas')->result();
         return $query;
     }
+    /**
+     * Data Jurusan
+     */
+    public function getDataJurusan()
+    {
+        $this->datatables->select('id_jurusan, nama_jurusan');
+        $this->datatables->from('jurusan');
+        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_jurusan, nama_jurusan');
+        return $this->datatables->generate();
+    }
+    public function getJurusanById($id)
+    {
+        $this->db->where_in('id_jurusan', $id);
+        $this->db->order_by('nama_jurusan');
+        $query = $this->db->get('jurusan')->result();
+        return $query;
+    }
+
 
     /**
      * Data siswa

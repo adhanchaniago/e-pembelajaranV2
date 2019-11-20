@@ -1,8 +1,8 @@
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Form <?=$judul?></h3>
+        <h3 class="box-title">Form <?= $judul ?></h3>
         <div class="box-tools pull-right">
-            <a href="<?=base_url()?>jurusanmatkul" class="btn btn-warning btn-flat btn-sm">
+            <a href="<?= base_url() ?>jurusanmapel" class="btn btn-warning btn-flat btn-sm">
                 <i class="fa fa-arrow-left"></i> Batal
             </a>
         </div>
@@ -12,22 +12,22 @@
             <div class="col-sm-4">
                 <div class="alert bg-purple">
                     <h4><i class="fa fa-info-circle"></i> Informasi</h4>
-                    Jika kolom Mata Kuliah kosong, berikut ini kemungkinan penyebabnya :
+                    Jika kolom Mata Pelajaran kosong, berikut ini kemungkinan penyebabnya :
                     <br><br>
                     <ol class="pl-4">
-                        <li>Anda belum menambahkan master data Mata Kuliah (Master Mata Kuliah kosong/belum ada data sama sekali).</li>
-                        <li>Mata Kuliah sudah ditambahkan, jadi anda tidak perlu tambah lagi. Anda hanya perlu mengedit data Jurusan Mata Kuliah nya saja.</li>
+                        <li>Anda belum menambahkan master data Mata Pelajaran (Master Mata Pelajaran kosong/belum ada data sama sekali).</li>
+                        <li>Mata Pelajaran sudah ditambahkan, jadi anda tidak perlu tambah lagi. Anda hanya perlu mengedit data Jurusan Mata Pelajaran nya saja.</li>
                     </ol>
                 </div>
             </div>
             <div class="col-sm-4">
-                <?=form_open('jurusanmatkul/save', array('id'=>'jurusanmatkul'), array('method'=>'add'))?>
+                <?= form_open('jurusanmapel/save', array('id' => 'jurusanmapel'), array('method' => 'add')) ?>
                 <div class="form-group">
-                    <label>Mata Kuliah</label>
-                    <select name="matkul_id" class="form-control select2" style="width: 100%!important">
+                    <label>Mata Pelajaran</label>
+                    <select name="mapel_id" class="form-control select2" style="width: 100%!important">
                         <option value="" disabled selected></option>
-                        <?php foreach ($matkul as $m) : ?>
-                            <option value="<?=$m->id_matkul?>"><?=$m->nama_matkul?></option>
+                        <?php foreach ($mapel as $m) : ?>
+                            <option value="<?= $m->id_mapel ?>"><?= $m->nama_mapel ?></option>
                         <?php endforeach; ?>
                     </select>
                     <small class="help-block text-right"></small>
@@ -46,10 +46,10 @@
                         <i class="fa fa-save"></i> Simpan
                     </button>
                 </div>
-                <?=form_close()?>
+                <?= form_close() ?>
             </div>
         </div>
     </div>
 </div>
 
-<script src="<?=base_url()?>assets/dist/js/app/relasi/jurusanmatkul/add.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/relasi/jurusanmapel/add.js"></script>

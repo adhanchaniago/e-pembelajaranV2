@@ -4,10 +4,10 @@ var table;
 $(document).ready(function() {
   ajaxcsrf();
 
-  table = $("#kelasdosen").DataTable({
+  table = $("#jurusanmapel").DataTable({
     initComplete: function() {
       var api = this.api();
-      $("#kelasdosen_filter input")
+      $("#jurusanmapel_filter input")
         .off(".DT")
         .on("keyup.DT", function(e) {
           api.search(this.value).draw();
@@ -20,19 +20,19 @@ $(document).ready(function() {
     buttons: [
       {
         extend: "copy",
-        exportOptions: { columns: [1, 2, 3] }
+        exportOptions: { columns: [1, 2] }
       },
       {
         extend: "print",
-        exportOptions: { columns: [1, 2, 3] }
+        exportOptions: { columns: [1, 2] }
       },
       {
         extend: "excel",
-        exportOptions: { columns: [1, 2, 3] }
+        exportOptions: { columns: [1, 2] }
       },
       {
         extend: "pdf",
-        exportOptions: { columns: [1, 2, 3] }
+        exportOptions: { columns: [1, 2] }
       }
     ],
     oLanguage: {
@@ -41,7 +41,7 @@ $(document).ready(function() {
     processing: true,
     serverSide: true,
     ajax: {
-      url: base_url + "kelasdosen/data",
+      url: base_url + "jurusanmapel/data",
       type: "POST"
     },
     columns: [
@@ -50,44 +50,41 @@ $(document).ready(function() {
         orderable: false,
         searchable: false
       },
-      { data: "nip" },
-      { data: "nama_dosen" }
+      { data: "nama_mapel" }
     ],
     columnDefs: [
       {
-        targets: 3,
+        targets: 2,
         searchable: false,
         orderable: false,
-        title: "Kelas",
-        data: "kelas",
+        title: "Jurusan",
+        data: "nama_jurusan",
         render: function(data, type, row, meta) {
-          let kelas = data.split(",");
+          let mapel = data.split(",");
           let badge = [];
-          $.each(kelas, function(i, val) {
-            var newkelas = `<span class="badge bg-maroon">${val}</span>`;
-            badge.push(newkelas);
+          $.each(mapel, function(i, val) {
+            var newmapel = `<span class="badge bg-maroon">${val}</span>`;
+            badge.push(newmapel);
           });
           return badge.join(" ");
         }
       },
       {
-        targets: 4,
+        targets: 3,
         searchable: false,
         orderable: false,
-        data: "id_dosen",
+        data: "id_mapel",
         render: function(data, type, row, meta) {
           return `<div class="text-center">
-									<a href="${base_url}kelasdosen/edit/${data}" class="btn btn-warning btn-xs">
+									<a href="${base_url}jurusanmapel/edit/${data}" class="btn btn-warning btn-xs">
 										<i class="fa fa-pencil"></i>
 									</a>
 								</div>`;
         }
       },
       {
-        targets: 5,
-        searchable: false,
-        orderable: false,
-        data: "id_dosen",
+        targets: 4,
+        data: "id_mapel",
         render: function(data, type, row, meta) {
           return `<div class="text-center">
 									<input name="checked[]" class="check" value="${data}" type="checkbox">
@@ -111,7 +108,11 @@ $(document).ready(function() {
   table
     .buttons()
     .container()
-    .appendTo("#kelasdosen_wrapper .col-md-6:eq(0)");
+    .appendTo("#jurusanmapel_wrapper .col-md-6:eq(0)");
+
+  $("#myModal").on("shown.modal.bs", function() {
+    $(':input[name="banyak"]').select();
+  });
 
   $(".select_all").on("click", function() {
     if (this.checked) {
@@ -127,9 +128,9 @@ $(document).ready(function() {
     }
   });
 
-  $("#kelasdosen tbody").on("click", "tr .check", function() {
-    var check = $("#kelasdosen tbody tr .check").length;
-    var checked = $("#kelasdosen tbody tr .check:checked").length;
+  $("#jurusanmapel tbody").on("click", "tr .check", function() {
+    var check = $("#jurusanmapel tbody tr .check").length;
+    var checked = $("#jurusanmapel tbody tr .check:checked").length;
     if (check === checked) {
       $(".select_all").prop("checked", true);
     } else {
@@ -138,7 +139,7 @@ $(document).ready(function() {
   });
 
   $("#bulk").on("submit", function(e) {
-    if ($(this).attr("action") == base_url + "kelasdosen/delete") {
+    if ($(this).attr("action") == base_url + "jurusanmapel/delete") {
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -175,14 +176,14 @@ $(document).ready(function() {
 });
 
 function bulk_delete() {
-  if ($("#kelasdosen tbody tr .check:checked").length == 0) {
+  if ($("#jurusanmapel tbody tr .check:checked").length == 0) {
     Swal({
       title: "Gagal",
       text: "Tidak ada data yang dipilih",
       type: "error"
     });
   } else {
-    $("#bulk").attr("action", base_url + "kelasdosen/delete");
+    $("#bulk").attr("action", base_url + "jurusanmapel/delete");
     Swal({
       title: "Anda yakin?",
       text: "Data akan dihapus!",

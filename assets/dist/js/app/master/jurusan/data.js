@@ -1,13 +1,12 @@
-var save_label;
 var table;
 
 $(document).ready(function () {
   ajaxcsrf();
 
-  table = $("#kelas").DataTable({
+  table = $("#jurusan").DataTable({
     initComplete: function () {
       var api = this.api();
-      $("#kelas_filter input")
+      $("#jurusan_filter input")
         .off(".DT")
         .on("keyup.DT", function (e) {
           api.search(this.value).draw();
@@ -19,25 +18,25 @@ $(document).ready(function () {
     buttons: [{
         extend: "copy",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1]
         }
       },
       {
         extend: "print",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1]
         }
       },
       {
         extend: "excel",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1]
         }
       },
       {
         extend: "pdf",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1]
         }
       }
     ],
@@ -47,17 +46,14 @@ $(document).ready(function () {
     processing: true,
     serverSide: true,
     ajax: {
-      url: base_url + "kelas/data",
+      url: base_url + "jurusan/data",
       type: "POST"
       //data: csrf
     },
     columns: [{
-        data: "id_kelas",
+        data: "id_jurusan",
         orderable: false,
         searchable: false
-      },
-      {
-        data: "nama_kelas"
       },
       {
         data: "nama_jurusan"
@@ -86,7 +82,7 @@ $(document).ready(function () {
   table
     .buttons()
     .container()
-    .appendTo("#kelas_wrapper .col-md-6:eq(0)");
+    .appendTo("#jurusan_wrapper .col-md-6:eq(0)");
 
   $("#myModal").on("shown.modal.bs", function () {
     $(':input[name="banyak"]').select();
@@ -104,9 +100,9 @@ $(document).ready(function () {
     }
   });
 
-  $("#kelas tbody").on("click", "tr .check", function () {
-    var check = $("#kelas tbody tr .check").length;
-    var checked = $("#kelas tbody tr .check:checked").length;
+  $("#jurusan tbody").on("click", "tr .check", function () {
+    var check = $("#jurusan tbody tr .check").length;
+    var checked = $("#jurusan tbody tr .check:checked").length;
     if (check === checked) {
       $("#select_all").prop("checked", true);
     } else {
@@ -115,7 +111,7 @@ $(document).ready(function () {
   });
 
   $("#bulk").on("submit", function (e) {
-    if ($(this).attr("action") == base_url + "kelas/delete") {
+    if ($(this).attr("action") == base_url + "jurusan/delete") {
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -151,36 +147,15 @@ $(document).ready(function () {
   });
 });
 
-function load_jurusan() {
-  var jurusan = $('select[name="nama_jurusan"]');
-  jurusan.children("option:not(:first)").remove();
-
-  ajaxcsrf(); // get csrf token
-  $.ajax({
-    url: base_url + "jurusan/load_jurusan",
-    type: "GET",
-    success: function (data) {
-      //console.log(data);
-      if (data.length) {
-        var dataJurusan;
-        $.each(data, function (key, val) {
-          dataJurusan = `<option value="${val.id_jurusan}">${val.nama_jurusan}</option>`;
-          jurusan.append(dataJurusan);
-        });
-      }
-    }
-  });
-}
-
 function bulk_delete() {
-  if ($("#kelas tbody tr .check:checked").length == 0) {
+  if ($("#jurusan tbody tr .check:checked").length == 0) {
     Swal({
       title: "Gagal",
       text: "Tidak ada data yang dipilih",
       type: "error"
     });
   } else {
-    $("#bulk").attr("action", base_url + "kelas/delete");
+    $("#bulk").attr("action", base_url + "jurusan/delete");
     Swal({
       title: "Anda yakin?",
       text: "Data akan dihapus!",
@@ -198,14 +173,14 @@ function bulk_delete() {
 }
 
 function bulk_edit() {
-  if ($("#kelas tbody tr .check:checked").length == 0) {
+  if ($("#jurusan tbody tr .check:checked").length == 0) {
     Swal({
       title: "Gagal",
       text: "Tidak ada data yang dipilih",
       type: "error"
     });
   } else {
-    $("#bulk").attr("action", base_url + "kelas/edit");
+    $("#bulk").attr("action", base_url + "jurusan/edit");
     $("#bulk").submit();
   }
 }

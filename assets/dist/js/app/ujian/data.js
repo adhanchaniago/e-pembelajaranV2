@@ -19,11 +19,10 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            "url": base_url+"ujian/json",
+            "url": base_url + "ujian/json",
             "type": "POST",
         },
-        columns: [
-            {
+        columns: [{
                 "data": "id_ujian",
                 "orderable": false,
                 "searchable": false
@@ -33,18 +32,27 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false
             },
-            { "data": 'nama_ujian' },
-            { "data": 'nama_matkul' },
-            { "data": 'jumlah_soal' },
-            { "data": 'waktu' },
-            { "data": 'jenis' },
+            {
+                "data": 'nama_ujian'
+            },
+            {
+                "data": 'nama_mapel'
+            },
+            {
+                "data": 'jumlah_soal'
+            },
+            {
+                "data": 'waktu'
+            },
+            {
+                "data": 'jenis'
+            },
             {
                 "data": 'token',
                 "orderable": false
             }
         ],
-        columnDefs: [
-            {
+        columnDefs: [{
                 "targets": 0,
                 "data": "id_ujian",
                 "render": function (data, type, row, meta) {
@@ -121,7 +129,7 @@ $(document).ready(function () {
 
         $(this).attr('disabled', 'disabled').children().addClass('fa-spin');
         $.ajax({
-            url: base_url+'ujian/refresh_token/' + id,
+            url: base_url + 'ujian/refresh_token/' + id,
             type: 'get',
             dataType: 'json',
             success: function (data) {
@@ -167,7 +175,7 @@ $(document).ready(function () {
         });
     });
 
-    table.ajax.url(base_url+'ujian/json/'+id_dosen).load();
+    table.ajax.url(base_url + 'ujian/json/' + id_guru).load();
 });
 
 function bulk_delete() {
