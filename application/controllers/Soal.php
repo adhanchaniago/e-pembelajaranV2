@@ -156,8 +156,6 @@ class Soal extends CI_Controller
         $method = $this->input->post('method', true);
         $this->validasi();
         $this->file_config();
-
-
         if ($this->form_validation->run() === FALSE) {
             $method === 'add' ? $this->add() : $this->edit();
         } else {

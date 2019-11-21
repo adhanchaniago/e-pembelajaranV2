@@ -66,6 +66,7 @@ class Kelas extends CI_Controller
 			$this->load->view('_templates/dashboard/_footer.php');
 		}
 	}
+
 	public function save()
 	{
 		$rows = count($this->input->post('nama_kelas', true));

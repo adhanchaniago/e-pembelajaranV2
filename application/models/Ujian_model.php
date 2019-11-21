@@ -6,9 +6,10 @@ class Ujian_model extends CI_Model
 
     public function getDataUjian($id)
     {
-        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, a.jumlah_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
+        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, c.nama_topik, a.jumlah_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
         $this->datatables->from('ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
+        $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
         if ($id !== null) {
             $this->datatables->where('guru_id', $id);
         }
@@ -17,10 +18,11 @@ class Ujian_model extends CI_Model
 
     public function getListUjian($id, $kelas)
     {
-        $this->datatables->select("a.id_ujian, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_ujian, b.nama_mapel, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu, (SELECT COUNT(id) FROM hasil_ujian h WHERE h.siswa_id = {$id} AND h.ujian_id = a.id_ujian) AS ada");
+        $this->datatables->select("a.id_ujian, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_ujian, b.nama_mapel, d.nama_topik, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu, (SELECT COUNT(id) FROM hasil_ujian h WHERE h.siswa_id = {$id} AND h.ujian_id = a.id_ujian) AS ada");
         $this->datatables->from('ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('guru c', 'a.guru_id = c.id_guru');
+        $this->datatables->join('topik d', 'd.id_topik = a.topik_id');
         $this->datatables->where("a.guru_id IN (select id_guru from guru where FIND_IN_SET({$kelas}, kelas_id))", null);
         return $this->datatables->generate();
     }
@@ -31,6 +33,7 @@ class Ujian_model extends CI_Model
         $this->db->from('ujian a');
         $this->db->join('guru b', 'a.guru_id=b.id_guru');
         $this->db->join('mapel c', 'a.mapel_id=c.id_mapel');
+        $this->db->join('topik d', 'd.id_topik = a.topik_id');
         $this->db->where('id_ujian', $id);
         return $this->db->get()->row();
     }
@@ -41,11 +44,12 @@ class Ujian_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    public function getJumlahSoal($guru)
+    public function getJumlahSoal($m, $t)
     {
         $this->db->select('COUNT(id_soal) as jml_soal');
         $this->db->from('soal');
-        $this->db->where('guru_id', $guru);
+        $this->db->where('mapel_id', $m);
+        $this->db->where("FIND_IN_SET({$t}, topik)", null);
         return $this->db->get()->row();
     }
 
@@ -75,8 +79,8 @@ class Ujian_model extends CI_Model
 
         $this->db->select('id_soal, soal, file, tipe_file, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, jawaban');
         $this->db->from('soal');
-        $this->db->where('guru_id', $ujian->guru_id);
         $this->db->where('mapel_id', $ujian->mapel_id);
+        $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
         $this->db->order_by($order);
         $this->db->limit($ujian->jumlah_soal);
         return $this->db->get()->result();
@@ -100,16 +104,17 @@ class Ujian_model extends CI_Model
 
     public function getHasilUjian($nip = null)
     {
-        $this->datatables->select('b.id_ujian, b.nama_ujian, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
+        $this->datatables->select('b.id_ujian, b.nama_ujian, e.nama_topik, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
         $this->datatables->select('c.nama_mapel, d.nama_guru');
         $this->datatables->from('hasil_ujian a');
         $this->datatables->join('ujian b', 'a.ujian_id = b.id_ujian');
         $this->datatables->join('mapel c', 'b.mapel_id = c.id_mapel');
         $this->datatables->join('guru d', 'b.guru_id = d.id_guru');
-        $this->datatables->group_by('b.id_ujian');
+        $this->datatables->join('topik e', 'b.topik_id = e.id_topik');
         if ($nip !== null) {
             $this->datatables->where('d.nip', $nip);
         }
+        $this->datatables->group_by('b.id_ujian');
         return $this->datatables->generate();
     }
 

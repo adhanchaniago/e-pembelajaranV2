@@ -58,7 +58,7 @@ $(document).ready(function () {
         data: "nama_ujian"
       },
       {
-        data: "nama_mapel"
+        data: "nama_topik"
       },
       {
         data: "nama_guru"

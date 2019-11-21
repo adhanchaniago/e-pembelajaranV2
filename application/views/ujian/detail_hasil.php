@@ -36,7 +36,7 @@
                         <td><?= strftime('%A, %d %B %Y', strtotime($ujian->tgl_mulai)) ?></td>
                     </tr>
                     <tr>
-                        <th>Tanggal Selasi</th>
+                        <th>Tanggal Selesai</th>
                         <td><?= strftime('%A, %d %B %Y', strtotime($ujian->terlambat)) ?></td>
                     </tr>
                 </table>
@@ -44,8 +44,8 @@
             <div class="col-sm-6">
                 <table class="table w-100">
                     <tr>
-                        <th>Mata Pelajaran</th>
-                        <td><?= $ujian->nama_mapel ?></td>
+                        <th>Topik</th>
+                        <td><?= $ujian->nama_topik ?></td>
                     </tr>
                     <tr>
                         <th>Guru</th>

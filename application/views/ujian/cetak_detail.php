@@ -82,8 +82,8 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
     <tr>
         <th>Jumlah Soal</th>
         <td>{$ujian->jumlah_soal}</td>
-        <th>Guru</th>
-        <td>{$ujian->nama_guru}</td>
+        <th>Topik</th>
+        <td>{$ujian->nama_topik}</td>
     </tr>
     <tr>
         <th>Waktu</th>
@@ -102,6 +102,10 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
         <td>{$selesai}</td>
         <th>Rata-rata Nilai</th>
         <td>{$nilai->avg_nilai}</td>
+    </tr>
+    <tr>
+        <th>Guru</th>
+        <td>{$ujian->nama_guru}</td>
     </tr>
 </table>
 EOD;

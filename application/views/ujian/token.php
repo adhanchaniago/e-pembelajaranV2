@@ -28,6 +28,10 @@
                         <td><?= $ujian->nama_ujian ?></td>
                     </tr>
                     <tr>
+                        <th>Topik</th>
+                        <td><?= $ujian->nama_topik ?></td>
+                    </tr>
+                    <tr>
                         <th>Jumlah Soal</th>
                         <td><?= $ujian->jumlah_soal ?></td>
                     </tr>

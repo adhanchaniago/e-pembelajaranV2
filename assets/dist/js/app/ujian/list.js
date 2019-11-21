@@ -34,6 +34,9 @@ $(document).ready(function () {
                 "data": 'nama_mapel'
             },
             {
+                "data": 'nama_topik'
+            },
+            {
                 "data": 'nama_guru'
             },
             {
@@ -48,7 +51,7 @@ $(document).ready(function () {
             }
         ],
         columnDefs: [{
-            "targets": 6,
+            "targets": 7,
             "data": {
                 "id_ujian": "id_ujian",
                 "ada": "ada"

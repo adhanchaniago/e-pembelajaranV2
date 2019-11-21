@@ -37,9 +37,14 @@ class Master_model extends CI_Model
         $this->datatables->select('id_topik, nama_topik, mapel_id, nama_mapel');
         $this->datatables->from('topik');
         $this->datatables->join('mapel', 'mapel_id=id_mapel');
-        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id, topik, id_mapel, nama_mapel');
+        $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_topik, nama_topik, id_mapel, nama_mapel');
         return $this->datatables->generate();
     }
+    public function getTopikByMapel($mapel_id)
+    {
+        return $this->db->get_where('topik', array('mapel_id' => $mapel_id))->result();
+    }
+
     public function getTopikById($id)
     {
         $this->db->where_in('id_topik', $id);

@@ -76,8 +76,9 @@ class Ujian extends CI_Controller
 			'judul'		=> 'Ujian',
 			'subjudul'	=> 'Tambah Ujian',
 			'mapel'	=> $this->soal->getMapelGuru($user->username),
-			'guru'		=> $this->ujian->getIdGuru($user->username),
+			'guru'		=> $this->ujian->getIdGuru($user->username)
 		];
+		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('ujian/add');
@@ -98,6 +99,7 @@ class Ujian extends CI_Controller
 			'guru'		=> $this->ujian->getIdGuru($user->username),
 			'ujian'		=> $this->ujian->getUjianById($id),
 		];
+		$data['topik'] = $this->master->getTopikById($data['mapel']->mapel_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('ujian/edit');
@@ -110,17 +112,16 @@ class Ujian extends CI_Controller
 		return date('Y-m-d H:i:s', strtotime($tgl));
 	}
 
-	public function validasi()
+	public function validasi($m = null, $t = null)
 	{
 		$this->akses_guru();
 
-		$user 	= $this->ion_auth->user()->row();
-		$guru 	= $this->ujian->getIdGuru($user->username);
-		$jml 	= $this->ujian->getJumlahSoal($guru->id_guru)->jml_soal;
+		$jml 	= $this->ujian->getJumlahSoal($m, $t)->jml_soal;
 		$jml_a 	= $jml + 1; // Jika tidak mengerti, silahkan baca user_guide codeigniter tentang form_validation pada bagian less_than
 
 		$this->form_validation->set_rules('nama_ujian', 'Nama Ujian', 'required|alpha_numeric_spaces|max_length[50]');
-		$this->form_validation->set_rules('jumlah_soal', 'Jumlah Soal', "required|integer|less_than[{$jml_a}]|greater_than[0]", ['less_than' => "Soal tidak cukup, anda hanya punya {$jml} soal"]);
+		$this->form_validation->set_rules('topik', 'Topik', 'required');
+		$this->form_validation->set_rules('jumlah_soal', 'Jumlah Soal', "required|integer|less_than[{$jml_a}]|greater_than[0]", ['less_than' => "Soal tidak cukup, hanya ada {$jml} soal untuk topik ini"]);
 		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
 		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
 		$this->form_validation->set_rules('waktu', 'Waktu', 'required|integer|max_length[4]|greater_than[0]');
@@ -129,12 +130,15 @@ class Ujian extends CI_Controller
 
 	public function save()
 	{
-		$this->validasi();
+		$m 		= $this->input->post('mapel_id', true);
+		$t	 	= $this->input->post('topik', true);
+		$this->validasi($m, $t);
 		$this->load->helper('string');
 
+		$mapel_id 		= $this->input->post('mapel_id', true);
+		$topik_id	 	= $this->input->post('topik', true);
 		$method 		= $this->input->post('method', true);
 		$guru_id 		= $this->input->post('guru_id', true);
-		$mapel_id 		= $this->input->post('mapel_id', true);
 		$nama_ujian 	= $this->input->post('nama_ujian', true);
 		$jumlah_soal 	= $this->input->post('jumlah_soal', true);
 		$tgl_mulai 		= $this->convert_tgl($this->input->post('tgl_mulai', 	true));
@@ -147,6 +151,7 @@ class Ujian extends CI_Controller
 			$data['status'] = false;
 			$data['errors'] = [
 				'nama_ujian' 	=> form_error('nama_ujian'),
+				'topik'		 	=> form_error('topik'),
 				'jumlah_soal' 	=> form_error('jumlah_soal'),
 				'tgl_mulai' 	=> form_error('tgl_mulai'),
 				'tgl_selesai' 	=> form_error('tgl_selesai'),
@@ -156,6 +161,7 @@ class Ujian extends CI_Controller
 		} else {
 			$input = [
 				'nama_ujian' 	=> $nama_ujian,
+				'topik_id'	 	=> $topik_id,
 				'jumlah_soal' 	=> $jumlah_soal,
 				'tgl_mulai' 	=> $tgl_mulai,
 				'terlambat' 	=> $tgl_selesai,
@@ -164,7 +170,7 @@ class Ujian extends CI_Controller
 			];
 			if ($method === 'add') {
 				$input['guru_id']	= $guru_id;
-				$input['mapel_id'] = $mapel_id;
+				$input['mapel_id'] 	= $mapel_id;
 				$input['token']		= $token;
 				$action = $this->master->create('ujian', $input);
 			} else if ($method === 'edit') {

@@ -39,6 +39,9 @@ $(document).ready(function () {
                 "data": 'nama_mapel'
             },
             {
+                "data": 'nama_topik'
+            },
+            {
                 "data": 'jumlah_soal'
             },
             {
@@ -62,7 +65,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "targets": 7,
+                "targets": 8,
                 "data": "token",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">
@@ -71,7 +74,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "targets": 8,
+                "targets": 9,
                 "data": "id_ujian",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">

@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dashboard_model extends CI_Model {
+class Dashboard_model extends CI_Model
+{
 
     public function total($table)
     {
@@ -15,19 +16,27 @@ class Dashboard_model extends CI_Model {
         $this->db->from($table);
         $this->db->where($pk, $id);
 
-        if($join !== null){
-            foreach($join as $table => $field){
+        if ($join !== null) {
+            foreach ($join as $table => $field) {
                 $this->db->join($table, $field);
             }
         }
-        
-        if($order !== null){
-            foreach($order as $field => $sort){
+
+        if ($order !== null) {
+            foreach ($order as $field => $sort) {
                 $this->db->order_by($field, $sort);
             }
         }
 
         $query = $this->db->get();
         return $query;
+    }
+
+    public function getKelas($id)
+    {
+        $this->db->select('*');
+        $this->db->from('kelas');
+        $this->db->where_in('id_kelas', $id);
+        return $this->db->get();
     }
 }

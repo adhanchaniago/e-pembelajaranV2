@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 20 Nov 2019 pada 12.22
+-- Waktu pembuatan: 21 Nov 2019 pada 02.43
 -- Versi server: 10.3.16-MariaDB
 -- Versi PHP: 7.3.7
 
@@ -92,8 +92,7 @@ CREATE TABLE `hasil_ujian` (
 --
 
 INSERT INTO `hasil_ujian` (`id`, `ujian_id`, `siswa_id`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
-(8, 7, 2, '8,9', '8:A:N,9::N', 1, '50.00', '100.00', '2019-11-19 10:53:30', '2019-11-19 10:54:30', 'N'),
-(9, 9, 2, '12', '12:A:N', 1, '100.00', '100.00', '2019-11-20 15:02:18', '2019-11-20 15:04:18', 'N');
+(12, 10, 2, '9,8,10', '9:D:N,8:A:N,10:A:N', 2, '66.00', '100.00', '2019-11-20 23:42:43', '2019-11-21 00:42:43', 'N');
 
 -- --------------------------------------------------------
 
@@ -255,7 +254,7 @@ CREATE TABLE `topik` (
 --
 
 INSERT INTO `topik` (`id_topik`, `nama_topik`, `mapel_id`) VALUES
-(1, 'Aljabar', 2),
+(1, 'Aljabaraaa', 2),
 (2, 'UTS', 2),
 (3, 'Trigonometri', 2),
 (4, 'Sinonim', 1),
@@ -271,6 +270,7 @@ CREATE TABLE `ujian` (
   `id_ujian` int(11) NOT NULL,
   `guru_id` int(11) NOT NULL,
   `mapel_id` int(11) NOT NULL,
+  `topik_id` int(11) NOT NULL,
   `nama_ujian` varchar(200) NOT NULL,
   `jumlah_soal` int(11) NOT NULL,
   `waktu` int(11) NOT NULL,
@@ -284,10 +284,8 @@ CREATE TABLE `ujian` (
 -- Dumping data untuk tabel `ujian`
 --
 
-INSERT INTO `ujian` (`id_ujian`, `guru_id`, `mapel_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
-(7, 5, 2, 'Penjumlahan', 2, 1, 'acak', '2019-11-19 10:42:20', '2019-11-20 10:42:30', 'VXNYE'),
-(8, 6, 2, 'Penjumlahan', 2, 1, 'acak', '2019-11-19 10:42:20', '2019-11-20 10:42:30', 'VXNYE'),
-(9, 7, 1, 'Sinonim', 1, 2, 'urut', '2019-11-20 15:00:49', '2019-11-21 15:00:51', 'KZTFP');
+INSERT INTO `ujian` (`id_ujian`, `guru_id`, `mapel_id`, `topik_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
+(10, 5, 2, 2, 'awdawd', 3, 60, 'acak', '2019-11-20 21:40:45', '2019-11-21 21:40:46', 'OKLCL');
 
 -- --------------------------------------------------------
 
@@ -323,8 +321,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
 (1, '127.0.0.1', 'Administrator', '$2y$12$duBtimAQzpTC6CaH9MFOheoCN5ss48Fe/i1PeO236GTPxozToItZG', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1574223036, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
-(11, '::1', '12345678', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'adam@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574134830, 1574237068, 1, 'Adam', 'Hendra', NULL, NULL),
-(12, '::1', '99000001', '$2y$10$qX7BZihKvB5M8Bn4K06Fk.98T9PVvEDaFeA50LYWE59HaLQAe/I6e', 'shasa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574135038, 1574237019, 1, 'Shafitri', 'Shafitri', NULL, NULL),
+(11, '::1', '12345678', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'adam@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574134830, 1574265735, 1, 'Adam', 'Hendra', NULL, NULL),
+(12, '::1', '99000001', '$2y$10$qX7BZihKvB5M8Bn4K06Fk.98T9PVvEDaFeA50LYWE59HaLQAe/I6e', 'shasa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574135038, 1574265638, 1, 'Shafitri', 'Shafitri', NULL, NULL),
 (13, '::1', '99000002', '$2y$10$qX7BZihKvB5M8Bn4K06Fk.98T9PVvEDaFeA50LYWE59HaLQAe/I6e', 'murayyan97@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574135116, 1574135130, 1, 'Muhammad', 'Abhad', NULL, NULL),
 (14, '::1', '12345679', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'herman@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574163761, 1574163779, 1, 'Herman', 'Tolle', NULL, NULL),
 (15, '::1', '19201920', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'wayan@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574236244, 1574236616, 1, 'Wayan', 'Firdaus', NULL, NULL);
@@ -428,7 +426,8 @@ ALTER TABLE `topik`
 ALTER TABLE `ujian`
   ADD PRIMARY KEY (`id_ujian`),
   ADD KEY `matkul_id` (`mapel_id`),
-  ADD KEY `dosen_id` (`guru_id`);
+  ADD KEY `dosen_id` (`guru_id`),
+  ADD KEY `topik_id` (`topik_id`);
 
 --
 -- Indeks untuk tabel `users`
@@ -469,7 +468,7 @@ ALTER TABLE `guru`
 -- AUTO_INCREMENT untuk tabel `hasil_ujian`
 --
 ALTER TABLE `hasil_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurusan`
@@ -487,7 +486,7 @@ ALTER TABLE `kelas`
 -- AUTO_INCREMENT untuk tabel `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `mapel`
@@ -517,7 +516,7 @@ ALTER TABLE `topik`
 -- AUTO_INCREMENT untuk tabel `ujian`
 --
 ALTER TABLE `ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
@@ -560,7 +559,8 @@ ALTER TABLE `topik`
 --
 ALTER TABLE `ujian`
   ADD CONSTRAINT `ujian_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
-  ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`);
+  ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
+  ADD CONSTRAINT `ujian_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
 
 --
 -- Ketidakleluasaan untuk tabel `users_groups`

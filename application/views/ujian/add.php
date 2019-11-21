@@ -27,6 +27,16 @@
                     <small class="help-block"></small>
                 </div>
                 <div class="form-group">
+                    <label for="topik">Topik</label>
+                    <select name="topik" id="topik" class="form-control select2" style="width: 100%!important">
+                        <option value="" disabled selected>Pilih Topik</option>
+                        <?php foreach ($topik as $row) : ?>
+                            <option value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small class="help-block"></small>
+                </div>
+                <div class="form-group">
                     <label for="jumlah_soal">Jumlah Soal</label>
                     <input placeholder="Jumlah Soal" type="number" class="form-control" name="jumlah_soal">
                     <small class="help-block"></small>
@@ -43,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label for="waktu">Waktu</label>
-                    <input placeholder="menit" type="number" class="form-control" name="waktu">
+                    <input placeholder="menit" type="number" class="form-control" min="1" name="waktu">
                     <small class="help-block"></small>
                 </div>
                 <div class="form-group">

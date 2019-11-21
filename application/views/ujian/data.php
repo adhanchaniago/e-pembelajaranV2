@@ -24,9 +24,10 @@
                     <th>No.</th>
                     <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
+                    <th>Topik</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
-                    <th>Acak Soal</th>
+                    <th>Jenis Soal</th>
                     <th class="text-center">Token</th>
                     <th class="text-center">Aksi</th>
                 </tr>
@@ -39,9 +40,10 @@
                     <th>No.</th>
                     <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
+                    <th>Topik</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
-                    <th>Acak Soal</th>
+                    <th>Jenis Soal</th>
                     <th class="text-center">Token</th>
                     <th class="text-center">Aksi</th>
                 </tr>
