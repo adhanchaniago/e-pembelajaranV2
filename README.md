@@ -1,4 +1,4 @@
-# ujian-online-ci
+# Ujian Online Codeigniter
 
 Aplikasi Ujian Online Menggunakan CodeIgniter
 
@@ -11,11 +11,7 @@ Aplikasi Ujian Online Menggunakan CodeIgniter
 
 jika sudah mengikuti langkah diatas dengan benar seharusnya aplikasi sudah berjalan dengan baik. Pastikan pada console browser tidak terdapat error.
 
-<h3>User</h3>
-<ul>
-<li>Administrator <br/> Email: admin@admin.com <br/> Password : password </li>
-  
-</ul>
+
 
 Thanks to :
 

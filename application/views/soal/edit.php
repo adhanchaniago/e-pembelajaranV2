@@ -63,6 +63,7 @@
                                 </div>
                             </div>
 
+                            <?php if ($soal->jenis_soal == 'pilgan') { ?>
                             <!-- 
                                 Membuat perulangan A-E 
                             -->
@@ -105,6 +106,9 @@
                                 </select>
                                 <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
                             </div>
+
+                            <?php } ?>
+
                             <div class="form-group col-sm-12">
                                 <label for="bobot" class="control-label">Bobot Nilai</label>
                                 <input required="required" value="<?= $soal->bobot ?>" type="number" name="bobot" placeholder="Bobot Soal" id="bobot" class="form-control">

@@ -31,6 +31,15 @@
                         </div>
 
                         <div class="col-sm-12">
+                            <label for="soal" class="control-label">Jenis Soal</label>
+                            <select id="jenis_soal" name="jenis_soal" class="form-control" style="width: 100%!important">
+                                <option value="pilgan">Pilihan Ganda</option>
+                                <option value="essay">Essay</option>
+                            </select>
+                            <small class="help-block" style="color: #dc3545"><?= form_error('jenis_soal') ?></small>
+                        </div>
+
+                        <div class="col-sm-12">
                             <label for="soal" class="control-label">Topik</label>
                             <select id="topik" multiple="multiple" name="topik_id[]" class="form-control select2" style="width: 100%!important">
                                 <?php foreach ($topik as $topik) : ?>
@@ -54,38 +63,41 @@
                         <!-- 
                             Membuat perulangan A-E 
                         -->
-                        <?php
-                        $abjad = ['a', 'b', 'c', 'd', 'e'];
-                        foreach ($abjad as $abj) :
-                            $ABJ = strtoupper($abj); // Abjad Kapital
-                            ?>
+                        <div id="pilgan">
+                            <?php
+                            $abjad = ['a', 'b', 'c', 'd', 'e'];
+                            foreach ($abjad as $abj) :
+                                $ABJ = strtoupper($abj); // Abjad Kapital
+                                ?>
 
-                            <div class="col-sm-12">
-                                <label for="file">Jawaban <?= $ABJ; ?></label>
-                                <div class="form-group">
-                                    <input type="file" name="file_<?= $abj; ?>" class="form-control">
-                                    <small class="help-block" style="color: #dc3545"><?= form_error('file_' . $abj) ?></small>
+                                <div class="col-sm-12">
+                                    <label for="file">Jawaban <?= $ABJ; ?></label>
+                                    <div class="form-group">
+                                        <input type="file" name="file_<?= $abj; ?>" class="form-control">
+                                        <small class="help-block" style="color: #dc3545"><?= form_error('file_' . $abj) ?></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control froala-editor"><?= set_value('jawaban_' . $abj) ?></textarea>
+                                        <small class="help-block" style="color: #dc3545"><?= form_error('jawaban_' . $abj) ?></small>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control froala-editor"><?= set_value('jawaban_a') ?></textarea>
-                                    <small class="help-block" style="color: #dc3545"><?= form_error('jawaban_' . $abj) ?></small>
-                                </div>
+
+                            <?php endforeach; ?>
+
+                            <div class="form-group col-sm-12">
+                                <label for="jawaban" class="control-label">Kunci Jawaban</label>
+                                <select name="jawaban" id="jawaban" class="form-control select2" style="width:100%!important">
+                                    <option value="" disabled selected>Pilih Kunci Jawaban</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                                <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
                             </div>
-
-                        <?php endforeach; ?>
-
-                        <div class="form-group col-sm-12">
-                            <label for="jawaban" class="control-label">Kunci Jawaban</label>
-                            <select name="jawaban" id="jawaban" class="form-control select2" style="width:100%!important">
-                                <option value="" disabled selected>Pilih Kunci Jawaban</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
-                            <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
                         </div>
+                        
                         <div class="form-group col-sm-12">
                             <label for="bobot" class="control-label">Bobot Soal</label>
                             <input required="required" value="1" type="number" name="bobot" placeholder="Bobot Soal" id="bobot" class="form-control">
@@ -95,6 +107,7 @@
                             <a href="<?= base_url('soal') ?>" class="btn btn-flat btn-default"><i class="fa fa-arrow-left"></i> Batal</a>
                             <button type="submit" id="submit" class="btn btn-flat bg-purple"><i class="fa fa-save"></i> Simpan</button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -102,3 +115,15 @@
         <?= form_close(); ?>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $("#jenis_soal").change(function() {
+            if ($("#jenis_soal").val() == 'pilgan') {
+                $("#pilgan").show()
+            } else {
+                $("#pilgan").hide()
+            }
+        })
+    });
+</script>

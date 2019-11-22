@@ -137,6 +137,16 @@ class Soal extends CI_Controller
         $this->form_validation->set_rules('bobot', 'Bobot Soal', 'required|max_length[2]');
     }
 
+    public function validasi_essay()
+    {
+        if ($this->ion_auth->is_admin()) {
+            $this->form_validation->set_rules('guru_id', 'Guru', 'required');
+        }
+        $this->form_validation->set_rules('soal', 'Soal', 'required');
+        $this->form_validation->set_rules('topik_id[]', 'Topik', 'required');
+        $this->form_validation->set_rules('bobot', 'Bobot Soal', 'required|max_length[2]');
+    }
+
     public function file_config()
     {
         $allowed_type     = [
@@ -154,26 +164,43 @@ class Soal extends CI_Controller
     public function save()
     {
         $method = $this->input->post('method', true);
-        $this->validasi();
+        // essay atau pilgan
+        if ($this->input->post('jenis_soal') == 'pilgan') {
+            $this->validasi();
+        } else {
+            $this->validasi_essay();
+        }
         $this->file_config();
         if ($this->form_validation->run() === FALSE) {
             $method === 'add' ? $this->add() : $this->edit();
         } else {
             $t = $this->input->post('topik_id', true);
             $topik = implode(",", $t);
-            $data = [
-                'topik'      => $topik,
-                'soal'      => $this->input->post('soal', true),
-                'jawaban'   => $this->input->post('jawaban', true),
-                'bobot'     => $this->input->post('bobot', true),
-            ];
+            // essay atau pilgan
+            if ($this->input->post('jenis_soal') == 'pilgan') {
+                $data = [
+                    'topik'      => $topik,
+                    'soal'      => $this->input->post('soal', true),
+                    'jenis_soal' => $this->input->post('jenis_soal', true),
+                    'jawaban'   => $this->input->post('jawaban', true),
+                    'bobot'     => $this->input->post('bobot', true),
+                ];
 
-            $abjad = ['a', 'b', 'c', 'd', 'e'];
-
-            // Inputan Opsi
-            foreach ($abjad as $abj) {
-                $data['opsi_' . $abj]    = $this->input->post('jawaban_' . $abj, true);
+                $abjad = ['a', 'b', 'c', 'd', 'e'];
+    
+                // Inputan Opsi
+                foreach ($abjad as $abj) {
+                    $data['opsi_' . $abj]    = $this->input->post('jawaban_' . $abj, true);
+                }
+            } else {
+                $data = [
+                    'topik'      => $topik,
+                    'soal'      => $this->input->post('soal', true),
+                    'jenis_soal' => $this->input->post('jenis_soal', true),
+                    'bobot'     => $this->input->post('bobot', true),
+                ];
             }
+
 
             $i = 0;
             foreach ($_FILES as $key => $val) {
@@ -234,13 +261,22 @@ class Soal extends CI_Controller
                 $data['created_on'] = time();
                 $data['updated_on'] = time();
                 //insert data
-                $this->master->create('soal', $data);
+                if ($this->input->post('jenis_soal') == 'pilgan') {
+                    $this->master->create('soal', $data);
+                } else {
+                    $this->master->create('soal', $data);
+                }
             } else if ($method === 'edit') {
                 //push array
                 $data['updated_on'] = time();
                 //update data
-                $id_soal = $this->input->post('id_soal', true);
-                $this->master->update('soal', $data, 'id_soal', $id_soal);
+                if ($this->input->post('jenis_soal') == 'pilgan') {
+                    $id_soal = $this->input->post('id_soal', true);
+                    $this->master->update('soal', $data, 'id_soal', $id_soal);
+                } else {
+                    $id_soal = $this->input->post('id_soal', true);
+                    $this->master->update('soal', $data, 'id_soal', $id_soal);
+                }
             } else {
                 show_error('Method tidak diketahui', 404);
             }

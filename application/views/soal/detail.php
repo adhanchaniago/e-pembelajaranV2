@@ -20,6 +20,7 @@
                     </div>
                 <?php endif; ?>
                 <?=$soal->soal?>
+                <?php if ($soal->jenis_soal == 'pilgan') { ?>
                 <hr class="my-4">
                 <h3 class="text-center">Jawaban</h3>
                 
@@ -44,6 +45,7 @@
                     <?php endif;?>
                 
                 <?php endforeach;?>
+                <?php } ?>
                 
                 <hr class="my-4">
                 <strong>Dibuat pada :</strong> <?=strftime("%A, %d %B %Y", date($soal->created_on))?>
