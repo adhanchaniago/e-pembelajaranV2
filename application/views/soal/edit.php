@@ -48,64 +48,63 @@
                             </div>
                             <div class="col-sm-12">
                                 <label for="soal" class="control-label text-center">Soal</label>
-                                <div class="row">
-                                    <div class="form-group col-sm-3">
-                                        <input type="file" name="file_soal" class="form-control">
-                                        <small class="help-block" style="color: #dc3545"><?= form_error('file_soal') ?></small>
-                                        <?php if (!empty($soal->file)) : ?>
-                                            <?= tampil_media('uploads/bank_soal/' . $soal->file); ?>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="form-group col-sm-9">
-                                        <textarea name="soal" id="soal" class="form-control froala-editor"><?= $soal->soal ?></textarea>
-                                        <small class="help-block" style="color: #dc3545"><?= form_error('soal') ?></small>
-                                    </div>
+                                <div class="form-group">
+                                    <input type="file" name="file_soal" class="form-control">
+                                    <small class="help-block" style="color: #dc3545"><?= form_error('file_soal') ?></small>
+                                    <?php if (!empty($soal->file)) : ?>
+                                        <?= tampil_media('uploads/bank_soal/' . $soal->file); ?>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="soal" id="soal" class="form-control froala-editor"><?= $soal->soal ?></textarea>
+                                    <small class="help-block" style="color: #dc3545"><?= form_error('soal') ?></small>
                                 </div>
                             </div>
+
 
                             <?php if ($soal->jenis_soal == 'pilgan') { ?>
-                            <!-- 
+                                <!-- 
                                 Membuat perulangan A-E 
                             -->
-                            <?php
-                            $abjad = ['a', 'b', 'c', 'd', 'e'];
-                            foreach ($abjad as $abj) :
-                                $ABJ = strtoupper($abj); // Abjad Kapital
-                                $file = 'file_' . $abj;
-                                $opsi = 'opsi_' . $abj;
-                                ?>
+                                <?php
+                                    $abjad = ['a', 'b', 'c', 'd', 'e'];
+                                    foreach ($abjad as $abj) :
+                                        $ABJ = strtoupper($abj); // Abjad Kapital
+                                        $file = 'file_' . $abj;
+                                        $opsi = 'opsi_' . $abj;
+                                        ?>
 
-                                <div class="col-sm-12">
-                                    <label for="jawaban_<?= $abj; ?>" class="control-label text-center">Jawaban <?= $ABJ; ?></label>
-                                    <div class="row">
-                                        <div class="form-group col-sm-3">
-                                            <input type="file" name="<?= $file; ?>" class="form-control">
-                                            <small class="help-block" style="color: #dc3545"><?= form_error($file) ?></small>
-                                            <?php if (!empty($soal->$file)) : ?>
-                                                <?= tampil_media('uploads/bank_soal/' . $soal->$file); ?>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="form-group col-sm-9">
-                                            <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control froala-editor"><?= $soal->$opsi ?></textarea>
-                                            <small class="help-block" style="color: #dc3545"><?= form_error('jawaban_' . $abj) ?></small>
+                                    <div class="col-sm-12">
+                                        <label for="jawaban_<?= $abj; ?>" class="control-label text-center">Jawaban <?= $ABJ; ?></label>
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <input type="file" name="<?= $file; ?>" class="form-control">
+                                                <small class="help-block" style="color: #dc3545"><?= form_error($file) ?></small>
+                                                <?php if (!empty($soal->$file)) : ?>
+                                                    <?= tampil_media('uploads/bank_soal/' . $soal->$file); ?>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="form-group col-sm-9">
+                                                <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control froala-editor"><?= $soal->$opsi ?></textarea>
+                                                <small class="help-block" style="color: #dc3545"><?= form_error('jawaban_' . $abj) ?></small>
+                                            </div>
                                         </div>
                                     </div>
+
+                                <?php endforeach; ?>
+
+                                <div class="form-group col-sm-12">
+                                    <label for="jawaban" class="control-label">Kunci Jawaban</label>
+                                    <select required="required" name="jawaban" id="jawaban" class="form-control select2" style="width:100%!important">
+                                        <option value="" disabled selected>Pilih Kunci Jawaban</option>
+                                        <option <?= $soal->jawaban === "A" ? "selected" : "" ?> value="A">A</option>
+                                        <option <?= $soal->jawaban === "B" ? "selected" : "" ?> value="B">B</option>
+                                        <option <?= $soal->jawaban === "C" ? "selected" : "" ?> value="C">C</option>
+                                        <option <?= $soal->jawaban === "D" ? "selected" : "" ?> value="D">D</option>
+                                        <option <?= $soal->jawaban === "E" ? "selected" : "" ?> value="E">E</option>
+                                    </select>
+                                    <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
                                 </div>
-
-                            <?php endforeach; ?>
-
-                            <div class="form-group col-sm-12">
-                                <label for="jawaban" class="control-label">Kunci Jawaban</label>
-                                <select required="required" name="jawaban" id="jawaban" class="form-control select2" style="width:100%!important">
-                                    <option value="" disabled selected>Pilih Kunci Jawaban</option>
-                                    <option <?= $soal->jawaban === "A" ? "selected" : "" ?> value="A">A</option>
-                                    <option <?= $soal->jawaban === "B" ? "selected" : "" ?> value="B">B</option>
-                                    <option <?= $soal->jawaban === "C" ? "selected" : "" ?> value="C">C</option>
-                                    <option <?= $soal->jawaban === "D" ? "selected" : "" ?> value="D">D</option>
-                                    <option <?= $soal->jawaban === "E" ? "selected" : "" ?> value="E">E</option>
-                                </select>
-                                <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
-                            </div>
 
                             <?php } ?>
 

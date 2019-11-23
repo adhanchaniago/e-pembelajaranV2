@@ -7,11 +7,12 @@ class Topik extends CI_Controller
 		parent::__construct();
 		if (!$this->ion_auth->logged_in()) {
 			redirect('auth');
-		} else if (!$this->ion_auth->is_admin()) {
+		} else if (!$this->ion_auth->is_admin() && !$this->ion_auth->in_group('guru')) {
 			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->model('Master_model', 'master');
+
 		$this->form_validation->set_error_delimiters('', '');
 	}
 	public function output_json($data, $encode = true)
@@ -21,34 +22,43 @@ class Topik extends CI_Controller
 	}
 	public function index()
 	{
+		$user = $this->ion_auth->user()->row();
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Topik',
-			'subjudul' => 'Data Topik'
+			'subjudul' => 'Data Topik',
+			'mapel' => $this->master->getMapelGuru($user->username)
 		];
+
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/topik/data');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
-	public function data()
+	public function data($id = null)
 	{
-		$this->output_json($this->master->getDataTopik(), false);
+		$this->output_json($this->master->getDataTopik($id), false);
 	}
 	public function add()
 	{
+		$user = $this->ion_auth->user()->row();
 		$data = [
 			'user' 		=> $this->ion_auth->user()->row(),
 			'judul'		=> 'Tambah Topik',
 			'subjudul'	=> 'Tambah Data Topik',
-			'banyak'	=> $this->input->post('banyak', true),
-			'mapel'	=> $this->master->getAllMapel()
+			'banyak'	=> $this->input->post('banyak', true)
 		];
+		if ($this->ion_auth->is_admin()) {
+			$data['mapel']	= $this->master->getAllMapel();
+		} else {
+			$data['mapel']	= $this->master->getMapelGuru($user->username);
+		}
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/topik/add');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 	public function edit()
 	{
+		$user = $this->ion_auth->user()->row();
 		$chk = $this->input->post('checked', true);
 		if (!$chk) {
 			redirect('admin/topik');
@@ -58,9 +68,13 @@ class Topik extends CI_Controller
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Topik',
 				'subjudul'	=> 'Edit Data Topik',
-				'mapel'	=> $this->master->getAllMapel(),
 				'topik'		=> $topik
 			];
+			if ($this->ion_auth->is_admin()) {
+				$data['mapel']	= $this->master->getAllMapel();
+			} else {
+				$data['mapel']	= $this->master->getMapelGuru($user->username);
+			}
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('master/topik/edit');
 			$this->load->view('_templates/dashboard/_footer.php');
