@@ -44,13 +44,20 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <select required="required" name="mapel_id[<?= $i ?>]" class="input-sm form-control select2" style="width: 100%!important">
-                                            <option value="" disabled>-- Pilih --</option>
-                                            <?php foreach ($mapel as $j) : ?>
-                                                <option <?= $row->mapel_id == $j->id_mapel ? "selected='selected'" : "" ?> value="<?= $j->id_mapel ?>"><?= $j->nama_mapel ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <small class="help-block text-right"></small>
+
+                                        <?php if ($this->ion_auth->is_admin()) { ?>
+                                            <select required="required" name="mapel_id[<?= $i ?>]" class="input-sm form-control select2" style="width: 100%!important">
+                                                <option value="" disabled>-- Pilih --</option>
+                                                <?php foreach ($mapel as $j) : ?>
+                                                    <option <?= $row->mapel_id == $j->id_mapel ? "selected='selected'" : "" ?> value="<?= $j->id_mapel ?>"><?= $j->nama_mapel ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <small class="help-block text-right"></small>
+                                        <?php } else { ?>
+                                            <input type="text" readonly value="<?= $mapel->nama_mapel ?>" class="form-control" style="width: 100%!important">
+                                            <input type="hidden" readonly value="<?= $mapel->mapel_id ?>" name="mapel_id[<?= $i ?>]" class="form-control input-sm" style="width: 100%!important">
+
+                                        <?php } ?>
                                     </div>
                                 </td>
                             </tr>

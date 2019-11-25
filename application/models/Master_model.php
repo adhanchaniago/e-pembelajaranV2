@@ -32,11 +32,14 @@ class Master_model extends CI_Model
     /**
      * Data Topik
      */
-    public function getDataTopik()
+    public function getDataTopik($id)
     {
         $this->datatables->select('id_topik, nama_topik, mapel_id, nama_mapel');
         $this->datatables->from('topik');
         $this->datatables->join('mapel', 'mapel_id=id_mapel');
+        if ($id !== null) {
+            $this->datatables->where('mapel_id', $id);
+        }
         $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_topik, nama_topik, id_mapel, nama_mapel');
         return $this->datatables->generate();
     }
@@ -201,7 +204,7 @@ class Master_model extends CI_Model
         return $this->datatables->generate();
     }
 
-    public function getAllmapel()
+    public function getAllMapel()
     {
         return $this->db->get('mapel')->result();
     }
@@ -240,7 +243,13 @@ class Master_model extends CI_Model
         return $this->db->get()->result();
     }
 
-
+    public function getMapelGuru($nip)
+    {
+        $this->db->select('mapel_id, nama_mapel, id_guru, nama_guru');
+        $this->db->join('mapel', 'mapel_id=id_mapel');
+        $this->db->from('guru')->where('nip', $nip);
+        return $this->db->get()->row();
+    }
     /**
      * Data Kelas guru
      */

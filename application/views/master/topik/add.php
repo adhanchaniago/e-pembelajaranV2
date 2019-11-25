@@ -41,13 +41,20 @@
                                 </td>
                                 <td width="200">
                                     <div class="form-group">
-                                        <select required="required" name="mapel_id[<?= $i ?>]" class="form-control input-sm select2" style="width: 100%!important">
-                                            <option value="" disabled selected>-- Pilih --</option>
-                                            <?php foreach ($mapel as $j) : ?>
-                                                <option value="<?= $j->id_mapel ?>"><?= $j->nama_mapel ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <small class="help-block text-right"></small>
+                                        <?php if ($this->ion_auth->is_admin()) { ?>
+                                            <select required="required" name="mapel_id[<?= $i ?>]" class="form-control input-sm select2" style="width: 100%!important">
+                                                <option value="" disabled selected>-- Pilih --</option>
+                                                <?php foreach ($mapel as $j) : ?>
+                                                    <option value="<?= $j->id_mapel ?>"><?= $j->nama_mapel ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <small class="help-block text-right"></small>
+                                        <?php } else { ?>
+                                            <input type="text" readonly value="<?= $mapel->nama_mapel ?>" class="form-control" style="width: 100%!important">
+                                            <input type="hidden" readonly value="<?= $mapel->mapel_id ?>" name="mapel_id[<?= $i ?>]" class="form-control input-sm" style="width: 100%!important">
+
+                                        <?php } ?>
+
                                     </div>
                                 </td>
                             </tr>

@@ -31,7 +31,7 @@ class Auth extends CI_Controller
 			'name' => 'identity',
 			'id' => 'identity',
 			'type' => 'text',
-			'placeholder' => 'Email',
+			'placeholder' => 'NIP/NIS',
 			'autofocus'	=> 'autofocus',
 			'class' => 'form-control',
 			'autocomplete' => 'off'

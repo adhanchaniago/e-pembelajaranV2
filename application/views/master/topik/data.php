@@ -60,3 +60,24 @@
 </div>
 
 <script src="<?= base_url() ?>assets/dist/js/app/master/topik/data.js"></script>
+
+<?php if ($this->ion_auth->is_admin()) : ?>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			let src = '<?= base_url() ?>topik/data';
+			table.ajax.url(src).load();
+		});
+	</script>
+<?php endif; ?>
+<?php if ($this->ion_auth->in_group('guru')) : ?>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			let id_mapel = '<?= $mapel->mapel_id ?>';
+			console.log(id_mapel)
+			let src = '<?= base_url() ?>topik/data';
+			let url = src + '/' + id_mapel;
+
+			table.ajax.url(url).load();
+		});
+	</script>
+<?php endif; ?>
