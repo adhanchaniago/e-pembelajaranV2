@@ -5,14 +5,25 @@ $(document).ready(function () {
     }
 
     buka(1);
-    simpan_sementara();
 
-    widget = $(".step");
-    btnnext = $(".next");
-    btnback = $(".back");
-    btnsubmit = $(".submit");
-
-    $(".step, .back, .selesai").hide();
+    if ($('#jenis_soal').val() == 'pilgan') {
+        simpan_sementara();
+    
+        widget = $(".step");
+        btnnext = $(".next");
+        btnback = $(".back");
+        btnsubmit = $(".submit");
+    
+        $(".step, .back, .selesai").hide();
+    } else {
+        widget = $(".step");
+        btnnext = $(".next");
+        btnback = $(".back");
+        btnsubmit = $(".submit");
+    
+        $(".step, .back").hide();
+    }
+    
     $("#widget_1").show();
 });
 

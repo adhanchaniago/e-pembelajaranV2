@@ -37,11 +37,13 @@ class Ujian extends CI_Controller
 		}
 	}
 
+	// untuk mengencode data menjadi json
 	public function output_json($data, $encode = true)
 	{
-		if ($encode) $data = json_encode($data);
+		 if ($encode) $data = json_encode($data);
 		$this->output->set_content_type('application/json')->set_output($data);
 	}
+
 
 	public function json($id = null)
 	{
@@ -50,6 +52,7 @@ class Ujian extends CI_Controller
 		$this->output_json($this->ujian->getDataUjian($id), false);
 	}
 
+	// fungsi untuk menampilkan seluruh daftar ujian yang dibuat untuk guru
 	public function master()
 	{
 		$this->akses_guru();
@@ -65,6 +68,15 @@ class Ujian extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	// fungsi untuk jquery mengambil soal essay berdasar topik
+	public function getSoalByTopic()
+	{
+		$this->akses_guru();
+		$topik = $this->input->get('topik'); 
+		$this->output_json($this->ujian->getSoalEssay($topik));
+	}
+
+	// fungsi untuk tampilan edit ujian
 	public function add()
 	{
 		$this->akses_guru();
@@ -80,11 +92,14 @@ class Ujian extends CI_Controller
 		];
 		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
 
+		// $data['soal'] = $this->ujian->getSoalEssay();
+
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('ujian/add');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	// fungsi untuk menampilkan tampilan edit ujian
 	public function edit($id)
 	{
 		$this->akses_guru();
@@ -100,6 +115,7 @@ class Ujian extends CI_Controller
 			'ujian'		=> $this->ujian->getUjianById($id),
 		];
 		$data['topik'] = $this->master->getTopikById($data['mapel']->mapel_id);
+		$data['soal'] = $this->ujian->getSoalEssay($data['ujian']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('ujian/edit');
@@ -126,13 +142,35 @@ class Ujian extends CI_Controller
 		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
 		$this->form_validation->set_rules('waktu', 'Waktu', 'required|integer|max_length[4]|greater_than[0]');
 		$this->form_validation->set_rules('jenis', 'Acak Soal', 'required|in_list[acak,urut]');
+		$this->form_validation->set_rules('jenis_soal', 'Tipe Soal', 'required|in_list[pilgan,essay]');
+	}
+
+	public function validasi_essay()
+	{
+		$this->akses_guru();
+
+		// $jml 	= $this->ujian->getJumlahSoal($m, $t)->jml_soal;
+		// $jml_a 	= $jml + 1; // Jika tidak mengerti, silahkan baca user_guide codeigniter tentang form_validation pada bagian less_than
+
+		$this->form_validation->set_rules('nama_ujian', 'Nama Ujian', 'required|alpha_numeric_spaces|max_length[50]');
+		$this->form_validation->set_rules('topik', 'Topik', 'required');
+		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
+		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
+		$this->form_validation->set_rules('waktu', 'Waktu', 'required|integer|max_length[4]|greater_than[0]');
+		$this->form_validation->set_rules('jenis_soal', 'Tipe Soal', 'required|in_list[pilgan,essay]');
+		$this->form_validation->set_rules('soal', 'Soal', 'required');
 	}
 
 	public function save()
 	{
 		$m 		= $this->input->post('mapel_id', true);
 		$t	 	= $this->input->post('topik', true);
-		$this->validasi($m, $t);
+		if ($this->input->post('jenis_soal') == 'pilgan') {
+			$this->validasi($m, $t);
+		} else {
+			$this->validasi_essay();
+		}
+		
 		$this->load->helper('string');
 
 		$mapel_id 		= $this->input->post('mapel_id', true);
@@ -144,7 +182,9 @@ class Ujian extends CI_Controller
 		$tgl_mulai 		= $this->convert_tgl($this->input->post('tgl_mulai', 	true));
 		$tgl_selesai	= $this->convert_tgl($this->input->post('tgl_selesai', true));
 		$waktu			= $this->input->post('waktu', true);
+		$jenis_soal		= $this->input->post('jenis_soal', true);
 		$jenis			= $this->input->post('jenis', true);
+		$id_soal		= $this->input->post('soal', true);
 		$token 			= strtoupper(random_string('alpha', 5));
 
 		if ($this->form_validation->run() === FALSE) {
@@ -156,18 +196,34 @@ class Ujian extends CI_Controller
 				'tgl_mulai' 	=> form_error('tgl_mulai'),
 				'tgl_selesai' 	=> form_error('tgl_selesai'),
 				'waktu' 		=> form_error('waktu'),
+				'jenis_soal'	=> form_error('jenis_soal'),
 				'jenis' 		=> form_error('jenis'),
+				'soal' 			=> form_error('soal')
 			];
 		} else {
-			$input = [
-				'nama_ujian' 	=> $nama_ujian,
-				'topik_id'	 	=> $topik_id,
-				'jumlah_soal' 	=> $jumlah_soal,
-				'tgl_mulai' 	=> $tgl_mulai,
-				'terlambat' 	=> $tgl_selesai,
-				'waktu' 		=> $waktu,
-				'jenis' 		=> $jenis,
-			];
+			if ($jenis_soal == 'pilgan') {
+				$input = [
+					'nama_ujian' 	=> $nama_ujian,
+					'topik_id'	 	=> $topik_id,
+					'jumlah_soal' 	=> $jumlah_soal,
+					'tgl_mulai' 	=> $tgl_mulai,
+					'terlambat' 	=> $tgl_selesai,
+					'waktu' 		=> $waktu,
+					'jenis_soal'	=> $jenis_soal,
+					'jenis' 		=> $jenis,
+				];
+			} else {
+				$input = [
+					'nama_ujian' 	=> $nama_ujian,
+					'topik_id'	 	=> $topik_id,
+					'tgl_mulai' 	=> $tgl_mulai,
+					'terlambat' 	=> $tgl_selesai,
+					'waktu' 		=> $waktu,
+					'jumlah_soal' 	=> 1,
+					'jenis_soal'	=> $jenis_soal,
+					'id_soal_essay'	=> $id_soal,
+				];
+			}
 			if ($method === 'add') {
 				$input['guru_id']	= $guru_id;
 				$input['mapel_id'] 	= $mapel_id;
@@ -182,6 +238,7 @@ class Ujian extends CI_Controller
 		$this->output_json($data);
 	}
 
+	// fungsi untuk menghapus ujian
 	public function delete()
 	{
 		$this->akses_guru();
@@ -195,6 +252,7 @@ class Ujian extends CI_Controller
 		}
 	}
 
+	// fungsi untuk memberikan token baru pada ujian
 	public function refresh_token($id)
 	{
 		$this->load->helper('string');
@@ -205,9 +263,10 @@ class Ujian extends CI_Controller
 	}
 
 	/**
-	 * BAGIAN MAHASISWA
+	 * BAGIAN SISWA
 	 */
 
+	//  fungsi untuk jquery mengambil data
 	public function list_json()
 	{
 		$this->akses_siswa();
@@ -216,6 +275,7 @@ class Ujian extends CI_Controller
 		$this->output_json($list, false);
 	}
 
+	// ini fungsi untuk menampilkan daftar ujian di siswa
 	public function list()
 	{
 		$this->akses_siswa();
@@ -233,6 +293,7 @@ class Ujian extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	// ketika menekan tombol ikuti ujian, akan mengakses fungsi token
 	public function token($id)
 	{
 		$this->akses_siswa();
@@ -251,6 +312,7 @@ class Ujian extends CI_Controller
 		$this->load->view('_templates/topnav/_footer.php');
 	}
 
+	// untuk memvalidasi inputan token dari siswa
 	public function cektoken()
 	{
 		$id = $this->input->post('id_ujian', true);
@@ -269,12 +331,14 @@ class Ujian extends CI_Controller
 		$this->output_json(['key' => $key]);
 	}
 
+	// fungsi index untuk halaman soal ujian dan jawaban
 	public function index()
 	{
 		$this->akses_siswa();
 		$key = $this->input->get('key', true);
 		$id  = $this->encryption->decrypt(rawurldecode($key));
 
+		// mengambil data ujian dan soal berdasarkan id
 		$ujian 		= $this->ujian->getUjianById($id);
 		$soal 		= $this->ujian->getSoal($id);
 
@@ -283,123 +347,178 @@ class Ujian extends CI_Controller
 
 		$cek_sudah_ikut = $hasil_ujian->num_rows();
 
+		// dicek apakah siswa sudah pernah ambil atau belum
 		if ($cek_sudah_ikut < 1) {
-			$soal_urut_ok 	= array();
-			$i = 0;
-			foreach ($soal as $s) {
-				$soal_per = new stdClass();
-				$soal_per->id_soal 		= $s->id_soal;
-				$soal_per->soal 		= $s->soal;
-				$soal_per->file 		= $s->file;
-				$soal_per->tipe_file 	= $s->tipe_file;
-				$soal_per->opsi_a 		= $s->opsi_a;
-				$soal_per->opsi_b 		= $s->opsi_b;
-				$soal_per->opsi_c 		= $s->opsi_c;
-				$soal_per->opsi_d 		= $s->opsi_d;
-				$soal_per->opsi_e 		= $s->opsi_e;
-				$soal_per->jawaban 		= $s->jawaban;
-				$soal_urut_ok[$i] 		= $soal_per;
-				$i++;
-			}
-			$soal_urut_ok 	= $soal_urut_ok;
-			$list_id_soal	= "";
-			$list_jw_soal 	= "";
-			if (!empty($soal)) {
-				foreach ($soal as $d) {
-					$list_id_soal .= $d->id_soal . ",";
-					$list_jw_soal .= $d->id_soal . "::N,";
+			// dicek apakah ujian pilgan atau essay
+			if ($ujian->jenis_soal == "pilgan") {
+				$soal_urut_ok 	= array();
+				$i = 0;
+				foreach ($soal as $s) {
+					$soal_per = new stdClass();
+					$soal_per->id_soal 		= $s->id_soal;
+					$soal_per->soal 		= $s->soal;
+					$soal_per->file 		= $s->file;
+					$soal_per->tipe_file 	= $s->tipe_file;
+					$soal_per->opsi_a 		= $s->opsi_a;
+					$soal_per->opsi_b 		= $s->opsi_b;
+					$soal_per->opsi_c 		= $s->opsi_c;
+					$soal_per->opsi_d 		= $s->opsi_d;
+					$soal_per->opsi_e 		= $s->opsi_e;
+					$soal_per->jawaban 		= $s->jawaban;
+					$soal_urut_ok[$i] 		= $soal_per;
+					$i++;
 				}
+				$soal_urut_ok 	= $soal_urut_ok;
+				$list_id_soal	= "";
+				$list_jw_soal 	= "";
+				if (!empty($soal)) {
+					foreach ($soal as $d) {
+						$list_id_soal .= $d->id_soal . ",";
+						$list_jw_soal .= $d->id_soal . "::N,";
+					}
+				}
+				$list_id_soal 	= substr($list_id_soal, 0, -1);
+				$list_jw_soal 	= substr($list_jw_soal, 0, -1);
+				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
+				$time_mulai		= date('Y-m-d H:i:s');
+	
+				$input = [
+					'ujian_id' 		=> $id,
+					'siswa_id'	=> $mhs->id_siswa,
+					'list_soal'		=> $list_id_soal,
+					'list_jawaban' 	=> $list_jw_soal,
+					'jml_benar'		=> 0,
+					'nilai'			=> 0,
+					'nilai_bobot'	=> 0,
+					'tgl_mulai'		=> $time_mulai,
+					'tgl_selesai'	=> $waktu_selesai,
+					'status'		=> 'Y'
+				];
+			} else {
+				$list_id_soal 	= $soal->soal;
+				$list_jw_soal 	= "";
+				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
+				$time_mulai		= date('Y-m-d H:i:s');
+	
+				$input = [
+					'ujian_id' 		=> $id,
+					'siswa_id'		=> $mhs->id_siswa,
+					'list_soal'		=> $list_id_soal,
+					'list_jawaban' 	=> $list_jw_soal,
+					'jml_benar'		=> 0,
+					'nilai'			=> 0,
+					'nilai_bobot'	=> 0,
+					'tgl_mulai'		=> $time_mulai,
+					'tgl_selesai'	=> $waktu_selesai,
+					'status'		=> 'Y'
+				];
 			}
-			$list_id_soal 	= substr($list_id_soal, 0, -1);
-			$list_jw_soal 	= substr($list_jw_soal, 0, -1);
-			$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
-			$time_mulai		= date('Y-m-d H:i:s');
-
-			$input = [
-				'ujian_id' 		=> $id,
-				'siswa_id'	=> $mhs->id_siswa,
-				'list_soal'		=> $list_id_soal,
-				'list_jawaban' 	=> $list_jw_soal,
-				'jml_benar'		=> 0,
-				'nilai'			=> 0,
-				'nilai_bobot'	=> 0,
-				'tgl_mulai'		=> $time_mulai,
-				'tgl_selesai'	=> $waktu_selesai,
-				'status'		=> 'Y'
-			];
 			$this->master->create('hasil_ujian', $input);
 
 			// Setelah insert wajib refresh dulu
 			redirect('ujian/?key=' . urlencode($key), 'location', 301);
 		}
 
-		$q_soal = $hasil_ujian->row();
-
-		$urut_soal 		= explode(",", $q_soal->list_jawaban);
-		$soal_urut_ok	= array();
-		for ($i = 0; $i < sizeof($urut_soal); $i++) {
-			$pc_urut_soal	= explode(":", $urut_soal[$i]);
-			$pc_urut_soal1 	= empty($pc_urut_soal[1]) ? "''" : "'{$pc_urut_soal[1]}'";
-			$ambil_soal 	= $this->ujian->ambilSoal($pc_urut_soal1, $pc_urut_soal[0]);
-			$soal_urut_ok[] = $ambil_soal;
-		}
-
-		$detail_tes = $q_soal;
-		$soal_urut_ok = $soal_urut_ok;
-
-		$pc_list_jawaban = explode(",", $detail_tes->list_jawaban);
-		$arr_jawab = array();
-		foreach ($pc_list_jawaban as $v) {
-			$pc_v 	= explode(":", $v);
-			$idx 	= $pc_v[0];
-			$val 	= $pc_v[1];
-			$rg 	= $pc_v[2];
-
-			$arr_jawab[$idx] = array("j" => $val, "r" => $rg);
-		}
-
-		$arr_opsi = array("a", "b", "c", "d", "e");
-		$html = '';
-		$no = 1;
-		if (!empty($soal_urut_ok)) {
-			foreach ($soal_urut_ok as $s) {
-				$path = 'uploads/bank_soal/';
-				$vrg = $arr_jawab[$s->id_soal]["r"] == "" ? "N" : $arr_jawab[$s->id_soal]["r"];
-				$html .= '<input type="hidden" name="id_soal_' . $no . '" value="' . $s->id_soal . '">';
-				$html .= '<input type="hidden" name="rg_' . $no . '" id="rg_' . $no . '" value="' . $vrg . '">';
-				$html .= '<div class="step" id="widget_' . $no . '">';
-
-				$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $s->file) . '</div></div>' . $s->soal . '<div class="funkyradio">';
-				for ($j = 0; $j < $this->config->item('jml_opsi'); $j++) {
-					$opsi 			= "opsi_" . $arr_opsi[$j];
-					$file 			= "file_" . $arr_opsi[$j];
-					$checked 		= $arr_jawab[$s->id_soal]["j"] == strtoupper($arr_opsi[$j]) ? "checked" : "";
-					$pilihan_opsi 	= !empty($s->$opsi) ? $s->$opsi : "";
-					$tampil_media_opsi = (is_file(base_url() . $path . $s->$file) || $s->$file != "") ? tampil_media($path . $s->$file) : "";
-					$html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
-						<input type="radio" id="opsi_' . strtolower($arr_opsi[$j]) . '_' . $s->id_soal . '" name="opsi_' . $no . '" value="' . strtoupper($arr_opsi[$j]) . '" ' . $checked . '> <label for="opsi_' . strtolower($arr_opsi[$j]) . '_' . $s->id_soal . '"><div class="huruf_opsi">' . $arr_opsi[$j] . '</div> <p>' . $pilihan_opsi . '</p><div class="w-25">' . $tampil_media_opsi . '</div></label></div>';
-				}
-				$html .= '</div></div>';
-				$no++;
+		if ($ujian->jenis_soal == 'pilgan') {
+			$q_soal = $hasil_ujian->row();
+	
+			$urut_soal 		= explode(",", $q_soal->list_jawaban);
+			$soal_urut_ok	= array();
+			for ($i = 0; $i < sizeof($urut_soal); $i++) {
+				$pc_urut_soal	= explode(":", $urut_soal[$i]);
+				$pc_urut_soal1 	= empty($pc_urut_soal[1]) ? "''" : "'{$pc_urut_soal[1]}'";
+				$ambil_soal 	= $this->ujian->ambilSoal($pc_urut_soal1, $pc_urut_soal[0]);
+				$soal_urut_ok[] = $ambil_soal;
 			}
+	
+			$detail_tes = $q_soal;
+			$soal_urut_ok = $soal_urut_ok;
+	
+			$pc_list_jawaban = explode(",", $detail_tes->list_jawaban);
+			$arr_jawab = array();
+			foreach ($pc_list_jawaban as $v) {
+				$pc_v 	= explode(":", $v);
+				$idx 	= $pc_v[0];
+				$val 	= $pc_v[1];
+				$rg 	= $pc_v[2];
+	
+				$arr_jawab[$idx] = array("j" => $val, "r" => $rg);
+			}
+	
+			$arr_opsi = array("a", "b", "c", "d", "e");
+			$html = '';
+			$no = 1;
+			if (!empty($soal_urut_ok)) {
+				foreach ($soal_urut_ok as $s) {
+					$path = 'uploads/bank_soal/';
+					$vrg = $arr_jawab[$s->id_soal]["r"] == "" ? "N" : $arr_jawab[$s->id_soal]["r"];
+					$html .= '<input type="hidden" name="id_soal_' . $no . '" value="' . $s->id_soal . '">';
+					$html .= '<input type="hidden" id="jenis_soal" name="jenis_soal" value="' . $s->jenis_soal . '">';
+					$html .= '<input type="hidden" name="rg_' . $no . '" id="rg_' . $no . '" value="' . $vrg . '">';
+					$html .= '<div class="step" id="widget_' . $no . '">';
+	
+					$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $s->file) . '</div></div>' . $s->soal . '<div class="funkyradio">';
+					for ($j = 0; $j < $this->config->item('jml_opsi'); $j++) {
+						$opsi 			= "opsi_" . $arr_opsi[$j];
+						$file 			= "file_" . $arr_opsi[$j];
+						$checked 		= $arr_jawab[$s->id_soal]["j"] == strtoupper($arr_opsi[$j]) ? "checked" : "";
+						$pilihan_opsi 	= !empty($s->$opsi) ? $s->$opsi : "";
+						$tampil_media_opsi = (is_file(base_url() . $path . $s->$file) || $s->$file != "") ? tampil_media($path . $s->$file) : "";
+						$html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
+							<input type="radio" id="opsi_' . strtolower($arr_opsi[$j]) . '_' . $s->id_soal . '" name="opsi_' . $no . '" value="' . strtoupper($arr_opsi[$j]) . '" ' . $checked . '> <label for="opsi_' . strtolower($arr_opsi[$j]) . '_' . $s->id_soal . '"><div class="huruf_opsi">' . $arr_opsi[$j] . '</div> <p>' . $pilihan_opsi . '</p><div class="w-25">' . $tampil_media_opsi . '</div></label></div>';
+					}
+					$html .= '</div></div>';
+					$no++;
+				}
+			}
+			// Enkripsi Id Tes
+			$id_tes = $this->encryption->encrypt($detail_tes->id);
+			$data = [
+				'user' 		=> $this->user,
+				'mhs'		=> $this->mhs,
+				'judul'		=> 'Ujian',
+				'subjudul'	=> 'Lembar Ujian',
+				'soal'		=> $detail_tes,
+				'no' 		=> $no,
+				'html' 		=> $html,
+				'id_tes'	=> $id_tes
+			];
+			$this->load->view('_templates/topnav/_header.php', $data);
+			$this->load->view('ujian/sheet');
+			$this->load->view('_templates/topnav/_footer.php');
+
+		} else {
+			$detail_tes = $hasil_ujian->row();
+
+			$html = '';
+			$no = 1;
+
+			$path = 'uploads/bank_soal/';
+			$html .= '<input type="hidden" id="jenis_soal" name="jenis_soal" value="' . $detail_tes->jenis_soal . '">';
+			$html .= '<div class="step" id="widget_' . $no . '">';
+
+			$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $s->file) . '</div></div>' . $s->soal;
+			$html .= '<textarea class="froala-editor">' . $detail_tes->list_jawaban . '</textarea>';
+			$html .= '</div>';
+			$no++;
+
+			// Enkripsi Id Tes
+			$id_tes = $this->encryption->encrypt($detail_tes->id);
+			$data = [
+				'user' 		=> $this->user,
+				'mhs'		=> $this->mhs,
+				'judul'		=> 'Ujian',
+				'subjudul'	=> 'Lembar Ujian',
+				'soal'		=> $detail_tes,
+				'no' 		=> $no,
+				'html' 		=> $html,
+				'id_tes'	=> $id_tes
+			];
+			$this->load->view('_templates/topnav/_header.php', $data);
+			$this->load->view('ujian/sheet');
+			$this->load->view('_templates/topnav/_footer.php');
 		}
 
-		// Enkripsi Id Tes
-		$id_tes = $this->encryption->encrypt($detail_tes->id);
-
-		$data = [
-			'user' 		=> $this->user,
-			'mhs'		=> $this->mhs,
-			'judul'		=> 'Ujian',
-			'subjudul'	=> 'Lembar Ujian',
-			'soal'		=> $detail_tes,
-			'no' 		=> $no,
-			'html' 		=> $html,
-			'id_tes'	=> $id_tes
-		];
-		$this->load->view('_templates/topnav/_header.php', $data);
-		$this->load->view('ujian/sheet');
-		$this->load->view('_templates/topnav/_footer.php');
 	}
 
 	public function simpan_satu()

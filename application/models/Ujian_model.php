@@ -6,7 +6,7 @@ class Ujian_model extends CI_Model
 
     public function getDataUjian($id)
     {
-        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, c.nama_topik, a.jumlah_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
+        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
         $this->datatables->from('ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
@@ -75,14 +75,31 @@ class Ujian_model extends CI_Model
     public function getSoal($id)
     {
         $ujian = $this->getUjianById($id);
-        $order = $ujian->jenis === "acak" ? 'rand()' : 'id_soal';
+        if ($ujian->jenis_soal === "pilgan") {
+            $order = $ujian->jenis === "acak" ? 'rand()' : 'id_soal';
+    
+            $this->db->select('id_soal, soal, file, tipe_file, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, jawaban');
+            $this->db->from('soal');
+            $this->db->where('mapel_id', $ujian->mapel_id);
+            $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
+            $this->db->order_by($order);
+            $this->db->limit($ujian->jumlah_soal);
+        } else {
+            $this->db->select('id_soal, soal, file, tipe_file');
+            $this->db->from('soal');
+            $this->db->where('mapel_id', $ujian->mapel_id);
+            $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
+            $this->db->where('id_soal', $ujian->id_soal_essay);
+        }
 
-        $this->db->select('id_soal, soal, file, tipe_file, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, jawaban');
+        return $this->db->get()->result();
+    }
+
+    public function getSoalEssay($topik)
+    {
+        $this->db->select('*');
         $this->db->from('soal');
-        $this->db->where('mapel_id', $ujian->mapel_id);
-        $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
-        $this->db->order_by($order);
-        $this->db->limit($ujian->jumlah_soal);
+        $this->db->where("FIND_IN_SET({$topik}, topik)");
         return $this->db->get()->result();
     }
 

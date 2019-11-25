@@ -25,6 +25,7 @@
                     <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
                     <th>Topik</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
                     <th>Jenis Soal</th>
@@ -41,6 +42,7 @@
                     <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
                     <th>Topik</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
                     <th>Jenis Soal</th>
