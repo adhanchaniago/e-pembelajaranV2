@@ -163,8 +163,10 @@ class Soal extends CI_Controller
 
     public function save()
     {
+        // variabel method untuk mengetahui apakah menyimpan form add atau form edit
         $method = $this->input->post('method', true);
-        // essay atau pilgan
+
+        // mengetahui essay atau pilgan
         if ($this->input->post('jenis_soal') == 'pilgan') {
             $this->validasi();
         } else {
