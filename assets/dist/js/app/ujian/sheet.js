@@ -212,10 +212,12 @@ function selesai() {
     if ($('#jenis_soal').val() == 'pilgan') {
         simpan();    
         ajaxcsrf();
+        var jenis = $('#jenis_soal').val()
+
         $.ajax({
             type: "POST",
             url: base_url + "ujian/simpan_akhir",
-            data: { id: id_tes },
+            data: { id: id_tes, jenis: jenis },
             beforeSend: function () {
                 simpan();
                 // $('.ajax-loading').show();    
