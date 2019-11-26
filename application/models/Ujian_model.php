@@ -82,6 +82,7 @@ class Ujian_model extends CI_Model
             $this->db->from('soal');
             $this->db->where('mapel_id', $ujian->mapel_id);
             $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
+            $this->db->where('jenis_soal', 'pilgan');
             $this->db->order_by($order);
             $this->db->limit($ujian->jumlah_soal);
             return $this->db->get()->result();
