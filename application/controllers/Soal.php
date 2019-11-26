@@ -189,7 +189,7 @@ class Soal extends CI_Controller
                 ];
 
                 $abjad = ['a', 'b', 'c', 'd', 'e'];
-    
+
                 // Inputan Opsi
                 foreach ($abjad as $abj) {
                     $data['opsi_' . $abj]    = $this->input->post('jawaban_' . $abj, true);
@@ -202,8 +202,6 @@ class Soal extends CI_Controller
                     'bobot'     => $this->input->post('bobot', true),
                 ];
             }
-
-
             $i = 0;
             foreach ($_FILES as $key => $val) {
                 $img_src = FCPATH . 'uploads/bank_soal/';

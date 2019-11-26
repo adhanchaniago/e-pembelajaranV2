@@ -33,6 +33,7 @@
 			<script src="<?= base_url() ?>assets/bower_components/pace/pace.min.js"></script>
 			<script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 
+
 			<!-- Textarea editor -->
 			<script src="<?= base_url() ?>assets/bower_components/codemirror/lib/codemirror.min.js"></script>
 			<script src="<?= base_url() ?>assets/bower_components/codemirror/mode/xml.min.js"></script>
@@ -69,6 +70,7 @@
 					table.ajax.reload(null, false);
 				}
 			</script>
+
 
 			</body>
 

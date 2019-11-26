@@ -118,6 +118,20 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<?php if ($this->ion_auth->in_group('guru')) : ?>
+				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
+					<a href="<?= base_url('tugas/master') ?>" rel="noopener noreferrer">
+						<i class="fa fa-chrome"></i> <span>Tugas</span>
+					</a>
+				</li>
+			<?php endif; ?>
+			<?php if ($this->ion_auth->in_group('siswa')) : ?>
+				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
+					<a href="<?= base_url('tugas/list') ?>" rel="noopener noreferrer">
+						<i class="fa fa-chrome"></i> <span>Tugas</span>
+					</a>
+				</li>
+			<?php endif; ?>
 			<?php if (!$this->ion_auth->in_group('siswa')) : ?>
 				<li class="header">REPORTS</li>
 				<li class="<?= $page === 'hasilujian' ? "active" : "" ?>">
