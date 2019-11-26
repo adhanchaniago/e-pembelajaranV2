@@ -403,6 +403,7 @@ class Ujian extends CI_Controller
 				$input = [
 					'ujian_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
+					'jenis_soal'	=> $ujian->jenis_soal,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
 					'jml_benar'		=> 0,
@@ -488,6 +489,7 @@ class Ujian extends CI_Controller
 			$this->load->view('_templates/topnav/_footer.php');
 
 		} else {
+			// menyimpan id hasil ujian
 			$detail_tes = $hasil_ujian->row();
 
 			$html = '';
@@ -497,8 +499,8 @@ class Ujian extends CI_Controller
 			$html .= '<input type="hidden" id="jenis_soal" name="jenis_soal" value="' . $detail_tes->jenis_soal . '">';
 			$html .= '<div class="step" id="widget_' . $no . '">';
 
-			$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $s->file) . '</div></div>' . $s->soal;
-			$html .= '<textarea class="froala-editor">' . $detail_tes->list_jawaban . '</textarea>';
+			$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $soal->file) . '</div></div>' . $soal->soal;
+			$html .= '<textarea class="froala-editor" id="jawaban">' . $detail_tes->list_jawaban . '</textarea>';
 			$html .= '</div>';
 			$no++;
 
@@ -551,43 +553,57 @@ class Ujian extends CI_Controller
 		// Decrypt Id
 		$id_tes = $this->input->post('id', true);
 		$id_tes = $this->encryption->decrypt($id_tes);
+		$jenis_soal = $this->input->post('jenis', true);
 
-		// Get Jawaban
-		$list_jawaban = $this->ujian->getJawaban($id_tes);
+		if ($jenis_soal == 'pilgan') {
+			// Get Jawaban
+			$list_jawaban = $this->ujian->getJawaban($id_tes);
+	
+			// Pecah Jawaban
+			$pc_jawaban = explode(",", $list_jawaban);
+	
+			$jumlah_benar 	= 0;
+			$jumlah_salah 	= 0;
+			$jumlah_ragu  	= 0;
+			$nilai_bobot 	= 0;
+			$total_bobot	= 0;
+			$jumlah_soal	= sizeof($pc_jawaban);
+	
+			foreach ($pc_jawaban as $jwb) {
+				$pc_dt 		= explode(":", $jwb);
+				$id_soal 	= $pc_dt[0];
+				$jawaban 	= $pc_dt[1];
+				$ragu 		= $pc_dt[2];
+	
+				$cek_jwb 	= $this->soal->getSoalById($id_soal);
+				$total_bobot = $total_bobot + $cek_jwb->bobot;
+	
+				$jawaban == $cek_jwb->jawaban ? $jumlah_benar++ : $jumlah_salah++;
+			}
+	
+			$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
+			$nilai_bobot = ($total_bobot / $jumlah_soal)  * 100;
+	
+			$d_update = [
+				'jml_benar'		=> $jumlah_benar,
+				'nilai'			=> number_format(floor($nilai), 0),
+				'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
+				'status'		=> 'N'
+			];
+			$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
+			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 
-		// Pecah Jawaban
-		$pc_jawaban = explode(",", $list_jawaban);
+		} else {
+			$jawab = $this->input->post('jawaban', true);
 
-		$jumlah_benar 	= 0;
-		$jumlah_salah 	= 0;
-		$jumlah_ragu  	= 0;
-		$nilai_bobot 	= 0;
-		$total_bobot	= 0;
-		$jumlah_soal	= sizeof($pc_jawaban);
+			$d_update = [
+				'list_jawaban' 	=> $jawab,
+				'status'		=> 'N'
+			];
 
-		foreach ($pc_jawaban as $jwb) {
-			$pc_dt 		= explode(":", $jwb);
-			$id_soal 	= $pc_dt[0];
-			$jawaban 	= $pc_dt[1];
-			$ragu 		= $pc_dt[2];
-
-			$cek_jwb 	= $this->soal->getSoalById($id_soal);
-			$total_bobot = $total_bobot + $cek_jwb->bobot;
-
-			$jawaban == $cek_jwb->jawaban ? $jumlah_benar++ : $jumlah_salah++;
+			$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
+			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
 
-		$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
-		$nilai_bobot = ($total_bobot / $jumlah_soal)  * 100;
-
-		$d_update = [
-			'jml_benar'		=> $jumlah_benar,
-			'nilai'			=> number_format(floor($nilai), 0),
-			'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
-			'status'		=> 'N'
-		];
-
-		$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
-		$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 	}
 }

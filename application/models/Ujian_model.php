@@ -84,15 +84,15 @@ class Ujian_model extends CI_Model
             $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
             $this->db->order_by($order);
             $this->db->limit($ujian->jumlah_soal);
+            return $this->db->get()->result();
         } else {
             $this->db->select('id_soal, soal, file, tipe_file');
             $this->db->from('soal');
             $this->db->where('mapel_id', $ujian->mapel_id);
             $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
             $this->db->where('id_soal', $ujian->id_soal_essay);
+            return $this->db->get()->row();
         }
-
-        return $this->db->get()->result();
     }
 
     public function getSoalEssay($topik)
@@ -100,6 +100,7 @@ class Ujian_model extends CI_Model
         $this->db->select('*');
         $this->db->from('soal');
         $this->db->where("FIND_IN_SET({$topik}, topik)");
+        $this->db->where('jenis_soal', 'essay');
         return $this->db->get()->result();
     }
 

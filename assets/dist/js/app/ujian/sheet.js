@@ -21,7 +21,8 @@ $(document).ready(function () {
         btnback = $(".back");
         btnsubmit = $(".submit");
     
-        $(".step, .back").hide();
+        $(".step, .back, .ragu_ragu").hide();
+        $('.selesai').show();
     }
     
     $("#widget_1").show();
@@ -208,23 +209,45 @@ function simpan() {
 }
 
 function selesai() {
-    simpan();
-    ajaxcsrf();
-    $.ajax({
-        type: "POST",
-        url: base_url + "ujian/simpan_akhir",
-        data: { id: id_tes },
-        beforeSend: function () {
-            simpan();
-            // $('.ajax-loading').show();    
-        },
-        success: function (r) {
-            console.log(r);
-            if (r.status) {
-                window.location.href = base_url + 'ujian/list';
+    if ($('#jenis_soal').val() == 'pilgan') {
+        simpan();    
+        ajaxcsrf();
+        $.ajax({
+            type: "POST",
+            url: base_url + "ujian/simpan_akhir",
+            data: { id: id_tes },
+            beforeSend: function () {
+                simpan();
+                // $('.ajax-loading').show();    
+            },
+            success: function (r) {
+                console.log(r);
+                if (r.status) {
+                    window.location.href = base_url + 'ujian/list';
+                }
             }
-        }
-    });
+        });
+    } else {
+        ajaxcsrf();
+        var jawab = $('#jawaban').val()
+        var jenis = $('#jenis_soal').val()
+        // console.log(jawab);
+        $.ajax({
+            type: "POST",
+            url: base_url + "ujian/simpan_akhir",
+            data: { 
+                id: id_tes, 
+                jawaban: jawab, 
+                jenis: jenis 
+            },
+            success: function (r) {
+                console.log(r);
+                if (r.status) {
+                    window.location.href = base_url + 'ujian/list';
+                }
+            }
+        });
+    }
 }
 
 function waktuHabis() {
@@ -233,7 +256,9 @@ function waktuHabis() {
 }
 
 function simpan_akhir() {
-    simpan();    
+    if ($('#jenis_soal').val() == 'pilgan') {
+        simpan();    
+    }
     if (confirm('Yakin ingin mengakhiri tes?')) {
         selesai();
     }
