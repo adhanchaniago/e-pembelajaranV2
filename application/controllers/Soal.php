@@ -174,7 +174,7 @@ class Soal extends CI_Controller
         }
         $this->file_config();
         if ($this->form_validation->run() === FALSE) {
-            $method === 'add' ? $this->add() : $this->edit();
+            $method === 'add' ? $this->add() : $this->edit($this->input->post('id_soal'));
         } else {
             $t = $this->input->post('topik_id', true);
             $topik = implode(",", $t);
