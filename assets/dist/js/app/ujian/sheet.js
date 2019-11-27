@@ -3,10 +3,10 @@ $(document).ready(function () {
     if (t.length) {
         sisawaktu(t.data('time'));
     }
-
-    buka(1);
-
+    
     if ($('#jenis_soal').val() == 'pilgan') {
+        buka(1);
+
         simpan_sementara();
     
         widget = $(".step");
@@ -16,6 +16,9 @@ $(document).ready(function () {
     
         $(".step, .back, .selesai").hide();
     } else {
+        var id_widget = 1;
+        $("#widget_" + id_widget).show();
+        
         widget = $(".step");
         btnnext = $(".next");
         btnback = $(".back");
