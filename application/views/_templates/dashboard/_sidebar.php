@@ -104,39 +104,44 @@
 					</a>
 				</li>
 			<?php endif; ?>
+
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
-					<a href="<?= base_url('ujian/master') ?>" rel="noopener noreferrer">
-						<i class="fa fa-chrome"></i> <span>Ujian</span>
-					</a>
-				</li>
-			<?php endif; ?>
-			<?php if ($this->ion_auth->in_group('siswa')) : ?>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
-					<a href="<?= base_url('ujian/list') ?>" rel="noopener noreferrer">
-						<i class="fa fa-chrome"></i> <span>Ujian</span>
-					</a>
-				</li>
-			<?php endif; ?>
-			<?php if ($this->ion_auth->in_group('guru')) : ?>
+				<li class="header">TUGAS</li>
 				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
 					<a href="<?= base_url('tugas/master') ?>" rel="noopener noreferrer">
-						<i class="fa fa-chrome"></i> <span>Tugas</span>
+						<i class="fa fa-paperclip"></i> <span>Tugas</span>
+					</a>
+				</li>
+				<li class="<?= $page === 'hasiltugas' ? "active" : "" ?>">
+					<a href="<?= base_url('hasiltugas') ?>" rel="noopener noreferrer">
+						<i class="fa fa-file"></i> <span>Hasil Tugas</span>
 					</a>
 				</li>
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
 				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
 					<a href="<?= base_url('tugas/list') ?>" rel="noopener noreferrer">
-						<i class="fa fa-chrome"></i> <span>Tugas</span>
+						<i class="fa fa-paperclip"></i> <span>Tugas</span>
 					</a>
 				</li>
 			<?php endif; ?>
-			<?php if (!$this->ion_auth->in_group('siswa')) : ?>
-				<li class="header">REPORTS</li>
+			<?php if ($this->ion_auth->in_group('guru')) : ?>
+				<li class="header">UJIAN</li>
+				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+					<a href="<?= base_url('ujian/master') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Ujian</span>
+					</a>
+				</li>
 				<li class="<?= $page === 'hasilujian' ? "active" : "" ?>">
 					<a href="<?= base_url('hasilujian') ?>" rel="noopener noreferrer">
 						<i class="fa fa-file"></i> <span>Hasil Ujian</span>
+					</a>
+				</li>
+			<?php endif; ?>
+			<?php if ($this->ion_auth->in_group('siswa')) : ?>
+				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+					<a href="<?= base_url('ujian/list') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Ujian</span>
 					</a>
 				</li>
 			<?php endif; ?>

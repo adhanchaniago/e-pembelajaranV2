@@ -43,15 +43,12 @@ $(document).ready(function () {
                 "data": 'jumlah_soal'
             },
             {
-                "data": 'waktu'
-            },
-            {
                 "searchable": false,
                 "orderable": false
             }
         ],
         columnDefs: [{
-            "targets": 7,
+            "targets": 6,
             "data": {
                 "id_tugas": "id_tugas",
                 "ada": "ada"

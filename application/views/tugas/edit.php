@@ -55,6 +55,11 @@
                     <input id="tgl_selesai" name="tgl_selesai" type="text" class="datetimepicker form-control" placeholder="Tanggal Selesai">
                     <small class="help-block"></small>
                 </div>
+                <div class="form-group">
+                    <label for="waktu">Waktu</label>
+                    <input value="<?= $tugas->waktu ?>" placeholder="menit" type="number" class="form-control" name="waktu">
+                    <small class="help-block"></small>
+                </div>
 
                 <div id="pilgan">
                     <div class="form-group">

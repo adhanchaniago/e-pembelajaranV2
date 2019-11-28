@@ -27,10 +27,12 @@
                         <th>Jumlah Soal</th>
                         <td><?= $tugas->jumlah_soal ?></td>
                     </tr>
-                    <tr>
-                        <th>Waktu</th>
-                        <td><?= $tugas->waktu ?> Menit</td>
-                    </tr>
+                    <?php if ($tugas->jenis_soal != 'essay') { ?>
+                        <tr>
+                            <th>Waktu</th>
+                            <td><?= $tugas->waktu ?> Menit</td>
+                        </tr>
+                    <?php } ?>
                     <tr>
                         <th>Tanggal Mulai</th>
                         <td><?= strftime('%A, %d %B %Y', strtotime($tugas->tgl_mulai)) ?></td>
@@ -61,7 +63,7 @@
                     </tr>
                     <tr>
                         <th>Rata-rata Nilai</th>
-                        <td><?= $nilai->avg_nilai ?></td>
+                        <td><?php printf('%.2f', $nilai->avg_nilai) ?></td>
                     </tr>
                 </table>
             </div>
@@ -75,8 +77,10 @@
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th>Jurusan</th>
-                    <th>Jumlah Benar</th>
                     <th>Nilai</th>
+                    <th class="text-center">
+                        <i class="fa fa-search"></i>
+                    </th>
                 </tr>
             </thead>
             <tfoot>
@@ -85,8 +89,10 @@
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th>Jurusan</th>
-                    <th>Jumlah Benar</th>
                     <th>Nilai</th>
+                    <th class="text-center">
+                        <i class="fa fa-search"></i>
+                    </th>
                 </tr>
             </tfoot>
         </table>
@@ -95,6 +101,7 @@
 
 <script type="text/javascript">
     var id = '<?= $this->uri->segment(3) ?>';
+    var jenis_soal = '<?= $tugas->jenis_soal ?>';
 </script>
 
 <script src="<?= base_url() ?>assets/dist/js/app/tugas/detail_hasil.js"></script>

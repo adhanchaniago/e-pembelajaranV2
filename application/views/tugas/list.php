@@ -49,7 +49,6 @@
                             <th>Topik</th>
                             <th>Guru</th>
                             <th>Jumlah Soal</th>
-                            <th>Waktu</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -61,7 +60,6 @@
                             <th>Topik</th>
                             <th>Guru</th>
                             <th>Jumlah Soal</th>
-                            <th>Waktu</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </tfoot>

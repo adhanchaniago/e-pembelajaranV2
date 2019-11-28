@@ -36,11 +36,7 @@
                         <td><?= $tugas->jumlah_soal ?></td>
                     </tr>
                     <tr>
-                        <th>Waktu</th>
-                        <td><?= $tugas->waktu ?> Menit</td>
-                    </tr>
-                    <tr>
-                        <th>Terlambat</th>
+                        <th>Deadline</th>
                         <td>
                             <?= strftime('%d %B %Y', strtotime($tugas->terlambat)) ?>
                             <?= date('H:i:s', strtotime($tugas->terlambat)) ?>

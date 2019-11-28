@@ -61,13 +61,10 @@ $(document).ready(function () {
         data: "nama_topik"
       },
       {
-        data: "nama_guru"
+        data: "jenis_soal"
       },
       {
         data: "jumlah_soal"
-      },
-      {
-        data: "waktu"
       },
       {
         data: "tgl_mulai"
@@ -78,7 +75,7 @@ $(document).ready(function () {
       }
     ],
     columnDefs: [{
-      targets: 7,
+      targets: 6,
       data: "id_tugas",
       render: function (data, type, row, meta) {
         return `

@@ -40,7 +40,7 @@
                         <td><?= $ujian->waktu ?> Menit</td>
                     </tr>
                     <tr>
-                        <th>Terlambat</th>
+                        <th>Deadline</th>
                         <td>
                             <?= strftime('%d %B %Y', strtotime($ujian->terlambat)) ?>
                             <?= date('H:i:s', strtotime($ujian->terlambat)) ?>

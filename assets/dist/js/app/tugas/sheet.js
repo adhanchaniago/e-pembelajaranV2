@@ -1,12 +1,7 @@
 $(document).ready(function () {
-    var t = $('.sisawaktu');
-    if (t.length) {
-        sisawaktu(t.data('time'));
-    }
-
-    buka(1);
-
     if ($('#jenis_soal').val() == 'pilgan') {
+        buka(1);
+        console.log('tes');
         simpan_sementara();
 
         widget = $(".step");
@@ -16,12 +11,17 @@ $(document).ready(function () {
 
         $(".step, .back, .selesai").hide();
     } else {
+        console.log('tis');
+        var id_widget = 1;
+        $("#widget_" + id_widget).show();
+
         widget = $(".step");
         btnnext = $(".next");
         btnback = $(".back");
         btnsubmit = $(".submit");
 
-        $(".step, .back").hide();
+        $(".step, .back, .ragu_ragu").hide();
+        $('.selesai').show();
     }
 
     $("#widget_1").show();
@@ -208,34 +208,56 @@ function simpan() {
 }
 
 function selesai() {
-    simpan();
-    ajaxcsrf();
-    $.ajax({
-        type: "POST",
-        url: base_url + "tugas/simpan_akhir",
-        data: {
-            id: id_tes
-        },
-        beforeSend: function () {
-            simpan();
-            // $('.ajax-loading').show();    
-        },
-        success: function (r) {
-            console.log(r);
-            if (r.status) {
-                window.location.href = base_url + 'tugas/list';
-            }
-        }
-    });
-}
+    if ($('#jenis_soal').val() == 'pilgan') {
+        simpan();
+        ajaxcsrf();
+        var jenis = $('#jenis_soal').val()
 
-function waktuHabis() {
-    selesai();
-    alert('Waktu tugas telah habis!');
+        $.ajax({
+            type: "POST",
+            url: base_url + "tugas/simpan_akhir",
+            data: {
+                id: id_tes,
+                jenis: jenis
+            },
+            beforeSend: function () {
+                simpan();
+                // $('.ajax-loading').show();    
+            },
+            success: function (r) {
+                console.log(r);
+                if (r.status) {
+                    window.location.href = base_url + 'tugas/list';
+                }
+            }
+        });
+    } else {
+        ajaxcsrf();
+        var jawab = $('#jawaban').val()
+        var jenis = $('#jenis_soal').val()
+        // console.log(jawab);
+        $.ajax({
+            type: "POST",
+            url: base_url + "tugas/simpan_akhir",
+            data: {
+                id: id_tes,
+                jawaban: jawab,
+                jenis: jenis
+            },
+            success: function (r) {
+                console.log(r);
+                if (r.status) {
+                    window.location.href = base_url + 'tugas/list';
+                }
+            }
+        });
+    }
 }
 
 function simpan_akhir() {
-    simpan();
+    if ($('#jenis_soal').val() == 'pilgan') {
+        simpan();
+    }
     if (confirm('Yakin ingin mengakhiri tes?')) {
         selesai();
     }

@@ -72,12 +72,35 @@ class Ujian_model extends CI_Model
         return $this->db->get();
     }
 
+    public function getHasilEssay($id)
+    {
+        $this->db->select('*');
+        $this->db->from('hasil_ujian a');
+        $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
+        $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
+        $this->db->join('ujian d', 'a.ujian_id=d.id_ujian');
+        $this->db->where('id', $id);
+        return $this->db->get();
+    }
+
+    function getAllJawabanByIdSoal($id_soal_essay, $id)
+    {
+        $this->db->select('*');
+        $this->db->from('hasil_ujian a');
+        $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
+        $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
+        $this->db->join('ujian d', 'a.ujian_id=d.id_ujian');
+        $this->db->where('id_soal_essay', $id_soal_essay);
+        $this->db->where_not_in('id', $id);
+        return $this->db->get();
+    }
+
     public function getSoal($id)
     {
         $ujian = $this->getUjianById($id);
         if ($ujian->jenis_soal === "pilgan") {
             $order = $ujian->jenis === "acak" ? 'rand()' : 'id_soal';
-    
+
             $this->db->select('id_soal, soal, file, tipe_file, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, jawaban');
             $this->db->from('soal');
             $this->db->where('mapel_id', $ujian->mapel_id);
@@ -123,7 +146,7 @@ class Ujian_model extends CI_Model
 
     public function getHasilUjian($nip = null)
     {
-        $this->datatables->select('b.id_ujian, b.nama_ujian, e.nama_topik, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
+        $this->datatables->select('b.id_ujian, b.nama_ujian, e.nama_topik, b.jenis_soal, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
         $this->datatables->select('c.nama_mapel, d.nama_guru');
         $this->datatables->from('hasil_ujian a');
         $this->datatables->join('ujian b', 'a.ujian_id = b.id_ujian');
@@ -147,7 +170,7 @@ class Ujian_model extends CI_Model
             $get = "generate";
         }
 
-        $this->$db->select('d.id, a.nama, b.nama_kelas, c.nama_jurusan, d.jml_benar, d.nilai');
+        $this->$db->select('d.id, a.nama, b.nama_kelas, d.jenis_soal, c.nama_jurusan, d.jml_benar, d.nilai');
         $this->$db->from('siswa a');
         $this->$db->join('kelas b', 'a.kelas_id=b.id_kelas');
         $this->$db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');

@@ -82,9 +82,9 @@
                     <label for="soal">Soal</label>
                     <div style="width: 100%; overflow: scroll; height: 300px">
                         <div id="soal">
-                        <?php foreach ($soal as $soal): ?>
-                            <input type="radio" name="soal" value="<?= $soal->id_soal ?>"  <?= $soal->id_soal === $ujian->id_soal_essay ? "checked" : ""; ?>><?= $soal->soal ?><div class="w-25"><?= tampil_media("uploads/bank_soal/" . $soal->file) ?> </div><br>
-                        <?php endforeach; ?>
+                            <?php foreach ($soal as $soal) : ?>
+                                <input type="radio" name="soal" value="<?= $soal->id_soal ?>" <?= $soal->id_soal === $ujian->id_soal_essay ? "checked" : ""; ?>><?= $soal->soal ?><div class="w-25"><?= tampil_media("uploads/bank_soal/" . $soal->file) ?> </div><br>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <small class="help-block"></small>
@@ -107,8 +107,8 @@
     var terlambat = '<?= $ujian->terlambat ?>';
 </script>
 <script>
-    $(document).ready(function(){
-        
+    $(document).ready(function() {
+
         if ($("#jenis_soal").val() == 'pilgan') {
             $("#pilgan").show()
             $("#essay").hide()
@@ -116,7 +116,7 @@
             $("#pilgan").hide()
             $("#essay").show()
         }
-        
+
         $("#jenis_soal").change(function() {
             if ($("#jenis_soal").val() == 'pilgan') {
                 $("#pilgan").show()
@@ -130,18 +130,19 @@
 
     });
 
-    function getSoal()
-    {
+    function getSoal() {
         var topik = $('#topik').val();
         // console.log(topik)
 
-        $.get( base_url + 'ujian/getSoalByTopic', { topik: topik } )
-            .done(function( result ) {
+        $.get(base_url + 'ujian/getSoalByTopic', {
+                topik: topik
+            })
+            .done(function(result) {
                 document.getElementById('soal').innerHTML = ''
-                result.forEach(function (val) {
-                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" value="'+ val.id_soal +'">' + val.soal + '  <div class="w-25"><?= tampil_media("uploads/bank_soal/" . "<script>document.write(val.file)</script>") ?> </div><br>'
+                result.forEach(function(val) {
+                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" value="' + val.id_soal + '">' + val.soal + '  <div class="w-25"><?= tampil_media("uploads/bank_soal/" . "<script>document.write(val.file)</script>") ?> </div><br>'
                 })
-        });
+            });
     }
 </script>
 <script src="<?= base_url() ?>assets/dist/js/app/ujian/edit.js"></script>

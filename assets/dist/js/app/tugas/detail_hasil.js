@@ -37,12 +37,26 @@ $(document).ready(function () {
                 "data": 'nama_jurusan'
             },
             {
-                "data": 'jml_benar'
-            },
-            {
                 "data": 'nilai'
             },
         ],
+        columnDefs: [{
+            targets: 5,
+            data: "id",
+            render: function (data, type, row, meta) {
+                if (jenis_soal === 'essay') {
+                    return `
+                          <div class="text-center">
+                              <a class="btn btn-xs bg-blue" href="${base_url}hasiltugas/essay/${data}" >
+                                  <i class="fa fa-search"></i> Lihat Jawaban
+                              </a>
+                          </div>
+                          `;
+                } else {
+                    return null
+                }
+            }
+        }],
         order: [
             [1, 'asc']
         ],

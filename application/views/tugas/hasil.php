@@ -20,9 +20,8 @@
                     <th>No.</th>
                     <th>Nama Tugas</th>
                     <th>Topik</th>
-                    <th>Guru</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
-                    <th>Waktu</th>
                     <th>Tanggal</th>
                     <th class="text-center">
                         <i class="fa fa-search"></i>
@@ -34,9 +33,8 @@
                     <th>No.</th>
                     <th>Nama Tugas</th>
                     <th>Topik</th>
-                    <th>Guru</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
-                    <th>Waktu</th>
                     <th>Tanggal</th>
                     <th class="text-center">
                         <i class="fa fa-search"></i>

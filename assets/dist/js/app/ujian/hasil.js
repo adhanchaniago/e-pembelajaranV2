@@ -61,7 +61,7 @@ $(document).ready(function () {
         data: "nama_topik"
       },
       {
-        data: "nama_guru"
+        data: "jenis_soal"
       },
       {
         data: "jumlah_soal"

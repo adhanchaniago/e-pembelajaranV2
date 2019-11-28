@@ -56,6 +56,12 @@
                     <input name="tgl_selesai" type="text" class="datetimepicker form-control" placeholder="Tanggal Selesai">
                     <small class="help-block"></small>
                 </div>
+                <div class="form-group">
+                    <label for="waktu">Waktu</label>
+                    <input placeholder="menit" type="number" class="form-control" min="1" name="waktu">
+                    <small class="help-block"></small>
+                </div>
+
                 <div id="pilgan">
                     <div class="form-group">
                         <label for="jumlah_soal">Jumlah Soal</label>
@@ -73,9 +79,9 @@
                     </div>
                 </div>
                 <div id="essay" class="form-group">
-                    <label for="soal">Pilih Soal</label>
-                    <div style="width: 100%;  height: 300px">
-                        <div class="form-group" id="soal">
+                    <label for="soal">Pilih Soal</label> (Jika tidak ada soal silahkan buat soal terlebih dahulu <a href="<?= base_url('soal') ?>">disini</a>)
+                    <div>
+                        <div class="form-group" id="soal" style="text-align:justify;">
                         </div>
                     </div>
                     <small class="help-block"></small>
@@ -126,7 +132,7 @@
             .done(function(result) {
                 document.getElementById('soal').innerHTML = ''
                 result.forEach(function(val) {
-                    document.getElementById('soal').innerHTML += '<input type="radio" name="r3" class="flat-red" value="' + val.id_soal + '"> ' + val.soal + '<br>';
+                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" class="flat-red" value="' + val.id_soal + '"> ' + removeTags(val.soal) + '<br>';
 
                 })
                 $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
@@ -136,7 +142,12 @@
             });
 
     }
-</script>
-<script>
 
+    function removeTags(str) {
+        if ((str === null) || (str === ''))
+            return false;
+        else
+            str = str.toString();
+        return str.replace(/(<([^>]+)>)/ig, '');
+    }
 </script>

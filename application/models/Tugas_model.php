@@ -72,6 +72,29 @@ class Tugas_model extends CI_Model
         return $this->db->get();
     }
 
+    public function getHasilEssay($id)
+    {
+        $this->db->select('*');
+        $this->db->from('hasil_tugas a');
+        $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
+        $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
+        $this->db->join('tugas d', 'a.tugas_id=d.id_tugas');
+        $this->db->where('id', $id);
+        return $this->db->get();
+    }
+
+    function getAllJawabanByIdSoal($id_soal_essay, $id)
+    {
+        $this->db->select('*');
+        $this->db->from('hasil_tugas a');
+        $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
+        $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
+        $this->db->join('tugas d', 'a.tugas_id=d.id_tugas');
+        $this->db->where('id_soal_essay', $id_soal_essay);
+        $this->db->where_not_in('id', $id);
+        return $this->db->get();
+    }
+
     public function getSoal($id)
     {
         $tugas = $this->getTugasById($id);
@@ -82,17 +105,18 @@ class Tugas_model extends CI_Model
             $this->db->from('soal');
             $this->db->where('mapel_id', $tugas->mapel_id);
             $this->db->where("FIND_IN_SET({$tugas->topik_id}, topik)", null);
+            $this->db->where('jenis_soal', 'pilgan');
             $this->db->order_by($order);
             $this->db->limit($tugas->jumlah_soal);
+            return $this->db->get()->result();
         } else {
             $this->db->select('id_soal, soal, file, tipe_file');
             $this->db->from('soal');
             $this->db->where('mapel_id', $tugas->mapel_id);
             $this->db->where("FIND_IN_SET({$tugas->topik_id}, topik)", null);
             $this->db->where('id_soal', $tugas->id_soal_essay);
+            return $this->db->get()->row();
         }
-
-        return $this->db->get()->result();
     }
 
     public function getSoalEssay($topik)
@@ -100,6 +124,7 @@ class Tugas_model extends CI_Model
         $this->db->select('*');
         $this->db->from('soal');
         $this->db->where("FIND_IN_SET({$topik}, topik)");
+        $this->db->where('jenis_soal', 'essay');
         return $this->db->get()->result();
     }
 
@@ -121,7 +146,7 @@ class Tugas_model extends CI_Model
 
     public function getHasilTugas($nip = null)
     {
-        $this->datatables->select('b.id_tugas, b.nama_tugas, e.nama_topik, b.jumlah_soal, b.tgl_mulai');
+        $this->datatables->select('b.id_tugas, b.nama_tugas, e.nama_topik, b.jenis_soal, b.jumlah_soal, b.tgl_mulai');
         $this->datatables->select('c.nama_mapel, d.nama_guru');
         $this->datatables->from('hasil_tugas a');
         $this->datatables->join('tugas b', 'a.tugas_id = b.id_tugas');
@@ -145,7 +170,7 @@ class Tugas_model extends CI_Model
             $get = "generate";
         }
 
-        $this->$db->select('d.id, a.nama, b.nama_kelas, c.nama_jurusan, d.jml_benar, d.nilai');
+        $this->$db->select('d.id, a.nama, b.nama_kelas, d.jenis_soal, c.nama_jurusan, d.jml_benar, d.nilai');
         $this->$db->from('siswa a');
         $this->$db->join('kelas b', 'a.kelas_id=b.id_kelas');
         $this->$db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');

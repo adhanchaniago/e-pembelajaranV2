@@ -75,8 +75,10 @@
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th>Jurusan</th>
-                    <th>Jumlah Benar</th>
                     <th>Nilai</th>
+                    <th class="text-center">
+                        <i class="fa fa-search"></i>
+                    </th>
                 </tr>
             </thead>
             <tfoot>
@@ -85,8 +87,10 @@
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th>Jurusan</th>
-                    <th>Jumlah Benar</th>
                     <th>Nilai</th>
+                    <th class="text-center">
+                        <i class="fa fa-search"></i>
+                    </th>
                 </tr>
             </tfoot>
         </table>
@@ -95,6 +99,7 @@
 
 <script type="text/javascript">
     var id = '<?= $this->uri->segment(3) ?>';
+    var jenis_soal = '<?= $ujian->jenis_soal ?>';
 </script>
 
 <script src="<?= base_url() ?>assets/dist/js/app/ujian/detail_hasil.js"></script>

@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+include_once('application/libraries/vendor/autoloader.php');
+
+
+use NlpTools\Tokenizers\WhitespaceTokenizer;
+use NlpTools\Similarity\CosineSimilarity;
+use NlpTools\Similarity\JaccardIndex;
+use NlpTools\Similarity\Simhash;
 
 class HasilUjian extends CI_Controller
 {
@@ -11,11 +18,19 @@ class HasilUjian extends CI_Controller
 			redirect('auth');
 		}
 
-		$this->load->library(['datatables']); // Load Library Ignited-Datatables
+		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->model('Master_model', 'master');
 		$this->load->model('Ujian_model', 'ujian');
 
 		$this->user = $this->ion_auth->user()->row();
+		$this->akses_guru();
+	}
+
+	public function akses_guru()
+	{
+		if (!$this->ion_auth->in_group('guru')) {
+			show_error('Halaman ini khusus untuk guru untuk membuat Test Online, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
+		}
 	}
 
 	public function output_json($data, $encode = true)
@@ -68,6 +83,63 @@ class HasilUjian extends CI_Controller
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('ujian/detail_hasil');
 		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+	public function essay($id)
+	{
+		$essay = $this->ujian->getHasilEssay($id)->row();
+		$data = [
+			'user' => $this->user,
+			'judul'	=> 'Hasil',
+			'subjudul' => 'Hasil Essay',
+			'essay'	=> $essay,
+			'plagiasi' => $this->cekplagiat($essay->id_soal_essay, $essay->id, $essay->list_jawaban)
+		];
+
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('ujian/hasil_essay');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+	function cekplagiat($id_soal_essay, $id, $jawaban)
+	{
+		$jwb_A = strip_tags($jawaban);
+		//memanggil jawaban
+		$jwb_B = $this->ujian->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
+		$tokenizer = new WhitespaceTokenizer();
+		$cosine = new CosineSimilarity();
+		$tok_A = $tokenizer->tokenize($jwb_A);
+		foreach ($jwb_B as $hasil) {
+			$tok_B = $tokenizer->tokenize(strip_tags($hasil->list_jawaban));
+			$hasil_plagiasi = $cosine->similarity($tok_A, $tok_B);
+			$data[] = array(
+				'nama' => $hasil->nama,
+				'jawaban' => $hasil->list_jawaban,
+				'hasil' => $hasil_plagiasi
+			);
+		}
+		return $data;
+	}
+
+	public function savenilai()
+	{
+		$this->form_validation->set_rules('nilai', 'Nilai', 'numeric');
+		$id = $this->input->post('id');
+		$nilai = $this->input->post('nilai');
+		if ($this->form_validation->run() === FALSE) {
+			$data['status'] = FALSE;
+			$data['errors'] = [
+				'nilai' 	=> form_error('nilai')
+			];
+		} else {
+			$input = [
+				'id' 		=> $id,
+				'nilai' 	=> $nilai
+			];
+			$action = $this->master->update('hasil_ujian', $input, 'id', $id);
+			$data['status'] = $action ? TRUE : FALSE;
+		}
+		$this->output_json($data);
 	}
 
 	public function cetak($id)

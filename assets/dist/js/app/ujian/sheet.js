@@ -3,31 +3,31 @@ $(document).ready(function () {
     if (t.length) {
         sisawaktu(t.data('time'));
     }
-    
     if ($('#jenis_soal').val() == 'pilgan') {
         buka(1);
-
+        console.log('tes');
         simpan_sementara();
-    
+
         widget = $(".step");
         btnnext = $(".next");
         btnback = $(".back");
         btnsubmit = $(".submit");
-    
+
         $(".step, .back, .selesai").hide();
     } else {
+        console.log('tis');
         var id_widget = 1;
         $("#widget_" + id_widget).show();
-        
+
         widget = $(".step");
         btnnext = $(".next");
         btnback = $(".back");
         btnsubmit = $(".submit");
-    
+
         $(".step, .back, .ragu_ragu").hide();
         $('.selesai').show();
     }
-    
+
     $("#widget_1").show();
 });
 
@@ -213,14 +213,17 @@ function simpan() {
 
 function selesai() {
     if ($('#jenis_soal').val() == 'pilgan') {
-        simpan();    
+        simpan();
         ajaxcsrf();
         var jenis = $('#jenis_soal').val()
 
         $.ajax({
             type: "POST",
             url: base_url + "ujian/simpan_akhir",
-            data: { id: id_tes, jenis: jenis },
+            data: {
+                id: id_tes,
+                jenis: jenis
+            },
             beforeSend: function () {
                 simpan();
                 // $('.ajax-loading').show();    
@@ -240,10 +243,10 @@ function selesai() {
         $.ajax({
             type: "POST",
             url: base_url + "ujian/simpan_akhir",
-            data: { 
-                id: id_tes, 
-                jawaban: jawab, 
-                jenis: jenis 
+            data: {
+                id: id_tes,
+                jawaban: jawab,
+                jenis: jenis
             },
             success: function (r) {
                 console.log(r);
@@ -262,7 +265,7 @@ function waktuHabis() {
 
 function simpan_akhir() {
     if ($('#jenis_soal').val() == 'pilgan') {
-        simpan();    
+        simpan();
     }
     if (confirm('Yakin ingin mengakhiri tes?')) {
         selesai();

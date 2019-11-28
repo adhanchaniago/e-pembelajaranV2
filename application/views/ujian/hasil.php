@@ -20,7 +20,7 @@
                     <th>No.</th>
                     <th>Nama Ujian</th>
                     <th>Topik</th>
-                    <th>Guru</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
                     <th>Tanggal</th>
@@ -34,7 +34,7 @@
                     <th>No.</th>
                     <th>Nama Ujian</th>
                     <th>Topik</th>
-                    <th>Guru</th>
+                    <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
                     <th>Waktu</th>
                     <th>Tanggal</th>

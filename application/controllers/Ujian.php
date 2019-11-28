@@ -350,7 +350,7 @@ class Ujian extends CI_Controller
 		// dicek apakah siswa sudah pernah ambil atau belum
 		if ($cek_sudah_ikut < 1) {
 			// dicek apakah ujian pilgan atau essay
-			if ($ujian->jenis_soal == "pilgan") {
+			if ($ujian->jenis_soal == "pilgan") { //jika pilgan
 				$soal_urut_ok 	= array();
 				$i = 0;
 				foreach ($soal as $s) {
@@ -394,7 +394,7 @@ class Ujian extends CI_Controller
 					'tgl_selesai'	=> $waktu_selesai,
 					'status'		=> 'Y'
 				];
-			} else {
+			} else { //jika essay
 				$list_id_soal 	= $soal->soal;
 				$list_jw_soal 	= "";
 				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
@@ -475,6 +475,7 @@ class Ujian extends CI_Controller
 			// Enkripsi Id Tes
 			$id_tes = $this->encryption->encrypt($detail_tes->id);
 			$data = [
+				'jenis_soal' => $ujian->jenis_soal,
 				'user' 		=> $this->user,
 				'mhs'		=> $this->mhs,
 				'judul'		=> 'Ujian',
@@ -488,6 +489,7 @@ class Ujian extends CI_Controller
 			$this->load->view('ujian/sheet');
 			$this->load->view('_templates/topnav/_footer.php');
 		} else {
+
 			// menyimpan id hasil ujian
 			$detail_tes = $hasil_ujian->row();
 
@@ -499,13 +501,14 @@ class Ujian extends CI_Controller
 			$html .= '<div class="step" id="widget_' . $no . '">';
 
 			$html .= '<div class="text-center"><div class="w-25">' . tampil_media($path . $soal->file) . '</div></div>' . $soal->soal;
-			$html .= '<textarea class="froala-editor" id="jawaban">' . $detail_tes->list_jawaban . '</textarea>';
+			$html .= '<textarea class="froala" id="jawaban">' . $detail_tes->list_jawaban . '</textarea>';
 			$html .= '</div>';
 			$no++;
 
 			// Enkripsi Id Tes
 			$id_tes = $this->encryption->encrypt($detail_tes->id);
 			$data = [
+				'jenis_soal' => $ujian->jenis_soal,
 				'user' 		=> $this->user,
 				'mhs'		=> $this->mhs,
 				'judul'		=> 'Ujian',
@@ -556,32 +559,32 @@ class Ujian extends CI_Controller
 		if ($jenis_soal == 'pilgan') {
 			// Get Jawaban
 			$list_jawaban = $this->ujian->getJawaban($id_tes);
-	
+
 			// Pecah Jawaban
 			$pc_jawaban = explode(",", $list_jawaban);
-	
+
 			$jumlah_benar 	= 0;
 			$jumlah_salah 	= 0;
 			$jumlah_ragu  	= 0;
 			$nilai_bobot 	= 0;
 			$total_bobot	= 0;
 			$jumlah_soal	= sizeof($pc_jawaban);
-	
+
 			foreach ($pc_jawaban as $jwb) {
 				$pc_dt 		= explode(":", $jwb);
 				$id_soal 	= $pc_dt[0];
 				$jawaban 	= $pc_dt[1];
 				$ragu 		= $pc_dt[2];
-	
+
 				$cek_jwb 	= $this->soal->getSoalById($id_soal);
 				$total_bobot = $total_bobot + $cek_jwb->bobot;
-	
+
 				$jawaban == $cek_jwb->jawaban ? $jumlah_benar++ : $jumlah_salah++;
 			}
-	
+
 			$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
 			$nilai_bobot = ($total_bobot / $jumlah_soal)  * 100;
-	
+
 			$d_update = [
 				'jml_benar'		=> $jumlah_benar,
 				'nilai'			=> number_format(floor($nilai), 0),
@@ -590,7 +593,6 @@ class Ujian extends CI_Controller
 			];
 			$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
-
 		} else {
 			$jawab = $this->input->post('jawaban', true);
 
@@ -602,6 +604,5 @@ class Ujian extends CI_Controller
 			$this->master->update('hasil_ujian', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
-
 	}
 }
