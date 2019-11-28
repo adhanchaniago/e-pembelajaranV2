@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <?= form_open_multipart('soal/save', array('id' => 'formsoal'), array('method' => 'edit', 'id_soal' => $soal->id_soal)); ?>
+        <?= form_open_multipart('soal/save', array('id' => 'formsoal'), array('method' => 'edit', 'id_soal' => $soal->id_soal, 'jenis_soal' => $soal->jenis_soal)); ?>
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= $subjudul ?></h3>
