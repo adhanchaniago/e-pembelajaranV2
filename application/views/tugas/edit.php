@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label for="topik">Topik</label>
-                    <select name="topik" id="topik" class="form-control select2" style="width: 100%!important">
+                    <select name="topik" id="topik" class="form-control select2" style="width: 100%!important" onchange="getSoal()">
                         <?php foreach ($topik as $row) : ?>
                             <option <?= $tugas->topik_id === $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
                         <?php endforeach; ?>
@@ -55,11 +55,6 @@
                     <input id="tgl_selesai" name="tgl_selesai" type="text" class="datetimepicker form-control" placeholder="Tanggal Selesai">
                     <small class="help-block"></small>
                 </div>
-                <div class="form-group">
-                    <label for="waktu">Waktu</label>
-                    <input value="<?= $tugas->waktu ?>" placeholder="menit" type="number" class="form-control" name="waktu">
-                    <small class="help-block"></small>
-                </div>
 
                 <div id="pilgan">
                     <div class="form-group">
@@ -77,11 +72,10 @@
                         <small class="help-block"></small>
                     </div>
                 </div>
-
                 <div id="essay" class="form-group">
-                    <label for="soal">Soal</label>
-                    <div style="width: 100%; overflow: scroll; height: 300px">
-                        <div id="soal">
+                    <label for="soal">Pilih Soal</label> (Jika tidak ada soal silahkan buat soal terlebih dahulu <a href="<?= base_url('soal') ?>">disini</a>)
+                    <div>
+                        <div class="form-group" id="soal" style="text-align:justify;">
                             <?php foreach ($soal as $soal) : ?>
                                 <input type="radio" name="soal" value="<?= $soal->id_soal ?>" <?= $soal->id_soal === $tugas->id_soal_essay ? "checked" : ""; ?>><?= $soal->soal ?><div class="w-25"><?= tampil_media("uploads/bank_soal/" . $soal->file) ?> </div><br>
                             <?php endforeach; ?>
@@ -101,7 +95,7 @@
         </div>
     </div>
 </div>
-
+<script src="<?= base_url() ?>assets/plugins/iCheck/icheck.min.js"></script>
 <script type="text/javascript">
     var tgl_mulai = '<?= $tugas->tgl_mulai ?>';
     var terlambat = '<?= $tugas->terlambat ?>';
@@ -140,9 +134,21 @@
             .done(function(result) {
                 document.getElementById('soal').innerHTML = ''
                 result.forEach(function(val) {
-                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" value="' + val.id_soal + '">' + val.soal + '  <div class="w-25"><?= tampil_media("uploads/bank_soal/" . "<script>document.write(val.file)</script>") ?> </div><br>'
+                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" class="flat-red" value="' + val.id_soal + '"> ' + removeTags(val.soal) + '<br>';
+                })
+                $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
                 })
             });
+    }
+
+    function removeTags(str) {
+        if ((str === null) || (str === ''))
+            return false;
+        else
+            str = str.toString();
+        return str.replace(/(<([^>]+)>)/ig, '');
     }
 </script>
 <script src="<?= base_url() ?>assets/dist/js/app/tugas/edit.js"></script>
