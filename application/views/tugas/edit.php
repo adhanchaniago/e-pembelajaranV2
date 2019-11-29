@@ -30,7 +30,7 @@
                     <label for="topik">Topik</label>
                     <select name="topik" id="topik" class="form-control select2" style="width: 100%!important" onchange="getSoal()">
                         <?php foreach ($topik as $row) : ?>
-                            <option <?= $tugas->topik_id === $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
+                            <option <?= $tugas->topik_id == $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
                         <?php endforeach; ?>
                     </select>
                     <small class="help-block"></small>
@@ -76,9 +76,7 @@
                     <label for="soal">Pilih Soal</label> (Jika tidak ada soal silahkan buat soal terlebih dahulu <a href="<?= base_url('soal') ?>">disini</a>)
                     <div>
                         <div class="form-group" id="soal" style="text-align:justify;">
-                            <?php foreach ($soal as $soal) : ?>
-                                <input type="radio" name="soal" value="<?= $soal->id_soal ?>" <?= $soal->id_soal === $tugas->id_soal_essay ? "checked" : ""; ?>><?= $soal->soal ?><div class="w-25"><?= tampil_media("uploads/bank_soal/" . $soal->file) ?> </div><br>
-                            <?php endforeach; ?>
+
                         </div>
                     </div>
                     <small class="help-block"></small>
@@ -95,14 +93,15 @@
         </div>
     </div>
 </div>
-<script src="<?= base_url() ?>assets/plugins/iCheck/icheck.min.js"></script>
 <script type="text/javascript">
     var tgl_mulai = '<?= $tugas->tgl_mulai ?>';
     var terlambat = '<?= $tugas->terlambat ?>';
 </script>
+<script src="<?= base_url() ?>assets/plugins/iCheck/icheck.min.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/tugas/edit.js"></script>
 <script>
     $(document).ready(function() {
-
+        getSoal();
         if ($("#jenis_soal").val() == 'pilgan') {
             $("#pilgan").show()
             $("#essay").hide()
@@ -120,8 +119,6 @@
                 $("#essay").show()
             }
         })
-
-
     });
 
     function getSoal() {
@@ -132,9 +129,11 @@
                 topik: topik
             })
             .done(function(result) {
-                document.getElementById('soal').innerHTML = ''
+                document.getElementById('soal').innerHTML = '';
+                var soal_id = <?= $tugas->id_soal_essay ?>;
                 result.forEach(function(val) {
-                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" class="flat-red" value="' + val.id_soal + '"> ' + removeTags(val.soal) + '<br>';
+                    var checked = val.id_soal == soal_id ? 'checked' : '';
+                    document.getElementById('soal').innerHTML += `<input type="radio" name="soal" class="flat-red" ${checked} value="${val.id_soal}"> ${removeTags(val.soal)}<br><br>`;
                 })
                 $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
                     checkboxClass: 'icheckbox_flat-green',
@@ -151,4 +150,3 @@
         return str.replace(/(<([^>]+)>)/ig, '');
     }
 </script>
-<script src="<?= base_url() ?>assets/dist/js/app/tugas/edit.js"></script>

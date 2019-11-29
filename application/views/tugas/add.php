@@ -56,11 +56,6 @@
                     <input name="tgl_selesai" type="text" class="datetimepicker form-control" placeholder="Tanggal Selesai">
                     <small class="help-block"></small>
                 </div>
-                <div class="form-group">
-                    <label for="waktu">Waktu</label>
-                    <input placeholder="menit" type="number" class="form-control" min="1" name="waktu">
-                    <small class="help-block"></small>
-                </div>
 
                 <div id="pilgan">
                     <div class="form-group">
@@ -133,14 +128,12 @@
                 document.getElementById('soal').innerHTML = ''
                 result.forEach(function(val) {
                     document.getElementById('soal').innerHTML += '<input type="radio" name="soal" class="flat-red" value="' + val.id_soal + '"> ' + removeTags(val.soal) + '<br>';
-
                 })
                 $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
                     checkboxClass: 'icheckbox_flat-green',
                     radioClass: 'iradio_flat-green'
                 })
             });
-
     }
 
     function removeTags(str) {

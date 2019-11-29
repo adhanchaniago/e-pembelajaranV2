@@ -50,7 +50,7 @@ class Master_model extends CI_Model
 
     public function getTopikById($id)
     {
-        $this->db->where_in('id_topik', $id);
+        $this->db->where_in('mapel_id', $id);
         $this->db->order_by('nama_topik');
         $query = $this->db->get('topik')->result();
         return $query;

@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label for="topik">Topik</label>
-                    <select name="topik" id="topik" class="form-control select2" style="width: 100%!important">
+                    <select name="topik" id="topik" class="form-control select2" style="width: 100%!important" onchange="getSoal()">
                         <?php foreach ($topik as $row) : ?>
                             <option <?= $ujian->topik_id === $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
                         <?php endforeach; ?>
@@ -79,12 +79,10 @@
                 </div>
 
                 <div id="essay" class="form-group">
-                    <label for="soal">Soal</label>
-                    <div style="width: 100%; overflow: scroll; height: 300px">
-                        <div id="soal">
-                            <?php foreach ($soal as $soal) : ?>
-                                <input type="radio" name="soal" value="<?= $soal->id_soal ?>" <?= $soal->id_soal === $ujian->id_soal_essay ? "checked" : ""; ?>><?= $soal->soal ?><div class="w-25"><?= tampil_media("uploads/bank_soal/" . $soal->file) ?> </div><br>
-                            <?php endforeach; ?>
+                    <label for="soal">Pilih Soal</label> (Jika tidak ada soal silahkan buat soal terlebih dahulu <a href="<?= base_url('soal') ?>">disini</a>)
+                    <div>
+                        <div class="form-group" id="soal" style="text-align:justify;">
+
                         </div>
                     </div>
                     <small class="help-block"></small>
@@ -106,9 +104,11 @@
     var tgl_mulai = '<?= $ujian->tgl_mulai ?>';
     var terlambat = '<?= $ujian->terlambat ?>';
 </script>
+<script src="<?= base_url() ?>assets/plugins/iCheck/icheck.min.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/ujian/edit.js"></script>
 <script>
     $(document).ready(function() {
-
+        getSoal();
         if ($("#jenis_soal").val() == 'pilgan') {
             $("#pilgan").show()
             $("#essay").hide()
@@ -126,8 +126,6 @@
                 $("#essay").show()
             }
         })
-
-
     });
 
     function getSoal() {
@@ -138,11 +136,24 @@
                 topik: topik
             })
             .done(function(result) {
-                document.getElementById('soal').innerHTML = ''
+                document.getElementById('soal').innerHTML = '';
+                var soal_id = <?= $ujian->id_soal_essay ?>;
                 result.forEach(function(val) {
-                    document.getElementById('soal').innerHTML += '<input type="radio" name="soal" value="' + val.id_soal + '">' + val.soal + '  <div class="w-25"><?= tampil_media("uploads/bank_soal/" . "<script>document.write(val.file)</script>") ?> </div><br>'
+                    var checked = val.id_soal == soal_id ? 'checked' : '';
+                    document.getElementById('soal').innerHTML += `<input type="radio" name="soal" class="flat-red" ${checked} value="${val.id_soal}"> ${removeTags(val.soal)}<br><br>`;
+                })
+                $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
                 })
             });
     }
+
+    function removeTags(str) {
+        if ((str === null) || (str === ''))
+            return false;
+        else
+            str = str.toString();
+        return str.replace(/(<([^>]+)>)/ig, '');
+    }
 </script>
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/edit.js"></script>
