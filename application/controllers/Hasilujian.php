@@ -109,6 +109,7 @@ class HasilUjian extends CI_Controller
 		$tokenizer = new WhitespaceTokenizer();
 		$cosine = new CosineSimilarity();
 		$tok_A = $tokenizer->tokenize($jwb_A);
+		$data = null;
 		foreach ($jwb_B as $hasil) {
 			$tok_B = $tokenizer->tokenize(strip_tags($hasil->list_jawaban));
 			$hasil_plagiasi = $cosine->similarity($tok_A, $tok_B);

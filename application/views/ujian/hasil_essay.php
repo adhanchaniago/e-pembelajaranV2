@@ -67,26 +67,32 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive px-4 pb-3" style="border: 0">
-                    <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Siswa Pembanding</th>
-                                <th>Presentase Plagiasi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $no = 1;
-                            foreach ($plagiasi as $plagiasi) { ?>
+
+                    <?php if (!empty($plagiasi)) { ?>
+                        <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td><?= $no; ?></td>
-                                    <td><?= $plagiasi['nama']; ?></td>
-                                    <td><?php printf("%.2f", $plagiasi['hasil'] * 100); ?> %</td>
+                                    <th>No.</th>
+                                    <th>Siswa Pembanding</th>
+                                    <th>Presentase Plagiasi</th>
                                 </tr>
-                            <?php $no++;
-                            } ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php $no = 1;
+                                    foreach ($plagiasi as $plagiasi) { ?>
+                                    <tr>
+                                        <td><?= $no; ?></td>
+                                        <td><?= $plagiasi['nama']; ?></td>
+                                        <td><?php printf("%.2f", $plagiasi['hasil'] * 100); ?> %</td>
+                                    </tr>
+                                <?php $no++;
+                                    }
+                                    ?>
+                            </tbody>
+                        </table>
+                    <?php } else {
+                        echo 'Tidak ada data yg dapat dibandingkan';
+                    } ?>
                 </div>
             </div>
             <div class="modal-footer">
