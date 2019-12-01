@@ -145,6 +145,21 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<li class="header">LAPORAN</li>
+			<?php if ($this->ion_auth->in_group('guru')) : ?>
+				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Laporan</span>
+					</a>
+				</li>
+			<?php endif; ?>
+			<?php if ($this->ion_auth->in_group('siswa')) : ?>
+				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Laporan Belajar</span>
+					</a>
+				</li>
+			<?php endif; ?>
 			<?php if ($this->ion_auth->is_admin()) : ?>
 				<li class="header">ADMINISTRATOR</li>
 				<li class="<?= $page === 'users' ? "active" : "" ?>">

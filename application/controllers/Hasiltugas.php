@@ -23,7 +23,6 @@ class HasilTugas extends CI_Controller
 		$this->load->model('Tugas_model', 'tugas');
 
 		$this->user = $this->ion_auth->user()->row();
-		$this->akses_guru();
 	}
 
 	public function akses_guru()

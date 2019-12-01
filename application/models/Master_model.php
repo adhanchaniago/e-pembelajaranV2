@@ -45,7 +45,10 @@ class Master_model extends CI_Model
     }
     public function getTopikByMapel($mapel_id)
     {
-        return $this->db->get_where('topik', array('mapel_id' => $mapel_id))->result();
+        $this->db->from('topik');
+        $this->db->where('mapel_id', $mapel_id);
+        $this->db->order_by('id_topik', 'asc');
+        return $this->db->get()->result();
     }
 
     public function getTopikById($id)

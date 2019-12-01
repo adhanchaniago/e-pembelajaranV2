@@ -27,12 +27,6 @@
                         <th>Jumlah Soal</th>
                         <td><?= $tugas->jumlah_soal ?></td>
                     </tr>
-                    <?php if ($tugas->jenis_soal != 'essay') { ?>
-                        <tr>
-                            <th>Waktu</th>
-                            <td><?= $tugas->waktu ?> Menit</td>
-                        </tr>
-                    <?php } ?>
                     <tr>
                         <th>Tanggal Mulai</th>
                         <td><?= strftime('%A, %d %B %Y', strtotime($tugas->tgl_mulai)) ?></td>

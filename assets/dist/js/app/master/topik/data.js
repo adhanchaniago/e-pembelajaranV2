@@ -69,7 +69,7 @@ $(document).ready(function () {
       }
     ],
     order: [
-      [1, "asc"]
+      [0, "asc"]
     ],
     rowId: function (a) {
       return a;

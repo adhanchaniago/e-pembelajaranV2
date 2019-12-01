@@ -21,7 +21,7 @@ class MYPDF extends TCPDF
 }
 
 // create new PDF document
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf = new MYPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
@@ -115,33 +115,45 @@ $html .= <<<EOD
 <table border="1" style="border-collapse:collapse">
     <thead>
         <tr align="center">
-            <th width="5%">No.</th>
-            <th width="35%">Nama</th>
-            <th width="15%">Kelas</th>
-            <th width="25%">Jurusan</th>
-            <th width="10%">Jumlah Benar</th>
-            <th width="10%">Nilai</th>
+            <th width="10%" rowspan="2">Mapel</th>
+            <th width="4%" colspan="2">KD1</th>
+            <th width="4%" colspan="2">KD2</th>
+            <th width="4%" colspan="2">KD3</th>
+            <th width="4%" colspan="2">KD4</th>
+            <th width="4%" colspan="2">KD5</th>
+            <th width="4%" colspan="2">KD6</th>
+            <th width="4%" colspan="2">KD7</th>
+            <th width="4%" colspan="2">KD8</th>
+            <th width="4%" colspan="2">KD9</th>
+            <th width="4%" colspan="2">KD10</th>
+            <th width="4%" rowspan="2">UTS</th>           
+            <th width="4%" rowspan="2">UAS</th>           
+        </tr>        
+        <tr align="center">
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
+            <th width="4%">Tugas</th>
+            <th width="4%">Kuis</th>
         </tr>        
     </thead>
     <tbody>
-EOD;
 
-$no = 1;
-foreach ($hasil as $row) {
-    $html .= <<<EOD
-    <tr>
-        <td align="center" width="5%">{$no}</td>
-        <td width="35%">{$row->nama}</td>
-        <td width="15%">{$row->nama_kelas}</td>
-        <td width="25%">{$row->nama_jurusan}</td>
-        <td width="10%">{$row->jml_benar}</td>
-        <td width="10%">{$row->nilai}</td>
-    </tr>
-EOD;
-    $no++;
-}
-
-$html .= <<<EOD
     </tbody>
 </table>
 EOD;

@@ -23,7 +23,6 @@ class HasilUjian extends CI_Controller
 		$this->load->model('Ujian_model', 'ujian');
 
 		$this->user = $this->ion_auth->user()->row();
-		$this->akses_guru();
 	}
 
 	public function akses_guru()
