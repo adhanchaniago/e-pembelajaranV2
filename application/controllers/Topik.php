@@ -61,7 +61,7 @@ class Topik extends CI_Controller
 		$user = $this->ion_auth->user()->row();
 		$chk = $this->input->post('checked', true);
 		if (!$chk) {
-			redirect('admin/topik');
+			redirect('topik');
 		} else {
 			$topik = $this->master->getTopikById($chk);
 			$data = [
@@ -85,26 +85,31 @@ class Topik extends CI_Controller
 		$rows = count($this->input->post('nama_topik', true));
 		$mode = $this->input->post('mode', true);
 		for ($i = 1; $i <= $rows; $i++) {
+			$kelas		 	= 'kelas[' . $i . ']';
 			$nama_topik 	= 'nama_topik[' . $i . ']';
-			$mapel_id 	= 'mapel_id[' . $i . ']';
+			$mapel_id 		= 'mapel_id[' . $i . ']';
+			$this->form_validation->set_rules($kelas, 'Kelas', 'required');
 			$this->form_validation->set_rules($nama_topik, 'Topik', 'required');
 			$this->form_validation->set_rules($mapel_id, 'Mapel', 'required');
 			$this->form_validation->set_message('required', '{field} Wajib diisi');
 			if ($this->form_validation->run() === FALSE) {
 				$error[] = [
+					$kelas 	=> form_error($kelas),
 					$nama_topik 	=> form_error($nama_topik),
-					$mapel_id 	=> form_error($mapel_id),
+					$mapel_id 		=> form_error($mapel_id),
 				];
 				$status = FALSE;
 			} else {
 				if ($mode == 'add') {
 					$insert[] = [
+						'kelas' 	=> $this->input->post($kelas, true),
 						'nama_topik' 	=> $this->input->post($nama_topik, true),
 						'mapel_id' 	=> $this->input->post($mapel_id, true)
 					];
 				} else if ($mode == 'edit') {
 					$update[] = array(
 						'id_topik'		=> $this->input->post('id_topik[' . $i . ']', true),
+						'kelas' 	=> $this->input->post($kelas, true),
 						'nama_topik' 	=> $this->input->post($nama_topik, true),
 						'mapel_id' 	=> $this->input->post($mapel_id, true)
 					);

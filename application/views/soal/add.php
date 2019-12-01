@@ -43,7 +43,7 @@
                             <label for="soal" class="control-label">Topik</label>
                             <select id="topik" multiple="multiple" name="topik_id[]" class="form-control select2" style="width: 100%!important">
                                 <?php foreach ($topik as $topik) : ?>
-                                    <option value="<?= $topik->id_topik ?>"><?= $topik->nama_topik ?></option>
+                                    <option value="<?= $topik->id_topik ?>"><?= "KELAS {$topik->kelas} - {$topik->nama_topik}" ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <small class="help-block" style="color: #dc3545"><?= form_error('topik_id[]') ?></small>
@@ -97,7 +97,7 @@
                                 <small class="help-block" style="color: #dc3545"><?= form_error('jawaban') ?></small>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-sm-12">
                             <label for="bobot" class="control-label">Bobot Soal</label>
                             <input required="required" value="1" type="number" name="bobot" placeholder="Bobot Soal" id="bobot" class="form-control">
@@ -117,7 +117,7 @@
 </div>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $("#jenis_soal").change(function() {
             if ($("#jenis_soal").val() == 'pilgan') {
                 $("#pilgan").show()

@@ -21,6 +21,7 @@
 			<thead>
 				<tr>
 					<th>No.</th>
+					<th>Kelas</th>
 					<th>Topik</th>
 					<th>Mapel</th>
 					<th class="text-center">

@@ -31,7 +31,7 @@
                     <select name="topik" id="topik" class="form-control select2" style="width: 100%!important" onchange="getSoal()">
                         <option value="" disabled selected>Pilih Topik</option>
                         <?php foreach ($topik as $row) : ?>
-                            <option value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
+                            <option value="<?= $row->id_topik ?>"><?= "KELAS {$row->kelas} - {$row->nama_topik}" ?></option>
                         <?php endforeach; ?>
                     </select>
                     <small class="help-block"></small>

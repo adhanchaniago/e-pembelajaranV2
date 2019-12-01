@@ -38,13 +38,11 @@
                                     <div class="form-group">
                                         <?= form_hidden('id_topik[' . $i . ']', $row->id_topik); ?>
                                         <input required="required" autofocus="autofocus" onfocus="this.select()" value="<?= $row->nama_topik ?>" type="text" name="nama_topik[<?= $i ?>]" class="form-control">
-                                        <span class="d-none">DON'T DELETE THIS</span>
                                         <small class="help-block text-right"></small>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-
                                         <?php if ($this->ion_auth->is_admin()) { ?>
                                             <select required="required" name="mapel_id[<?= $i ?>]" class="input-sm form-control select2" style="width: 100%!important">
                                                 <option value="" disabled>-- Pilih --</option>
@@ -56,7 +54,6 @@
                                         <?php } else { ?>
                                             <input type="text" readonly value="<?= $mapel->nama_mapel ?>" class="form-control" style="width: 100%!important">
                                             <input type="hidden" readonly value="<?= $mapel->mapel_id ?>" name="mapel_id[<?= $i ?>]" class="form-control input-sm" style="width: 100%!important">
-
                                         <?php } ?>
                                     </div>
                                 </td>

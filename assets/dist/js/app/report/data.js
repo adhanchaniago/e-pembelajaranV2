@@ -47,13 +47,14 @@ $(document).ready(function () {
     processing: true,
     serverSide: true,
     ajax: {
-      url: base_url + "report/data",
+      url: url,
       type: "POST"
     },
     columns: [{
         data: "id_siswa",
-        orderable: false,
-        searchable: false
+        render: function (data, type, row, meta) {
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
       },
       {
         data: "nama"
@@ -139,28 +140,18 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "tugas10",
+        data: "uts",
         "className": "text-center"
       },
       {
-        data: "ujian10",
+        data: "uas",
         "className": "text-center"
       }
     ],
 
     order: [
       [1, "asc"]
-    ],
-    rowId: function (a) {
-      return a;
-    },
-    rowCallback: function (row, data, iDisplayIndex) { //numbering
-      var info = this.fnPagingInfo();
-      var page = info.iPage;
-      var length = info.iLength;
-      var index = page * length + (iDisplayIndex + 1);
-      $("td:eq(0)", row).html(index); //letakkan pada kolom ke 0
-    }
+    ]
   });
 
 

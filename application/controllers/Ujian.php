@@ -114,7 +114,7 @@ class Ujian extends CI_Controller
 			'guru'		=> $this->ujian->getIdGuru($user->username),
 			'ujian'		=> $this->ujian->getUjianById($id),
 		];
-		$data['topik'] = $this->master->getTopikById($data['mapel']->mapel_id);
+		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
 		$data['soal'] = $this->ujian->getSoalEssay($data['ujian']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);

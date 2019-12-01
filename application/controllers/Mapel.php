@@ -69,7 +69,7 @@ class Mapel extends CI_Controller
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Mata Pelajaran',
 				'subjudul'	=> 'Edit Data Mata Pelajaran',
-				'mapel'	=> $mapel
+				'mapel'		=> $mapel
 			];
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('master/mapel/edit');

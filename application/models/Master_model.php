@@ -34,7 +34,7 @@ class Master_model extends CI_Model
      */
     public function getDataTopik($id)
     {
-        $this->datatables->select('id_topik, nama_topik, mapel_id, nama_mapel');
+        $this->datatables->select('id_topik, kelas, nama_topik, mapel_id, nama_mapel');
         $this->datatables->from('topik');
         $this->datatables->join('mapel', 'mapel_id=id_mapel');
         if ($id !== null) {
@@ -43,19 +43,27 @@ class Master_model extends CI_Model
         $this->datatables->add_column('bulk_select', '<div class="text-center"><input type="checkbox" class="check" name="checked[]" value="$1"/></div>', 'id_topik, nama_topik, id_mapel, nama_mapel');
         return $this->datatables->generate();
     }
-    public function getTopikByMapel($mapel_id)
+    public function getTopikByMapel($where, $multi_where = false)
     {
         $this->db->from('topik');
-        $this->db->where('mapel_id', $mapel_id);
+        if ($multi_where == false) {
+            $this->db->where('mapel_id', $where);
+        } else {
+            $this->db->where($where);
+        }
         $this->db->order_by('id_topik', 'asc');
         return $this->db->get()->result();
     }
 
-    public function getTopikById($id)
+    public function getTopikById($id, $single = false)
     {
-        $this->db->where_in('mapel_id', $id);
-        $this->db->order_by('nama_topik');
-        $query = $this->db->get('topik')->result();
+        if ($single === false) {
+            $this->db->where_in('id_topik', $id);
+            $this->db->order_by('nama_topik');
+            $query = $this->db->get('topik')->result();
+        } else {
+            $query = $this->db->get_where('topik', array('id_topik' => $id))->row();
+        }
         return $query;
     }
 

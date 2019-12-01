@@ -78,7 +78,7 @@ class Soal extends CI_Controller
             //Jika bukan maka mapel dipilih otomatis sesuai mapel guru
             $data['guru'] = $this->soal->getMapelGuru($user->username);
             $mapel = $this->soal->getMapelGuru($user->username);
-            $data['topik'] = $this->soal->getTopikMapel($mapel->mapel_id);
+            $data['topik'] = $this->master->getTopikByMapel($mapel->mapel_id);
         }
 
         $this->load->view('_templates/dashboard/_header.php', $data);
@@ -94,12 +94,13 @@ class Soal extends CI_Controller
             $top[] = (object) array("id_topik" => $topik);
         }
         $user = $this->ion_auth->user()->row();
+        $mapel = $this->soal->getMapelGuru($user->username);
         $data = [
             'user'      => $user,
             'judul'        => 'Soal',
             'subjudul'  => 'Edit Soal',
             'soal'      => $this->soal->getSoalById($id),
-            'all_topik'        => $this->master->getAllTopik(),
+            'all_topik'        => $this->master->getTopikByMapel($mapel->mapel_id),
             'topik'            => $top
         ];
 

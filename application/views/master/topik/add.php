@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th># No</th>
+                            <th>Kelas</th>
                             <th>Topik</th>
                             <th>Mapel</th>
                         </tr>
@@ -32,6 +33,16 @@
                         <?php for ($i = 1; $i <= $banyak; $i++) : ?>
                             <tr>
                                 <td><?= $i ?></td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="form-control input-sm select2" name="kelas[<?= $i ?>]" required="required" style="width: 100%!important">
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                        <small class="help-block text-right"></small>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="form-group">
                                         <input autofocus="autofocus" onfocus="this.select()" required="required" autocomplete="off" type="text" name="nama_topik[<?= $i ?>]" class="form-control">

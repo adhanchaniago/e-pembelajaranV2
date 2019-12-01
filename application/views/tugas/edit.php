@@ -30,7 +30,7 @@
                     <label for="topik">Topik</label>
                     <select name="topik" id="topik" class="form-control select2" style="width: 100%!important" onchange="getSoal()">
                         <?php foreach ($topik as $row) : ?>
-                            <option <?= $tugas->topik_id == $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= $row->nama_topik ?></option>
+                            <option <?= $tugas->topik_id == $row->id_topik ? "selected" : "" ?> value="<?= $row->id_topik ?>"><?= "KELAS {$row->kelas} - {$row->nama_topik}" ?></option>
                         <?php endforeach; ?>
                     </select>
                     <small class="help-block"></small>

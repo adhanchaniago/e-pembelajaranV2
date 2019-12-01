@@ -41,7 +41,7 @@
                                         $top[] = $val->id_topik;
                                     }
                                     foreach ($all_topik as $t) : ?>
-                                        <option <?= in_array($t->id_topik, $top) ? "selected" : "" ?> value="<?= $t->id_topik ?>"><?= $t->nama_topik ?></option>
+                                        <option <?= in_array($t->id_topik, $top) ? "selected" : "" ?> value="<?= $t->id_topik ?>"><?= "KELAS {$t->kelas} - {$t->nama_topik}" ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <small class="help-block text-right"></small>

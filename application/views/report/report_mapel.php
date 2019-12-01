@@ -10,7 +10,16 @@
         <div class="row">
             <div class="col-sm-4">
             </div>
+            <div class="form-group col-sm-4 text-center">
+                <?php if ($this->ion_auth->in_group('guru')) : ?>
+                    <select id="kelas_filter" class="form-control select2" style="width:100% !important">
+                        <?php foreach ($kelas as $k) : ?>
+                            <option value="<?= $k->id_kelas ?>"><?= $k->nama_kelas ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
 
+            </div>
             <div class="col-sm-4">
                 <div class="pull-right">
                 </div>
@@ -52,16 +61,32 @@
     </div>
 </div>
 
+<?php if ($this->ion_auth->in_group('guru')) : ?>
+    <script type="text/javascript">
+        let url = ''
+        $(document).ready(function() {
+            let sel = document.getElementById("kelas_filter");
+            let id_kelas = sel.value;
+            let str = sel.options[sel.selectedIndex].text;
+            let kelas = str.substring(0, 2);
+            let src = '<?= base_url() ?>report/data';
+            url = src + '/' + id_kelas + '/' + kelas;
+        });
+    </script>
+<?php endif; ?>
 <script src="<?= base_url() ?>assets/dist/js/app/report/data.js"></script>
 
 
 <?php if ($this->ion_auth->in_group('guru')) : ?>
     <script type="text/javascript">
-        $(document).ready(function() {
-            let id_mapel = 13;
-            let src = '<?= base_url() ?>report/data';
-            let url = src + '/' + id_mapel;
-
+        $('#kelas_filter').on('change', function() {
+            id_kelas = $(this).val();
+            sel = document.getElementById("kelas_filter");
+            str = sel.options[sel.selectedIndex].text;
+            kelas = str.substring(0, 2);
+            src = '<?= base_url() ?>report/data';
+            let url = src + '/' + id_kelas + '/' + kelas;
+            console.log(url)
             table.ajax.url(url).load();
         });
     </script>

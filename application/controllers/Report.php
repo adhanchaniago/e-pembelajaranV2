@@ -52,12 +52,12 @@ class Report extends CI_Controller
 		$this->output_json($this->tugas->getDataTugas($id), false);
 	}
 
-	public function data($id_kelas = 13)
+	public function data($id_kelas, $kelas)
 	{
 		$user = $this->ion_auth->user()->row();
 		$guru = $this->report->getGuru($user->username)->row();
-		$topik = $this->master->getTopikByMapel($guru->mapel_id);
-		$this->output_json($this->report->getDataReport($guru->id_guru, $guru->mapel_id, $id_kelas, $topik), false);
+		$topik = $this->master->getTopikByMapel(['mapel_id' => $guru->mapel_id, 'kelas' => $kelas], true);
+		echo $this->output_json($this->report->getDataReport($guru->id_guru, $guru->mapel_id, $id_kelas, $topik), false);
 	}
 
 	// fungsi untuk menampilkan seluruh daftar tugas yang dibuat untuk guru

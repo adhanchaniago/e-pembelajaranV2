@@ -114,7 +114,7 @@ class Tugas extends CI_Controller
 			'guru'		=> $this->tugas->getIdGuru($user->username),
 			'tugas'		=> $this->tugas->getTugasById($id),
 		];
-		$data['topik'] = $this->master->getTopikById($data['mapel']->mapel_id);
+		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
 		$data['soal'] = $this->tugas->getSoalEssay($data['tugas']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);

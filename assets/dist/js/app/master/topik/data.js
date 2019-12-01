@@ -19,25 +19,25 @@ $(document).ready(function () {
     buttons: [{
         extend: "copy",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1, 2, 3]
         }
       },
       {
         extend: "print",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1, 2, 3]
         }
       },
       {
         extend: "excel",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1, 2, 3]
         }
       },
       {
         extend: "pdf",
         exportOptions: {
-          columns: [1, 2]
+          columns: [1, 2, 3]
         }
       }
     ],
@@ -55,6 +55,9 @@ $(document).ready(function () {
         data: "id_topik",
         orderable: false,
         searchable: false
+      },
+      {
+        data: "kelas"
       },
       {
         data: "nama_topik"
