@@ -31,7 +31,8 @@
                     <li class="user-footer">
                         <div class="pull-left">
                             <a href="<?= base_url() ?>users/edit/<?= $user->id ?>" class="btn btn-default btn-flat">
-                                <?= $this->ion_auth->is_admin() ? "Edit Profile" : "Ganti Password" ?>
+                                <!-- <?= $this->ion_auth->is_admin() ? "Edit Profile" : "Ganti Password" ?> -->
+                                Edit Profile
                             </a>
                         </div>
                         <div class="pull-right">

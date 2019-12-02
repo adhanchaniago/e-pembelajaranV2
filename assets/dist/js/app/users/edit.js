@@ -30,7 +30,7 @@ function submitajax(url, data, msg, btn) {
                     });
                 }
             }
-            btn.removeAttr('disabled').text('Ganti Password');
+            btn.removeAttr('disabled').text('Simpan');
         }
     });
 }

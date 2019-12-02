@@ -65,12 +65,17 @@ class Users extends CI_Controller {
 
 	public function edit_info()
 	{
-		$this->is_admin();
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('first_name', 'First Name', 'required');
-		$this->form_validation->set_rules('last_name', 'Last Name', 'required');
-		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-		
+		if ($this->ion_auth->is_admin()) {
+			$this->is_admin();
+			$this->form_validation->set_rules('username', 'Username', 'required');
+			$this->form_validation->set_rules('first_name', 'First Name', 'required');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		} else {
+			$this->form_validation->set_rules('fullname', 'Name', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		}
+
 		if($this->form_validation->run()===FALSE){
 			$data['status'] = false;
 			$data['errors'] = [
@@ -81,13 +86,49 @@ class Users extends CI_Controller {
 			];
 		}else{
 			$id = $this->input->post('id', true);
-			$input = [
-				'username' 		=> $this->input->post('username', true),
-				'first_name'	=> $this->input->post('first_name', true),
-				'last_name'		=> $this->input->post('last_name', true),
-				'email'			=> $this->input->post('email', true)
-			];
+			if ($this->ion_auth->is_admin()) {
+				$input = [
+					'username' 		=> $this->input->post('username', true),
+					'first_name'	=> $this->input->post('first_name', true),
+					'last_name'		=> $this->input->post('last_name', true),
+					'email'			=> $this->input->post('email', true)
+				];
+			} elseif ($this->ion_auth->in_group('guru')) {
+				$nama = explode(' ', $this->input->post('fullname', true));
+				$first_name = $nama[0];
+				$last_name = end($nama);
+				$input_guru = [
+					'nama_guru'			=> $this->input->post('fullname', true),
+					'email'			=> $this->input->post('email', true)
+				];
+
+				$input = [
+					'first_name'	=> $first_name,
+					'last_name'		=> $last_name,
+					'email'			=> $this->input->post('email', true)
+				];
+
+				$this->master->update('guru', $input_guru, 'id_user', $id);
+
+			} else {
+				$nama = explode(' ', $this->input->post('fullname', true));
+				$first_name = $nama[0];
+				$last_name = end($nama);
+				$input_siswa = [
+					'nama'			=> $this->input->post('fullname', true),
+					'email'			=> $this->input->post('email', true)
+				];
+
+				$input = [
+					'first_name'	=> $first_name,
+					'last_name'		=> $last_name,
+					'email'			=> $this->input->post('email', true)
+				];
+
+				$this->master->update('siswa', $input_siswa, 'id_user', $id);
+			}
 			$update = $this->master->update('users', $input, 'id', $id);
+
 			$data['status'] = $update ? true : false;
 		}
 		$this->output_json($data);

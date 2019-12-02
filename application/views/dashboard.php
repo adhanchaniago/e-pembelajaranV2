@@ -1,3 +1,4 @@
+
 <?php if ($this->ion_auth->is_admin()) : ?>
     <div class="row">
         <?php foreach ($info_box as $info) : ?>

@@ -45,6 +45,37 @@
         </div>
         <?=form_close()?>
     </div>
+    <?php else : ?>
+    <div class="col-sm-4">
+        <?=form_open('users/edit_info', array('id'=>'user_info'), array('id'=>$users->id))?>
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Data User</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body pb-0">
+                
+                <div class="form-group">
+                    <label for="first_name">Name</label>
+                    <input type="text" name="fullname" class="form-control" value="<?=$users->first_name?>">
+                    <small class="help-block"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control" value="<?=$users->email?>">
+                    <small class="help-block"></small>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" id="btn-info" class="btn btn-info">Simpan</button>
+            </div>
+        </div>
+        <?=form_close()?>
+    </div>
     <?php endif; ?>
     <?php if($user->id !== $users->id) : ?>
     <div class="col-sm-4">
@@ -134,7 +165,7 @@
                 <button type="reset" class="btn btn-flat btn-default">
                     <i class="fa fa-rotate-left"></i> Reset
                 </button>
-                <button type="submit" id="btn-pass" class="btn btn-flat btn-warning">Ganti Password</button>            
+                <button type="submit" id="btn-pass" class="btn btn-flat btn-warning">Simpan</button>            
             </div>
         </div>
     </div>
