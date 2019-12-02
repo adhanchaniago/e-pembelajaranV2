@@ -308,28 +308,4 @@ class Master_model extends CI_Model
         $query = $this->db->get()->result();
         return $query;
     }
-    /**
-     * Data Jurusan mapel
-     */
-
-    public function getJurusanmapel()
-    {
-        $this->datatables->select('jurusan_mapel.id, mapel.id_mapel, mapel.nama_mapel, jurusan.id_jurusan, GROUP_CONCAT(jurusan.nama_jurusan) as nama_jurusan');
-        $this->datatables->from('jurusan_mapel');
-        $this->datatables->join('mapel', 'mapel_id=id_mapel');
-        $this->datatables->join('jurusan', 'jurusan_id=id_jurusan');
-        $this->datatables->group_by('mapel.nama_mapel');
-        return $this->datatables->generate();
-    }
-
-
-    public function getJurusanByIdmapel($id)
-    {
-        $this->db->select('jurusan.id_jurusan');
-        $this->db->from('jurusan_mapel');
-        $this->db->join('jurusan', 'jurusan_mapel.jurusan_id=jurusan.id_jurusan');
-        $this->db->where('mapel_id', $id);
-        $query = $this->db->get()->result();
-        return $query;
-    }
 }

@@ -21,8 +21,8 @@ class Report_model extends CI_Model
                 $select .= ", uts";
                 $from .= "
                 left join
-                (select id_siswa, nama, round(avg(nilai)) as uts from hasil_ujian hu 
-                JOIN ujian u ON hu.ujian_id = u.id_ujian
+                (select id_siswa, nama, round(avg(nilai)) as uts from hasil_kuis hu 
+                JOIN kuis u ON hu.kuis_id = u.id_kuis
                 JOIN topik t ON t.id_topik = u.topik_id
                 JOIN siswa s ON s.id_siswa = hu.siswa_id
                 where u.guru_id = {$id_guru} AND s.kelas_id = {$id_kelas} AND t.mapel_id = {$id_mapel} AND u.topik_id = {$value->id_topik}
@@ -32,15 +32,15 @@ class Report_model extends CI_Model
                 $select .= ", uas";
                 $from .= "
                 left join
-                (select id_siswa, nama, round(avg(nilai)) as uas from hasil_ujian hu 
-                JOIN ujian u ON hu.ujian_id = u.id_ujian
+                (select id_siswa, nama, round(avg(nilai)) as uas from hasil_kuis hu 
+                JOIN kuis u ON hu.kuis_id = u.id_kuis
                 JOIN topik t ON t.id_topik = u.topik_id
                 JOIN siswa s ON s.id_siswa = hu.siswa_id
                 where u.guru_id = {$id_guru} AND s.kelas_id = {$id_kelas} AND t.mapel_id = {$id_mapel} AND u.topik_id = {$value->id_topik}
                 group by id_siswa) t_uas
                 using(id_siswa)";
             } else {
-                $select .= ", tugas{$key}, ujian{$key}";
+                $select .= ", tugas{$key}, kuis{$key}";
                 $from .= "
                 left join
                 (select id_siswa, nama, round(avg(nilai)) as tugas{$key} from hasil_tugas ht 
@@ -51,8 +51,8 @@ class Report_model extends CI_Model
                 group by id_siswa) t{$key}
                 using(id_siswa)
                 left join
-                (select id_siswa, nama, round(avg(nilai)) as ujian{$key} from hasil_ujian hu 
-                JOIN ujian u ON hu.ujian_id = u.id_ujian
+                (select id_siswa, nama, round(avg(nilai)) as kuis{$key} from hasil_kuis hu 
+                JOIN kuis u ON hu.kuis_id = u.id_kuis
                 JOIN topik t ON t.id_topik = u.topik_id
                 JOIN siswa s ON s.id_siswa = hu.siswa_id
                 where u.guru_id = {$id_guru} AND s.kelas_id = {$id_kelas} AND t.mapel_id = {$id_mapel} AND u.topik_id = {$value->id_topik}

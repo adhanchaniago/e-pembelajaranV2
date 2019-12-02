@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 26 Nov 2019 pada 07.19
+-- Waktu pembuatan: 02 Des 2019 pada 06.33
 -- Versi server: 10.3.16-MariaDB
 -- Versi PHP: 7.3.7
 
@@ -63,9 +63,55 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`id_guru`, `nip`, `nama_guru`, `email`, `mapel_id`, `kelas_id`) VALUES
-(5, '12345678', 'Adam Hendra', 'adam@gmail.com', 2, '13,14'),
-(6, '12345679', 'Herman Tolle', 'herman@gmail.com', 2, '14'),
-(7, '19201920', 'Wayan Firdaus', 'wayan@gmail.com', 1, '13');
+(10, '11111111', 'Nadiem Makariem', 'nadiem@gmail.com', 8, '13,14,15'),
+(11, '22222222', 'Wishnutama', 'wis@gmail.com', 8, '16,17'),
+(12, '33333333', 'Erick Tohir', 'erick@gmail.com', 2, '13,14,15'),
+(13, '44444444', 'Sandiaga Uno', 'sandi@gmail.com', 2, '16,17');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `hasil_kuis`
+--
+
+CREATE TABLE `hasil_kuis` (
+  `id` int(11) NOT NULL,
+  `kuis_id` int(11) NOT NULL,
+  `siswa_id` int(11) NOT NULL,
+  `jenis_soal` enum('pilgan','essay') NOT NULL,
+  `list_soal` longtext NOT NULL,
+  `list_jawaban` longtext NOT NULL,
+  `jml_benar` int(11) NOT NULL,
+  `nilai` decimal(10,2) NOT NULL,
+  `nilai_bobot` decimal(10,2) NOT NULL,
+  `tgl_mulai` datetime NOT NULL,
+  `tgl_selesai` datetime NOT NULL,
+  `status` enum('Y','N') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data untuk tabel `hasil_kuis`
+--
+
+INSERT INTO `hasil_kuis` (`id`, `kuis_id`, `siswa_id`, `jenis_soal`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
+(39, 25, 6, 'pilgan', '20,18,19', '20:B:N,18:A:N,19:C:N', 3, '100.00', '100.00', '2019-11-30 19:44:52', '2019-11-30 21:44:52', 'N'),
+(40, 26, 6, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya tampan</p>', 0, '95.00', '0.00', '2019-11-30 19:45:20', '2019-11-30 20:00:20', 'N'),
+(41, 26, 7, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya baik kok</p>', 0, '78.00', '0.00', '2019-11-30 19:48:18', '2019-11-30 20:03:18', 'N'),
+(42, 25, 7, 'pilgan', '18,19,20', '18:A:N,19:C:N,20:B:N', 3, '100.00', '100.00', '2019-11-30 19:48:42', '2019-11-30 21:48:42', 'N'),
+(43, 25, 10, 'pilgan', '19,18,20', '19:C:N,18:B:N,20:C:N', 1, '33.00', '100.00', '2019-11-30 19:55:29', '2019-11-30 21:55:29', 'N'),
+(44, 26, 10, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>aku juga suka berenang dihatimu</p>', 0, '100.00', '0.00', '2019-11-30 19:55:47', '2019-11-30 20:10:47', 'N'),
+(45, 27, 6, 'essay', '<p>jelaskan kenapa ayam bertelur !</p>', '<p>ya lu pikir aja sendiri</p>', 0, '70.00', '0.00', '2019-11-30 22:32:09', '2019-11-30 22:39:09', 'N'),
+(46, 29, 6, 'pilgan', '18,19,20', '18:A:N,19:C:N,20:B:N', 3, '100.00', '100.00', '2019-12-01 22:06:14', '2019-12-01 22:11:14', 'N'),
+(47, 28, 6, 'pilgan', '18,19,20', '18:B:N,19:D:N,20:B:N', 1, '33.00', '100.00', '2019-12-01 22:06:37', '2019-12-01 22:11:37', 'N'),
+(48, 25, 9, 'pilgan', '20,18,19', '20:B:N,18:A:N,19:C:N', 3, '100.00', '100.00', '2019-11-30 19:44:52', '2019-11-30 21:44:52', 'N'),
+(49, 26, 9, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya tampan</p>', 0, '95.00', '0.00', '2019-11-30 19:45:20', '2019-11-30 20:00:20', 'N'),
+(50, 26, 11, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya baik kok</p>', 0, '78.00', '0.00', '2019-11-30 19:48:18', '2019-11-30 20:03:18', 'N'),
+(51, 25, 11, 'pilgan', '18,19,20', '18:A:N,19:C:N,20:B:N', 3, '100.00', '100.00', '2019-11-30 19:48:42', '2019-11-30 21:48:42', 'N'),
+(52, 25, 12, 'pilgan', '19,18,20', '19:C:N,18:B:N,20:C:N', 1, '33.00', '100.00', '2019-11-30 19:55:29', '2019-11-30 21:55:29', 'N'),
+(53, 26, 12, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>aku juga suka berenang dihatimu</p>', 0, '100.00', '0.00', '2019-11-30 19:55:47', '2019-11-30 20:10:47', 'N'),
+(54, 27, 13, 'essay', '<p>jelaskan kenapa ayam bertelur !</p>', '<p>ya lu pikir aja sendiri</p>', 0, '70.00', '0.00', '2019-11-30 22:32:09', '2019-11-30 22:39:09', 'N'),
+(55, 29, 13, 'pilgan', '18,19,20', '18:A:N,19:C:N,20:B:N', 3, '100.00', '100.00', '2019-12-01 22:06:14', '2019-12-01 22:11:14', 'N'),
+(56, 28, 13, 'pilgan', '18,19,20', '18:B:N,19:D:N,20:B:N', 1, '33.00', '100.00', '2019-12-01 22:06:37', '2019-12-01 22:11:37', 'N');
 
 -- --------------------------------------------------------
 
@@ -84,28 +130,23 @@ CREATE TABLE `hasil_tugas` (
   `nilai_bobot` decimal(10,2) NOT NULL,
   `tgl_mulai` datetime NOT NULL,
   `tgl_selesai` datetime NOT NULL,
-  `status` enum('Y','N') CHARACTER SET utf8 NOT NULL
+  `status` enum('Y','N') CHARACTER SET utf8 NOT NULL,
+  `jenis_soal` enum('pilgan','essay') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Struktur dari tabel `hasil_ujian`
+-- Dumping data untuk tabel `hasil_tugas`
 --
 
-CREATE TABLE `hasil_ujian` (
-  `id` int(11) NOT NULL,
-  `ujian_id` int(11) NOT NULL,
-  `siswa_id` int(11) NOT NULL,
-  `list_soal` longtext NOT NULL,
-  `list_jawaban` longtext NOT NULL,
-  `jml_benar` int(11) NOT NULL,
-  `nilai` decimal(10,2) NOT NULL,
-  `nilai_bobot` decimal(10,2) NOT NULL,
-  `tgl_mulai` datetime NOT NULL,
-  `tgl_selesai` datetime NOT NULL,
-  `status` enum('Y','N') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `hasil_tugas` (`id`, `tugas_id`, `siswa_id`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`, `jenis_soal`) VALUES
+(8, 4, 6, '<p>Jelaskan tentang diri anda !</p>', '<p>saya tampan bos</p>', 0, '90.00', '0.00', '2019-11-30 19:45:54', '1970-01-01 07:00:00', 'N', 'essay'),
+(9, 3, 6, '18,20,19', '18:A:N,20:B:N,19:C:N', 3, '100.00', '100.00', '2019-11-30 19:46:23', '1970-01-01 07:00:00', 'N', 'pilgan'),
+(10, 3, 7, '18,19,20', '18:A:N,19:C:N,20:B:N', 3, '100.00', '100.00', '2019-11-30 19:47:29', '1970-01-01 07:00:00', 'N', 'pilgan'),
+(11, 4, 7, '<p>Jelaskan tentang diri anda !</p>', '<p>saya baik</p>', 0, '80.00', '0.00', '2019-11-30 19:47:51', '1970-01-01 07:00:00', 'N', 'essay'),
+(12, 3, 10, '18,19,20', '18:C:N,19:C:N,20:B:N', 2, '66.00', '100.00', '2019-11-30 19:54:35', '1970-01-01 07:00:00', 'N', 'pilgan'),
+(13, 4, 10, '<p>Jelaskan tentang diri anda !</p>', '<p>ga tau ya aku suka ngoding ngoding gitu loh</p>', 0, '98.00', '0.00', '2019-11-30 19:54:56', '1970-01-01 07:00:00', 'N', 'essay'),
+(14, 5, 6, '<p>jelaskan kenapa ayam bertelur !</p>', '<p>ga tau lah bro</p>', 0, '85.00', '0.00', '2019-11-30 22:31:36', '1970-01-01 07:00:00', 'N', 'essay'),
+(15, 6, 6, '19,18,20', '19:C:N,18:A:N,20:B:N', 3, '100.00', '100.00', '2019-12-01 22:07:08', '1970-01-01 07:00:00', 'N', 'pilgan');
 
 -- --------------------------------------------------------
 
@@ -144,7 +185,45 @@ CREATE TABLE `kelas` (
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `jurusan_id`) VALUES
 (13, '10 IPA 1', 1),
-(14, '10 IPA 2', 1);
+(14, '10 IPA 2', 1),
+(15, '10 IPA 3', 1),
+(16, '10 IPA 4', 1),
+(17, '10 IPA 5', 1),
+(18, '10 IPS 1', 2),
+(19, '10 IPS 2', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `kuis`
+--
+
+CREATE TABLE `kuis` (
+  `id_kuis` int(11) NOT NULL,
+  `guru_id` int(11) NOT NULL,
+  `mapel_id` int(11) NOT NULL,
+  `topik_id` int(11) NOT NULL,
+  `nama_kuis` varchar(200) NOT NULL,
+  `jumlah_soal` int(11) NOT NULL,
+  `waktu` int(11) NOT NULL,
+  `jenis_soal` enum('pilgan','essay') NOT NULL,
+  `id_soal_essay` int(11) NOT NULL,
+  `jenis` enum('acak','urut') NOT NULL,
+  `tgl_mulai` datetime NOT NULL,
+  `terlambat` datetime NOT NULL,
+  `token` varchar(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data untuk tabel `kuis`
+--
+
+INSERT INTO `kuis` (`id_kuis`, `guru_id`, `mapel_id`, `topik_id`, `nama_kuis`, `jumlah_soal`, `waktu`, `jenis_soal`, `id_soal_essay`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
+(25, 10, 8, 18, 'Ulangan Bab 1', 3, 120, 'pilgan', 0, 'acak', '2019-11-30 18:50:32', '2019-12-01 18:50:36', 'UKIMM'),
+(26, 10, 8, 18, 'Ulangan Bab 1', 1, 15, 'essay', 21, 'acak', '2019-11-30 18:52:22', '2019-12-01 18:52:24', 'BZXLM'),
+(27, 10, 8, 19, 'Ujian KD2', 1, 7, 'essay', 22, 'acak', '2019-11-30 22:30:36', '2019-12-01 22:30:38', 'DUMPJ'),
+(28, 10, 8, 28, 'UTS hayuu', 3, 5, 'pilgan', 0, 'urut', '2019-12-01 22:00:49', '2019-12-02 22:00:50', 'NTAKD'),
+(29, 10, 8, 29, 'UAS hayuuu', 3, 5, 'pilgan', 0, 'acak', '2019-12-01 22:01:52', '2019-12-02 22:01:53', 'MVFOB');
 
 -- --------------------------------------------------------
 
@@ -158,14 +237,6 @@ CREATE TABLE `login_attempts` (
   `login` varchar(100) NOT NULL,
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data untuk tabel `login_attempts`
---
-
-INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
-(21, '::1', 'Administrator', 1574668139),
-(22, '::1', 'Administrator', 1574668148);
 
 -- --------------------------------------------------------
 
@@ -185,14 +256,7 @@ CREATE TABLE `mapel` (
 INSERT INTO `mapel` (`id_mapel`, `nama_mapel`) VALUES
 (1, 'Bhs Indonesia'),
 (2, 'Matematika'),
-(3, 'Biologi'),
-(4, 'Fisika'),
-(5, 'Kimia'),
-(6, 'Agama'),
-(7, 'Olahraga'),
-(8, 'Bhs Inggris'),
-(9, 'TIK'),
-(10, 'Seni Budaya');
+(8, 'Bhs Inggris');
 
 -- --------------------------------------------------------
 
@@ -214,8 +278,15 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`id_siswa`, `nama`, `nis`, `email`, `jenis_kelamin`, `kelas_id`) VALUES
-(2, 'Shafitri', '99000001', 'shasa@gmail.com', 'P', 13),
-(3, 'Muhammad Rayyan Abhad', '99000002', 'murayyan97@gmail.com', 'L', 14);
+(6, 'Muhammad Rayyan Abhad', '00111222', 'rayyan@gmail.com', 'L', 13),
+(7, 'Zeddin Arief', '00111223', 'zeddin@gmail.com', 'L', 13),
+(8, 'Shafitri N P', '00111224', 'sasa@gmail.com', 'P', 13),
+(9, 'Hugo Ghally', '00111226', 'hugo@gmail.com', 'L', 14),
+(10, 'Fajri Fernanda', '00111225', 'fajri@gmail.com', 'L', 14),
+(11, 'Maulidiya Qurrota', '00111227', 'maul@gmail.com', 'P', 14),
+(12, 'Achmad Alim', '00111228', 'alim@gmail.com', 'L', 15),
+(13, 'Ubaidillah Hakim Fadly', '00111229', 'ubed@gmail.com', 'L', 15),
+(14, 'Wahyu Ridiansyah', '00111230', 'wahyu@gmail.com', 'L', 15);
 
 -- --------------------------------------------------------
 
@@ -227,9 +298,9 @@ CREATE TABLE `soal` (
   `id_soal` int(11) NOT NULL,
   `guru_id` int(11) NOT NULL,
   `mapel_id` int(11) NOT NULL,
+  `jenis_soal` varchar(6) NOT NULL,
   `bobot` int(11) NOT NULL,
   `file` varchar(255) NOT NULL,
-  `jenis_soal` varchar(20) NOT NULL,
   `tipe_file` varchar(50) NOT NULL,
   `topik` varchar(20) NOT NULL,
   `soal` longtext NOT NULL,
@@ -252,13 +323,12 @@ CREATE TABLE `soal` (
 -- Dumping data untuk tabel `soal`
 --
 
-INSERT INTO `soal` (`id_soal`, `guru_id`, `mapel_id`, `bobot`, `file`, `jenis_soal`, `tipe_file`, `topik`, `soal`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `opsi_e`, `file_a`, `file_b`, `file_c`, `file_d`, `file_e`, `jawaban`, `created_on`, `updated_on`) VALUES
-(8, 5, 2, 1, '', '', '', '1,2', '<p>1+1 = ?</p>', '<p>2</p>', '<p>3</p>', '<p>4</p>', '<p>5</p>', '', '', '', '', '', '', 'A', 1574134873, 1574134873),
-(9, 5, 2, 1, '', '', '', '2', '<p>2-1=?</p>', '<p>2</p>', '<p>3</p>', '<p>4</p>', '<p>1</p>', '<p>0</p>', '', '', '', '', '', 'D', 1574134914, 1574134914),
-(10, 6, 2, 1, '', '', '', '1,2', '<p>12</p>', '<p>12</p>', '<p>12</p>', '<p>12</p>', '<p>12</p>', '<p>12</p>', '', '', '', '', '', 'B', 1574174052, 1574174052),
-(11, 6, 2, 1, '', '', '', '1', '<p>aaaqqwq</p>', '<p>aa</p>', '<p>bb</p>', '<p>cc</p>', '<p>dd</p>', '<p>ee</p>', '', '', '', '', '', 'B', 1574174506, 1574174506),
-(12, 7, 1, 1, '', '', '', '4,5', '<p>sinonim tangan ?</p>', '<p>hasta</p>', '<p>karya</p>', '<p>kaki</p>', '<p>makan</p>', '<p>kepala</p>', '', '', '', '', '', 'A', 1574236818, 1574236818),
-(13, 5, 2, 1, '', 'essay', '', '2', '<p>Buatlah sebuah cerita pendek</p>', '', '', '', '', '', '', '', '', '', '', '', 1574431228, 1574431228);
+INSERT INTO `soal` (`id_soal`, `guru_id`, `mapel_id`, `jenis_soal`, `bobot`, `file`, `tipe_file`, `topik`, `soal`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `opsi_e`, `file_a`, `file_b`, `file_c`, `file_d`, `file_e`, `jawaban`, `created_on`, `updated_on`) VALUES
+(18, 10, 8, 'pilgan', 1, '', '', '18,20,28,29', '<p>Jawabannya A</p>', '<p>kuda</p>', '<p>kijang</p>', '<p>kancil</p>', '<p>kelinci</p>', '<p>kecoa</p>', '', '', '', '', '', 'A', 1575114336, 1575212688),
+(19, 10, 8, 'pilgan', 1, '', '', '18,20,28,29', '<p>Jawabannya C</p>', '<p>tikus</p>', '<p>tupai</p>', '<p>trenggiling</p>', '<p>tapir</p>', '<p>tokek</p>', '', '', '', '', '', 'C', 1575114395, 1575212679),
+(20, 10, 8, 'pilgan', 1, '', '', '18,20,28,29', '<p>Jawabannya B</p>', '<p>tikus</p>', '<p>tupai</p>', '<p>trenggiling</p>', '<p>tapir</p>', '<p>tokek</p>', '', '', '', '', '', 'B', 0, 1575212701),
+(21, 10, 8, 'essay', 1, '', '', '18', '<p>Jelaskan tentang diri anda !</p>', '', '', '', '', '', '', '', '', '', '', '', 1575114486, 1575114486),
+(22, 10, 8, 'essay', 1, '', '', '19', '<p>jelaskan kenapa ayam bertelur !</p>', '', '', '', '', '', '', '', '', '', '', '', 1575127782, 1575127782);
 
 -- --------------------------------------------------------
 
@@ -268,6 +338,7 @@ INSERT INTO `soal` (`id_soal`, `guru_id`, `mapel_id`, `bobot`, `file`, `jenis_so
 
 CREATE TABLE `topik` (
   `id_topik` int(5) NOT NULL,
+  `kelas` enum('10','11','12') DEFAULT NULL,
   `nama_topik` varchar(255) NOT NULL,
   `mapel_id` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -276,13 +347,32 @@ CREATE TABLE `topik` (
 -- Dumping data untuk tabel `topik`
 --
 
-INSERT INTO `topik` (`id_topik`, `nama_topik`, `mapel_id`) VALUES
-(1, 'Aljabaraaa', 2),
-(2, 'UTS', 2),
-(3, 'Trigonometri', 2),
-(4, 'Sinonim', 1),
-(5, 'Kata Baku', 1),
-(6, 'Kalkulus', 2);
+INSERT INTO `topik` (`id_topik`, `kelas`, `nama_topik`, `mapel_id`) VALUES
+(6, '10', 'MTK-KD1', 2),
+(7, '10', 'MTK-KD2', 2),
+(8, '10', 'MTK-KD3', 2),
+(9, '10', 'MTK-KD4', 2),
+(10, '10', 'MTK-KD5', 2),
+(11, '10', 'MTK-KD6', 2),
+(12, '10', 'MTK-KD7', 2),
+(13, '10', 'MTK-KD8', 2),
+(14, '10', 'MTK-KD9', 2),
+(15, '10', 'MTK-KD10', 2),
+(16, '10', 'UTS', 2),
+(17, '10', 'UAS', 2),
+(18, '10', 'BIG-KD1', 8),
+(19, '10', 'BIG-KD2', 8),
+(20, '10', 'BIG-KD3', 8),
+(21, '10', 'BIG-KD4', 8),
+(22, '10', 'BIG-KD5', 8),
+(23, '10', 'BIG-KD6', 8),
+(24, '10', 'BIG-KD7', 8),
+(25, '10', 'BIG-KD8', 8),
+(26, '10', 'BIG-KD9', 8),
+(27, '10', 'BIG-KD10', 8),
+(28, '10', 'UTS', 8),
+(29, '10', 'UAS', 8),
+(30, '11', 'BIG-1', 8);
 
 -- --------------------------------------------------------
 
@@ -305,34 +395,15 @@ CREATE TABLE `tugas` (
   `id_soal_essay` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Struktur dari tabel `ujian`
+-- Dumping data untuk tabel `tugas`
 --
 
-CREATE TABLE `ujian` (
-  `id_ujian` int(11) NOT NULL,
-  `guru_id` int(11) NOT NULL,
-  `mapel_id` int(11) NOT NULL,
-  `topik_id` int(11) NOT NULL,
-  `nama_ujian` varchar(200) NOT NULL,
-  `jumlah_soal` int(11) NOT NULL,
-  `waktu` int(11) NOT NULL,
-  `jenis` enum('acak','urut') NOT NULL,
-  `tgl_mulai` datetime NOT NULL,
-  `terlambat` datetime NOT NULL,
-  `token` varchar(5) NOT NULL,
-  `jenis_soal` enum('pilgan','essay') NOT NULL,
-  `id_soal_essay` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data untuk tabel `ujian`
---
-
-INSERT INTO `ujian` (`id_ujian`, `guru_id`, `mapel_id`, `topik_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`, `jenis_soal`, `id_soal_essay`) VALUES
-(10, 5, 2, 2, 'awdawd', 1, 60, 'acak', '2019-11-20 21:40:45', '2019-11-26 21:40:46', 'LLFJS', 'essay', 13);
+INSERT INTO `tugas` (`id_tugas`, `guru_id`, `mapel_id`, `topik_id`, `nama_tugas`, `jumlah_soal`, `jenis`, `tgl_mulai`, `terlambat`, `token`, `jenis_soal`, `id_soal_essay`) VALUES
+(3, 10, 8, 18, 'Tugas 1', 3, 'acak', '2019-11-30 18:49:33', '2019-12-01 18:49:35', 'EQTAU', 'pilgan', 0),
+(4, 10, 8, 18, 'Tugas 2', 1, 'acak', '2019-11-30 18:51:18', '2019-12-01 18:51:20', 'CNEMJ', 'essay', 21),
+(5, 10, 8, 19, 'Tugas KD 2', 1, 'acak', '2019-11-30 22:30:06', '2019-12-01 22:30:08', 'DPVTA', 'essay', 22),
+(6, 10, 8, 20, 'Tugas 3', 3, 'acak', '2019-12-01 22:05:14', '2019-12-02 22:05:15', 'GWYFB', 'pilgan', 0);
 
 -- --------------------------------------------------------
 
@@ -367,12 +438,20 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'admin', '$2y$12$duBtimAQzpTC6CaH9MFOheoCN5ss48Fe/i1PeO236GTPxozToItZG', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1574686396, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
-(11, '::1', '12345678', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'adam@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574134830, 1574743568, 1, 'Adam', 'Hendra', NULL, NULL),
-(12, '::1', '99000001', '$2y$10$qX7BZihKvB5M8Bn4K06Fk.98T9PVvEDaFeA50LYWE59HaLQAe/I6e', 'shasa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574135038, 1574300807, 1, 'Shafitri', 'Shafitri', NULL, NULL),
-(13, '::1', '99000002', '$2y$10$qX7BZihKvB5M8Bn4K06Fk.98T9PVvEDaFeA50LYWE59HaLQAe/I6e', 'murayyan97@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574135116, 1574690822, 1, 'Muhammad', 'Abhad', NULL, NULL),
-(14, '::1', '12345679', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'herman@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574163761, 1574163779, 1, 'Herman', 'Tolle', NULL, NULL),
-(15, '::1', '19201920', '$2y$10$69dcIPhN46vLrUX2./kiEO4gadWg1apyVzRq1A0jgt3aymNA/WdMe', 'wayan@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1574236244, 1574236616, 1, 'Wayan', 'Firdaus', NULL, NULL);
+(1, '127.0.0.1', 'admin', '$2y$12$duBtimAQzpTC6CaH9MFOheoCN5ss48Fe/i1PeO236GTPxozToItZG', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1575264043, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(20, '::1', '11111111', '$2y$10$1TxtDxsflgJgNwsV9RP4HePBwB1f1XDdRqshRLaxi3IIbVQPiAaxS', 'nadiem@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575112954, 1575114245, 1, 'Nadiem', 'Makariem', NULL, NULL),
+(21, '::1', '22222222', '$2y$10$7SKToztmx9fL.tW9Rh2RqeZxa6ganahqiusYUlIByQsXU/T6uPmXm', 'wis@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113094, NULL, 1, 'Wishnutama', 'Wishnutama', NULL, NULL),
+(22, '::1', '33333333', '$2y$10$dKWq4qRRkx4I.acUYGjRBeKvmkdXLuzVoMXBKZxiJ/qY5hAwtiaqi', 'erick@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113097, NULL, 1, 'Erick', 'Tohir', NULL, NULL),
+(23, '::1', '44444444', '$2y$10$Ky/sMRSkSn1nKwrwaoPF6OSedDL/7jWOYckjaEMtHurbLlkvB3qVy', 'sandi@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113100, NULL, 1, 'Sandiaga', 'Uno', NULL, NULL),
+(24, '::1', '00111222', '$2y$10$sMs4VBEG6DcFwQhxx1mLMONHyvI3Hf9rIQADRX7WjnyKnggzLr/3m', 'rayyan@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113400, 1575212558, 1, 'Muhammad', 'Abhad', NULL, NULL),
+(25, '::1', '00111223', '$2y$10$cLWqId1W65.GgYy9vsYVtu54C1CcLxN3ODxAA72qyvjIhC4V2Offq', 'zeddin@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113402, 1575118017, 1, 'Zeddin', 'Arief', NULL, NULL),
+(26, '::1', '00111224', '$2y$10$gpntgciL54po8.CAxIRYeeCgxTR7qU3b8scd8LiZsM8VMgknPewvG', 'sasa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113480, NULL, 1, 'Shafitri', 'P', NULL, NULL),
+(27, '::1', '00111225', '$2y$10$YUvwgZ6sNl40uMYwy6tLLuj3vF5fAqjhcRHX4plVsK4aMftqf5sVS', 'fajri@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113556, 1575118364, 1, 'Fajri', 'Fernanda', NULL, NULL),
+(28, '::1', '00111226', '$2y$10$R9rCJKNG0aRn7QeLLSDACu3MbPb12GVU3Xuyb29nx135vKA5w6Jy2', 'hugo@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113559, NULL, 1, 'Hugo', 'Ghally', NULL, NULL),
+(29, '::1', '00111227', '$2y$10$KZnaO6zKeTAfdlcmv3/H2ONKFrVUMOIQc.SKPN62Ep1Vd55XKE92a', 'maul@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113674, NULL, 1, 'Maulidiya', 'Qurrota', NULL, NULL),
+(30, '::1', '00111228', '$2y$10$KuLP4bjz7PT4B5cwAom6Ueok.k/mY54KQNhAocLJc3dqCetAjf1KK', 'alim@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113677, NULL, 1, 'Achmad', 'Alim', NULL, NULL),
+(31, '::1', '00111229', '$2y$10$.chWhJrnsmc0esSX5tsMg.Pxg5rs2OOLkVnBY67oIPbqJCxfvF2aC', 'ubed@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113679, NULL, 1, 'Ubaidillah', 'Fadly', NULL, NULL),
+(32, '::1', '00111230', '$2y$10$XcNdoU15EWQJAqJQBAKGc.lsC7lyeECIw5r7RhJ0qv7AAm3k6kpbK', 'wahyu@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1575113720, NULL, 1, 'Wahyu', 'Ridiansyah', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -392,11 +471,19 @@ CREATE TABLE `users_groups` (
 
 INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 (3, 1, 1),
-(13, 11, 2),
-(14, 12, 3),
-(15, 13, 3),
-(16, 14, 2),
-(17, 15, 2);
+(22, 20, 2),
+(23, 21, 2),
+(24, 22, 2),
+(25, 23, 2),
+(26, 24, 3),
+(27, 25, 3),
+(28, 26, 3),
+(29, 27, 3),
+(30, 28, 3),
+(31, 29, 3),
+(32, 30, 3),
+(33, 31, 3),
+(34, 32, 3);
 
 --
 -- Indexes for dumped tables
@@ -415,20 +502,18 @@ ALTER TABLE `guru`
   ADD PRIMARY KEY (`id_guru`) USING BTREE;
 
 --
+-- Indeks untuk tabel `hasil_kuis`
+--
+ALTER TABLE `hasil_kuis`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ujian_id` (`kuis_id`),
+  ADD KEY `mahasiswa_id` (`siswa_id`);
+
+--
 -- Indeks untuk tabel `hasil_tugas`
 --
 ALTER TABLE `hasil_tugas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tugas_id` (`tugas_id`),
-  ADD KEY `siswa_id` (`siswa_id`);
-
---
--- Indeks untuk tabel `hasil_ujian`
---
-ALTER TABLE `hasil_ujian`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ujian_id` (`ujian_id`),
-  ADD KEY `mahasiswa_id` (`siswa_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeks untuk tabel `jurusan`
@@ -441,6 +526,15 @@ ALTER TABLE `jurusan`
 --
 ALTER TABLE `kelas`
   ADD PRIMARY KEY (`id_kelas`);
+
+--
+-- Indeks untuk tabel `kuis`
+--
+ALTER TABLE `kuis`
+  ADD PRIMARY KEY (`id_kuis`) USING BTREE,
+  ADD KEY `matkul_id` (`mapel_id`),
+  ADD KEY `dosen_id` (`guru_id`),
+  ADD KEY `topik_id` (`topik_id`);
 
 --
 -- Indeks untuk tabel `login_attempts`
@@ -465,8 +559,8 @@ ALTER TABLE `siswa`
 --
 ALTER TABLE `soal`
   ADD PRIMARY KEY (`id_soal`),
-  ADD KEY `matkul_id` (`mapel_id`),
-  ADD KEY `dosen_id` (`guru_id`);
+  ADD KEY `mapel_id` (`mapel_id`) USING BTREE,
+  ADD KEY `guru_id` (`guru_id`) USING BTREE;
 
 --
 -- Indeks untuk tabel `topik`
@@ -479,19 +573,7 @@ ALTER TABLE `topik`
 -- Indeks untuk tabel `tugas`
 --
 ALTER TABLE `tugas`
-  ADD PRIMARY KEY (`id_tugas`),
-  ADD KEY `guru_id` (`guru_id`),
-  ADD KEY `mapel_id` (`mapel_id`),
-  ADD KEY `topik_id` (`topik_id`);
-
---
--- Indeks untuk tabel `ujian`
---
-ALTER TABLE `ujian`
-  ADD PRIMARY KEY (`id_ujian`),
-  ADD KEY `matkul_id` (`mapel_id`),
-  ADD KEY `dosen_id` (`guru_id`),
-  ADD KEY `topik_id` (`topik_id`);
+  ADD PRIMARY KEY (`id_tugas`);
 
 --
 -- Indeks untuk tabel `users`
@@ -526,19 +608,19 @@ ALTER TABLE `groups`
 -- AUTO_INCREMENT untuk tabel `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT untuk tabel `hasil_kuis`
+--
+ALTER TABLE `hasil_kuis`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT untuk tabel `hasil_tugas`
 --
 ALTER TABLE `hasil_tugas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `hasil_ujian`
---
-ALTER TABLE `hasil_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurusan`
@@ -550,13 +632,19 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT untuk tabel `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT untuk tabel `kuis`
+--
+ALTER TABLE `kuis`
+  MODIFY `id_kuis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT untuk tabel `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT untuk tabel `mapel`
@@ -568,61 +656,56 @@ ALTER TABLE `mapel`
 -- AUTO_INCREMENT untuk tabel `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT untuk tabel `soal`
 --
 ALTER TABLE `soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `topik`
 --
 ALTER TABLE `topik`
-  MODIFY `id_topik` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_topik` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT untuk tabel `tugas`
 --
 ALTER TABLE `tugas`
-  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `ujian`
---
-ALTER TABLE `ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT untuk tabel `users_groups`
 --
 ALTER TABLE `users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Ketidakleluasaan untuk tabel `hasil_tugas`
+-- Ketidakleluasaan untuk tabel `hasil_kuis`
 --
-ALTER TABLE `hasil_tugas`
-  ADD CONSTRAINT `hasil_tugas_ibfk_1` FOREIGN KEY (`tugas_id`) REFERENCES `tugas` (`id_tugas`),
-  ADD CONSTRAINT `hasil_tugas_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
+ALTER TABLE `hasil_kuis`
+  ADD CONSTRAINT `hasil_kuis_ibfk_1` FOREIGN KEY (`kuis_id`) REFERENCES `kuis` (`id_kuis`),
+  ADD CONSTRAINT `hasil_kuis_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
 
 --
--- Ketidakleluasaan untuk tabel `hasil_ujian`
+-- Ketidakleluasaan untuk tabel `kuis`
 --
-ALTER TABLE `hasil_ujian`
-  ADD CONSTRAINT `hasil_ujian_ibfk_1` FOREIGN KEY (`ujian_id`) REFERENCES `ujian` (`id_ujian`),
-  ADD CONSTRAINT `hasil_ujian_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
+ALTER TABLE `kuis`
+  ADD CONSTRAINT `kuis_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
+  ADD CONSTRAINT `kuis_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
+  ADD CONSTRAINT `kuis_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
 
 --
 -- Ketidakleluasaan untuk tabel `soal`
@@ -636,22 +719,6 @@ ALTER TABLE `soal`
 --
 ALTER TABLE `topik`
   ADD CONSTRAINT `topik_ibfk_1` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`);
-
---
--- Ketidakleluasaan untuk tabel `tugas`
---
-ALTER TABLE `tugas`
-  ADD CONSTRAINT `tugas_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
-  ADD CONSTRAINT `tugas_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
-  ADD CONSTRAINT `tugas_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
-
---
--- Ketidakleluasaan untuk tabel `ujian`
---
-ALTER TABLE `ujian`
-  ADD CONSTRAINT `ujian_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
-  ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
-  ADD CONSTRAINT `ujian_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
 
 --
 -- Ketidakleluasaan untuk tabel `users_groups`

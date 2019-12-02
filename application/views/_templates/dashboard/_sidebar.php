@@ -21,7 +21,6 @@
 			<?php
 			$page = $this->uri->segment(1);
 			$master = ["kelas", "mapel", "topik", "guru", "siswa"];
-			$relasi = ["kelasguru", "jurusanmapel"];
 			$users = ["users"];
 			?>
 			<li class="<?= $page === 'dashboard' ? "active" : "" ?>"><a href="<?= base_url('dashboard') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
@@ -67,27 +66,7 @@
 						</li>
 					</ul>
 				</li>
-				<!-- <li class="treeview <?= in_array($page, $relasi)  ? "active menu-open" : ""  ?>">
-					<a href="#"><i class="fa fa-link"></i> <span>Relasi</span>
-						<span class="pull-right-container">
-							<i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-					<ul class="treeview-menu">
-						<li class="<?= $page === 'kelasguru' ? "active" : "" ?>">
-							<a href="<?= base_url('kelasguru') ?>">
-								<i class="fa fa-circle-o"></i>
-								Kelas - Guru
-							</a>
-						</li>
-						<li class="<?= $page === 'jurusanmapel' ? "active" : "" ?>">
-							<a href="<?= base_url('jurusanmapel') ?>">
-								<i class="fa fa-circle-o"></i>
-								Jurusan - Mata Pelajaran
-							</a>
-						</li>
-					</ul>
-				</li> -->
+
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="<?= $page === 'topik' ? "active" : "" ?>">
@@ -126,35 +105,36 @@
 				</li>
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
-				<li class="header">UJIAN</li>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
-					<a href="<?= base_url('ujian/master') ?>" rel="noopener noreferrer">
-						<i class="fa fa-clipboard"></i> <span>Ujian</span>
+				<li class="header">KUIS</li>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+					<a href="<?= base_url('kuis/master') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Kuis</span>
 					</a>
 				</li>
-				<li class="<?= $page === 'hasilujian' ? "active" : "" ?>">
-					<a href="<?= base_url('hasilujian') ?>" rel="noopener noreferrer">
-						<i class="fa fa-file"></i> <span>Hasil Ujian</span>
+				<li class="<?= $page === 'hasilkuis' ? "active" : "" ?>">
+					<a href="<?= base_url('hasilkuis') ?>" rel="noopener noreferrer">
+						<i class="fa fa-file"></i> <span>Hasil Kuis</span>
 					</a>
 				</li>
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
-					<a href="<?= base_url('ujian/list') ?>" rel="noopener noreferrer">
-						<i class="fa fa-clipboard"></i> <span>Ujian</span>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+					<a href="<?= base_url('kuis/list') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Kuis</span>
 					</a>
 				</li>
 			<?php endif; ?>
-			<li class="header">LAPORAN</li>
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+				<li class="header">LAPORAN</li>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
 					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
 						<i class="fa fa-clipboard"></i> <span>Laporan</span>
 					</a>
 				</li>
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
-				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
+				<li class="header">LAPORAN</li>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
 					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
 						<i class="fa fa-clipboard"></i> <span>Laporan Belajar</span>
 					</a>
