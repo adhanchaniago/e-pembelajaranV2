@@ -60,7 +60,7 @@
                 
                 <div class="form-group">
                     <label for="first_name">Name</label>
-                    <input type="text" name="fullname" class="form-control" value="<?=$users->first_name?> <?=$users->last_name?>">
+                    <input type="text" name="fullname" class="form-control" value="<?= ($users->first_name == $users->last_name) ? $users->first_name : $users->first_name . ' ' . $users->last_name ?>">
                     <small class="help-block"></small>
                 </div>
                 
