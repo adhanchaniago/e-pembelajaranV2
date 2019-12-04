@@ -19,6 +19,7 @@ class Jurusan extends CI_Controller
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->model('Master_model', 'master');
+		$this->load->model('kelas_model', 'kelas');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 
@@ -55,7 +56,7 @@ class Jurusan extends CI_Controller
 
 	public function data()
 	{
-		$this->output_json($this->master->getDataJurusan(), false);
+		$this->output_json($this->kelas->getDataJurusan(), false);
 	}
 
 	public function edit()
@@ -64,7 +65,7 @@ class Jurusan extends CI_Controller
 		if (!$chk) {
 			redirect('jurusan');
 		} else {
-			$jurusan = $this->master->getJurusanById($chk);
+			$jurusan = $this->kelas->getJurusanById($chk);
 			$data = [
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Jurusan',
@@ -107,10 +108,10 @@ class Jurusan extends CI_Controller
 		}
 		if ($status) {
 			if ($mode == 'add') {
-				$this->master->create('jurusan', $insert, true);
+				$this->kelas->create('jurusan', $insert, true);
 				$data['insert']	= $insert;
 			} else if ($mode == 'edit') {
-				$this->master->update('jurusan', $update, 'id_jurusan', null, true);
+				$this->kelas->update('jurusan', $update, 'id_jurusan', null, true);
 				$data['update'] = $update;
 			}
 		} else {
@@ -128,7 +129,7 @@ class Jurusan extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('jurusan', $chk, 'id_jurusan')) {
+			if ($this->kelas->delete('jurusan', $chk, 'id_jurusan')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -136,7 +137,7 @@ class Jurusan extends CI_Controller
 
 	public function load_jurusan()
 	{
-		$data = $this->master->getJurusan();
+		$data = $this->kelas->getJurusan();
 		$this->output_json($data);
 	}
 
@@ -209,7 +210,7 @@ class Jurusan extends CI_Controller
 			$jurusan[] = ['nama_jurusan' => $j];
 		}
 
-		$save = $this->master->create('jurusan', $jurusan, true);
+		$save = $this->kelas->create('jurusan', $jurusan, true);
 		if ($save) {
 			redirect('jurusan');
 		} else {

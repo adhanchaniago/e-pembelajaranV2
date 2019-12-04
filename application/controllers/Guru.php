@@ -13,7 +13,10 @@ class Guru extends CI_Controller
 			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Guru_model', 'guru');
+		$this->load->model('Mapel_model', 'mapel');
+		$this->load->model('Kelas_model', 'kelas');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 
@@ -37,7 +40,7 @@ class Guru extends CI_Controller
 
 	public function data()
 	{
-		$this->output_json($this->master->getDataguru(), false);
+		$this->output_json($this->guru->getDataguru(), false);
 	}
 
 	public function add()
@@ -46,8 +49,8 @@ class Guru extends CI_Controller
 			'user' 		=> $this->ion_auth->user()->row(),
 			'judul'		=> 'Tambah Guru',
 			'subjudul'	=> 'Tambah Data Guru',
-			'mapel'		=> $this->master->getAllmapel(),
-			'kelas'	    => $this->master->getAllKelas()
+			'mapel'		=> $this->mapel->getAllmapel(),
+			'kelas'	    => $this->kelas->getAllKelas()
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -57,18 +60,18 @@ class Guru extends CI_Controller
 
 	public function edit($id)
 	{
-		$k = $this->master->getguruById($id);
+		$k = $this->guru->getguruById($id);
 		$kelas = explode(',', $k->kelas_id);
 		foreach ($kelas as $kelas) {
 			$kls[] = (object) array("id_kelas" => $kelas);
 		}
 		$data = [
-			'user' 		=> $this->ion_auth->user()->row(),
-			'judul'		=> 'Edit Guru',
-			'subjudul'	=> 'Edit Data Guru',
-			'mapel'	=> $this->master->getAllmapel(),
-			'data' 		=> $this->master->getguruById($id),
-			'all_kelas'	    => $this->master->getAllKelas(),
+			'user' 			=> $this->ion_auth->user()->row(),
+			'judul'			=> 'Edit Guru',
+			'subjudul'		=> 'Edit Data Guru',
+			'mapel'			=> $this->mapel->getAllmapel(),
+			'data' 			=> $this->guru->getguruById($id),
+			'all_kelas'	    => $this->kelas->getAllKelas(),
 			'kelas'		    => $kls
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -90,7 +93,7 @@ class Guru extends CI_Controller
 			$u_nip = '|is_unique[guru.nip]';
 			$u_email = '|is_unique[guru.email]';
 		} else {
-			$dbdata 	= $this->master->getguruById($id_guru);
+			$dbdata 	= $this->guru->getguruById($id_guru);
 			$u_nip		= $dbdata->nip === $nip ? "" : "|is_unique[guru.nip]";
 			$u_email	= $dbdata->email === $email ? "" : "|is_unique[guru.email]";
 		}
@@ -119,9 +122,9 @@ class Guru extends CI_Controller
 				'kelas_id' 		=> $kelas
 			];
 			if ($method === 'add') {
-				$action = $this->master->create('guru', $input);
+				$action = $this->guru->create('guru', $input);
 			} else if ($method === 'edit') {
-				$action = $this->master->update('guru', $input, 'id_guru', $id_guru);
+				$action = $this->guru->update('guru', $input, 'id_guru', $id_guru);
 			}
 
 			if ($action) {
@@ -138,7 +141,7 @@ class Guru extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('guru', $chk, 'id_guru')) {
+			if ($this->guru->delete('guru', $chk, 'id_guru')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -147,7 +150,7 @@ class Guru extends CI_Controller
 	public function create_user()
 	{
 		$id = $this->input->get('id', true);
-		$data = $this->master->getguruById($id);
+		$data = $this->guru->getguruById($id);
 		$nama = explode(' ', $data->nama_guru);
 		$first_name = $nama[0];
 		$last_name = end($nama);
@@ -187,7 +190,7 @@ class Guru extends CI_Controller
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Guru',
 			'subjudul' => 'Import Data Guru',
-			'mapel' => $this->master->getAllmapel()
+			'mapel' => $this->mapel->getAllmapel()
 		];
 		if ($import_data != null) $data['import'] = $import_data;
 
@@ -258,7 +261,7 @@ class Guru extends CI_Controller
 			];
 		}
 
-		$save = $this->master->create('guru', $data, true);
+		$save = $this->guru->create('guru', $data, true);
 		if ($save) {
 			redirect('guru');
 		} else {

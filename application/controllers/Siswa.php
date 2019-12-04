@@ -13,7 +13,9 @@ class Siswa extends CI_Controller
 			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Siswa_model', 'siswa');
+		$this->load->model('Kelas_model', 'kelas');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 
@@ -37,7 +39,7 @@ class Siswa extends CI_Controller
 
 	public function data()
 	{
-		$this->output_json($this->master->getDataSiswa(), false);
+		$this->output_json($this->siswa->getDataSiswa(), false);
 	}
 
 	public function add()
@@ -54,13 +56,13 @@ class Siswa extends CI_Controller
 
 	public function edit($id)
 	{
-		$mhs = $this->master->getSiswaById($id);
+		$mhs = $this->siswa->getSiswaById($id);
 		$data = [
 			'user' 		=> $this->ion_auth->user()->row(),
 			'judul'		=> 'Siswa',
 			'subjudul'	=> 'Edit Data Siswa',
-			'jurusan'	=> $this->master->getJurusan(),
-			'kelas'		=> $this->master->getKelasByJurusan($mhs->jurusan_id),
+			'jurusan'	=> $this->kelas->getJurusan(),
+			'kelas'		=> $this->kelas->getKelasByJurusan($mhs->jurusan_id),
 			'siswa' => $mhs
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -77,7 +79,7 @@ class Siswa extends CI_Controller
 			$u_nis = '|is_unique[siswa.nis]';
 			$u_email = '|is_unique[siswa.email]';
 		} else {
-			$dbdata 	= $this->master->getSiswaById($id_siswa);
+			$dbdata 	= $this->siswa->getSiswaById($id_siswa);
 			$u_nis		= $dbdata->nis === $nis ? "" : "|is_unique[siswa.nis]";
 			$u_email	= $dbdata->email === $email ? "" : "|is_unique[siswa.email]";
 		}
@@ -118,10 +120,10 @@ class Siswa extends CI_Controller
 				'kelas_id' 		=> $this->input->post('kelas', true),
 			];
 			if ($method === 'add') {
-				$action = $this->master->create('siswa', $input);
+				$action = $this->siswa->create('siswa', $input);
 			} else if ($method === 'edit') {
 				$id = $this->input->post('id_siswa', true);
-				$action = $this->master->update('siswa', $input, 'id_siswa', $id);
+				$action = $this->siswa->update('siswa', $input, 'id_siswa', $id);
 			}
 
 			if ($action) {
@@ -138,7 +140,7 @@ class Siswa extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('siswa', $chk, 'id_siswa')) {
+			if ($this->siswa->delete('siswa', $chk, 'id_siswa')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -147,7 +149,7 @@ class Siswa extends CI_Controller
 	public function create_user()
 	{
 		$id = $this->input->get('id', true);
-		$data = $this->master->getSiswaById($id);
+		$data = $this->siswa->getSiswaById($id);
 		$nama = explode(' ', $data->nama);
 		$first_name = $nama[0];
 		$last_name = end($nama);
@@ -187,7 +189,7 @@ class Siswa extends CI_Controller
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Siswa',
 			'subjudul' => 'Import Data Siswa',
-			'kelas' => $this->master->getAllKelas()
+			'kelas' => $this->kelas->getAllKelas()
 		];
 		if ($import_data != null) $data['import'] = $import_data;
 
@@ -260,7 +262,7 @@ class Siswa extends CI_Controller
 			];
 		}
 
-		$save = $this->master->create('siswa', $data, true);
+		$save = $this->siswa->create('siswa', $data, true);
 		if ($save) {
 			redirect('siswa');
 		} else {

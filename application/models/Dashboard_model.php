@@ -31,12 +31,4 @@ class Dashboard_model extends CI_Model
         $query = $this->db->get();
         return $query;
     }
-
-    public function getKelas($id)
-    {
-        $this->db->select('*');
-        $this->db->from('kelas');
-        $this->db->where_in('id_kelas', $id);
-        return $this->db->get();
-    }
 }

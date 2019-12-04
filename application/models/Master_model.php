@@ -67,6 +67,19 @@ class Master_model extends CI_Model
         return $query;
     }
 
+    public function getTopik($where, $group = false)
+    {
+        if ($group == true) {
+            $this->db->select('mapel_id');
+        }
+        $this->db->where(['kelas' => $where]);
+        if ($group == true) {
+            $this->db->group_by('mapel_id');
+        }
+        $result = $this->db->get('topik');
+        return $result->result();
+    }
+
     public function getAllTopik()
     {
         return $this->db->get('topik')->result();

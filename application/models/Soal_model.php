@@ -3,6 +3,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Soal_model extends CI_Model
 {
+    public function create($table, $data, $batch = false)
+    {
+        if ($batch === false) {
+            $insert = $this->db->insert($table, $data);
+        } else {
+            $insert = $this->db->insert_batch($table, $data);
+        }
+        return $insert;
+    }
+
+    public function update($table, $data, $pk, $id = null, $batch = false)
+    {
+        if ($batch === false) {
+            $insert = $this->db->update($table, $data, array($pk => $id));
+        } else {
+            $insert = $this->db->update_batch($table, $data, $pk);
+        }
+        return $insert;
+    }
+
+    public function delete($table, $data, $pk)
+    {
+        $this->db->where_in($pk, $data);
+        return $this->db->delete($table);
+    }
 
     public function getDataSoal($id)
     {
@@ -27,13 +52,6 @@ class Soal_model extends CI_Model
         $this->db->join('mapel', 'mapel_id=id_mapel');
         $this->db->from('guru')->where('nip', $nip);
         return $this->db->get()->row();
-    }
-
-    public function getTopikMapel($mapel_id)
-    {
-        $this->db->select('id_topik, nama_topik');
-        $this->db->from('topik')->where('mapel_id', $mapel_id);
-        return $this->db->get()->result();
     }
 
     public function getAllGuru()

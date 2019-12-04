@@ -5,8 +5,6 @@ include_once('application/libraries/vendor/autoloader.php');
 
 use NlpTools\Tokenizers\WhitespaceTokenizer;
 use NlpTools\Similarity\CosineSimilarity;
-use NlpTools\Similarity\JaccardIndex;
-use NlpTools\Similarity\Simhash;
 
 class HasilKuis extends CI_Controller
 {
@@ -19,7 +17,7 @@ class HasilKuis extends CI_Controller
 		}
 
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
 		$this->load->model('Kuis_model', 'kuis');
 
 		$this->user = $this->ion_auth->user()->row();
@@ -136,7 +134,7 @@ class HasilKuis extends CI_Controller
 				'id' 		=> $id,
 				'nilai' 	=> $nilai
 			];
-			$action = $this->master->update('hasil_kuis', $input, 'id', $id);
+			$action = $this->kuis->update('hasil_kuis', $input, 'id', $id);
 			$data['status'] = $action ? TRUE : FALSE;
 		}
 		$this->output_json($data);

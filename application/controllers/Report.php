@@ -15,9 +15,8 @@ class Report extends CI_Controller
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->helper('my');
 		$this->load->model('Report_model', 'report');
-		$this->load->model('Dashboard_model', 'dashboard');
-		$this->load->model('Soal_model', 'soal');
-		$this->load->model('Master_model', 'master');
+		$this->load->model('Kelas_model', 'kelas');
+		$this->load->model('Topik_model', 'topik');
 		$this->form_validation->set_error_delimiters('', '');
 
 		$this->user = $this->ion_auth->user()->row();
@@ -56,28 +55,49 @@ class Report extends CI_Controller
 	{
 		$user = $this->ion_auth->user()->row();
 		$guru = $this->report->getGuru($user->username)->row();
-		$topik = $this->master->getTopikByMapel(['mapel_id' => $guru->mapel_id, 'kelas' => $kelas], true);
+		$topik = $this->topik->getTopikByMapel(['mapel_id' => $guru->mapel_id, 'kelas' => $kelas], true);
 		echo $this->output_json($this->report->getDataReport($guru->id_guru, $guru->mapel_id, $id_kelas, $topik), false);
+	}
+	public function data_siswa($id_siswa, $kelas)
+	{
+		$topik = $this->topik->getTopik($kelas);
+		// print_r($topik);
+		$mapel = $this->topik->getTopik($kelas, true);
+		// print_r($mapel);
+		// die;
+		echo $this->output_json($this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel), false);
 	}
 
 	// fungsi untuk menampilkan seluruh daftar tugas yang dibuat untuk guru
 	public function index()
 	{
-		$this->akses_guru();
+		if ($this->ion_auth->in_group('guru')) {
+			$user = $this->ion_auth->user()->row();
+			$data = [
+				'user' => $user,
+				'judul'	=> 'Laporan',
+				'subjudul' => 'Laporan Kelas',
+				'guru' => $this->report->getGuru($user->username)->row()
+			];
 
-		$user = $this->ion_auth->user()->row();
-		$data = [
-			'user' => $user,
-			'judul'	=> 'Laporan',
-			'subjudul' => 'Laporan Kelas',
-			'guru' => $this->report->getGuru($user->username)->row()
-		];
+			$kelas_id = explode(',', $data['guru']->kelas_id);
+			$data['kelas'] = $this->kelas->getKelas($kelas_id)->result();
+			$this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('report/report_mapel');
+			$this->load->view('_templates/dashboard/_footer.php');
+		} else if ($this->ion_auth->in_group('siswa')) {
+			$user = $this->ion_auth->user()->row();
+			$data = [
+				'user' => $user,
+				'judul'	=> 'Laporan Belajar',
+				'subjudul' => 'Laporan Belajar Siswa',
+				'siswa' => $this->report->getSiswa($user->username)->row()
+			];
 
-		$kelas_id = explode(',', $data['guru']->kelas_id);
-		$data['kelas'] = $this->dashboard->getKelas($kelas_id)->result();
-		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('report/report_mapel');
-		$this->load->view('_templates/dashboard/_footer.php');
+			$this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('report/report_siswa');
+			$this->load->view('_templates/dashboard/_footer.php');
+		}
 	}
 
 	public function convert_tgl($tgl)

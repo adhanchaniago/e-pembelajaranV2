@@ -11,15 +11,19 @@ class Topik extends CI_Controller
 			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Mapel_model', 'mapel');
+		$this->load->model('Topik_model', 'topik');
 
 		$this->form_validation->set_error_delimiters('', '');
 	}
+
 	public function output_json($data, $encode = true)
 	{
 		if ($encode) $data = json_encode($data);
 		$this->output->set_content_type('application/json')->set_output($data);
 	}
+
 	public function index()
 	{
 		$user = $this->ion_auth->user()->row();
@@ -27,7 +31,7 @@ class Topik extends CI_Controller
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Topik',
 			'subjudul' => 'Data Topik',
-			'mapel' => $this->master->getMapelGuru($user->username)
+			'mapel' => $this->mapel->getMapelGuru($user->username)
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -36,7 +40,7 @@ class Topik extends CI_Controller
 	}
 	public function data($id = null)
 	{
-		$this->output_json($this->master->getDataTopik($id), false);
+		$this->output_json($this->topik->getDataTopik($id), false);
 	}
 	public function add()
 	{
@@ -48,9 +52,9 @@ class Topik extends CI_Controller
 			'banyak'	=> $this->input->post('banyak', true)
 		];
 		if ($this->ion_auth->is_admin()) {
-			$data['mapel']	= $this->master->getAllMapel();
+			$data['mapel']	= $this->mapel->getAllMapel();
 		} else {
-			$data['mapel']	= $this->master->getMapelGuru($user->username);
+			$data['mapel']	= $this->mapel->getMapelGuru($user->username);
 		}
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/topik/add');
@@ -63,7 +67,7 @@ class Topik extends CI_Controller
 		if (!$chk) {
 			redirect('topik');
 		} else {
-			$topik = $this->master->getTopikById($chk);
+			$topik = $this->topik->getTopikById($chk);
 			$data = [
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Topik',
@@ -71,9 +75,9 @@ class Topik extends CI_Controller
 				'topik'		=> $topik
 			];
 			if ($this->ion_auth->is_admin()) {
-				$data['mapel']	= $this->master->getAllMapel();
+				$data['mapel']	= $this->mapel->getAllMapel();
 			} else {
-				$data['mapel']	= $this->master->getMapelGuru($user->username);
+				$data['mapel']	= $this->mapel->getMapelGuru($user->username);
 			}
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('master/topik/edit');
@@ -119,10 +123,10 @@ class Topik extends CI_Controller
 		}
 		if ($status) {
 			if ($mode == 'add') {
-				$this->master->create('topik', $insert, true);
+				$this->topik->create('topik', $insert, true);
 				$data['insert']	= $insert;
 			} else if ($mode == 'edit') {
-				$this->master->update('topik', $update, 'id_topik', null, true);
+				$this->topik->update('topik', $update, 'id_topik', null, true);
 				$data['update'] = $update;
 			}
 		} else {
@@ -139,14 +143,14 @@ class Topik extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('topik', $chk, 'id_topik')) {
+			if ($this->topik->delete('topik', $chk, 'id_topik')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
 	}
 	public function topik_by_mapel($id)
 	{
-		$data = $this->master->getTopikByMapel($id);
+		$data = $this->topik->getTopikByMapel($id);
 		$this->output_json($data);
 	}
 	public function import($import_data = null)
@@ -155,7 +159,7 @@ class Topik extends CI_Controller
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Topik',
 			'subjudul' => 'Import Topik',
-			'mapel' => $this->master->getAllMapel()
+			'mapel' => $this->mapel->getAllMapel()
 		];
 		if ($import_data != null) $data['import'] = $import_data;
 		$this->load->view('_templates/dashboard/_header', $data);
@@ -210,7 +214,7 @@ class Topik extends CI_Controller
 		foreach ($input as $d) {
 			$data[] = ['nama_topik' => $d->topik, 'mapel_id' => $d->mapel];
 		}
-		$save = $this->master->create('topik', $data, true);
+		$save = $this->topik->create('topik', $data, true);
 		if ($save) {
 			redirect('topik');
 		} else {

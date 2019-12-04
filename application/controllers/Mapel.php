@@ -1,11 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
-
 class Mapel extends CI_Controller
 {
 
@@ -18,7 +13,8 @@ class Mapel extends CI_Controller
 			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Mapel_model', 'mapel');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 
@@ -42,7 +38,7 @@ class Mapel extends CI_Controller
 
 	public function data()
 	{
-		$this->output_json($this->master->getDatamapel(), false);
+		$this->output_json($this->mapel->getDatamapel(), false);
 	}
 
 	public function add()
@@ -64,7 +60,7 @@ class Mapel extends CI_Controller
 		if (!$chk) {
 			redirect('mapel');
 		} else {
-			$mapel = $this->master->getmapelById($chk);
+			$mapel = $this->mapel->getmapelById($chk);
 			$data = [
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Mata Pelajaran',
@@ -107,10 +103,10 @@ class Mapel extends CI_Controller
 		}
 		if ($status) {
 			if ($mode == 'add') {
-				$this->master->create('mapel', $insert, true);
+				$this->mapel->create('mapel', $insert, true);
 				$data['insert']	= $insert;
 			} else if ($mode == 'edit') {
-				$this->master->update('mapel', $update, 'id_mapel', null, true);
+				$this->mapel->update('mapel', $update, 'id_mapel', null, true);
 				$data['update'] = $update;
 			}
 		} else {
@@ -128,7 +124,7 @@ class Mapel extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('mapel', $chk, 'id_mapel')) {
+			if ($this->mapel->delete('mapel', $chk, 'id_mapel')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -202,7 +198,7 @@ class Mapel extends CI_Controller
 			$jurusan[] = ['nama_mapel' => $j];
 		}
 
-		$save = $this->master->create('mapel', $jurusan, true);
+		$save = $this->mapel->create('mapel', $jurusan, true);
 		if ($save) {
 			redirect('mapel');
 		} else {

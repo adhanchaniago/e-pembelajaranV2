@@ -14,7 +14,8 @@ class Kuis extends CI_Controller
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->helper('my');
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Topik_model', 'topik');
 		$this->load->model('Soal_model', 'soal');
 		$this->load->model('Kuis_model', 'kuis');
 		$this->form_validation->set_error_delimiters('', '');
@@ -90,7 +91,7 @@ class Kuis extends CI_Controller
 			'mapel'	=> $this->soal->getMapelGuru($user->username),
 			'guru'		=> $this->kuis->getIdGuru($user->username)
 		];
-		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
+		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
 
 		// $data['soal'] = $this->kuis->getSoalEssay();
 
@@ -114,7 +115,7 @@ class Kuis extends CI_Controller
 			'guru'		=> $this->kuis->getIdGuru($user->username),
 			'kuis'		=> $this->kuis->getKuisById($id),
 		];
-		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
+		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
 		$data['soal'] = $this->kuis->getSoalEssay($data['kuis']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -228,10 +229,10 @@ class Kuis extends CI_Controller
 				$input['guru_id']	= $guru_id;
 				$input['mapel_id'] 	= $mapel_id;
 				$input['token']		= $token;
-				$action = $this->master->create('kuis', $input);
+				$action = $this->kuis->create('kuis', $input);
 			} else if ($method === 'edit') {
 				$id_kuis = $this->input->post('id_kuis', true);
-				$action = $this->master->update('kuis', $input, 'id_kuis', $id_kuis);
+				$action = $this->kuis->update('kuis', $input, 'id_kuis', $id_kuis);
 			}
 			$data['status'] = $action ? TRUE : FALSE;
 		}
@@ -246,7 +247,7 @@ class Kuis extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('kuis', $chk, 'id_kuis')) {
+			if ($this->kuis->delete('kuis', $chk, 'id_kuis')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -257,7 +258,7 @@ class Kuis extends CI_Controller
 	{
 		$this->load->helper('string');
 		$data['token'] = strtoupper(random_string('alpha', 5));
-		$refresh = $this->master->update('kuis', $data, 'id_kuis', $id);
+		$refresh = $this->kuis->update('kuis', $data, 'id_kuis', $id);
 		$data['status'] = $refresh ? TRUE : FALSE;
 		$this->output_json($data);
 	}
@@ -414,7 +415,7 @@ class Kuis extends CI_Controller
 					'status'		=> 'Y'
 				];
 			}
-			$this->master->create('hasil_kuis', $input);
+			$this->kuis->create('hasil_kuis', $input);
 
 			// Setelah insert wajib refresh dulu
 			redirect('kuis/?key=' . urlencode($key), 'location', 301);
@@ -545,7 +546,7 @@ class Kuis extends CI_Controller
 		];
 
 		// Simpan jawaban
-		$this->master->update('hasil_kuis', $d_simpan, 'id', $id_tes);
+		$this->kuis->update('hasil_kuis', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status' => true]);
 	}
 
@@ -591,7 +592,7 @@ class Kuis extends CI_Controller
 				'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
 				'status'		=> 'N'
 			];
-			$this->master->update('hasil_kuis', $d_update, 'id', $id_tes);
+			$this->kuis->update('hasil_kuis', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		} else {
 			$jawab = $this->input->post('jawaban', true);
@@ -601,7 +602,7 @@ class Kuis extends CI_Controller
 				'status'		=> 'N'
 			];
 
-			$this->master->update('hasil_kuis', $d_update, 'id', $id_tes);
+			$this->kuis->update('hasil_kuis', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
 	}

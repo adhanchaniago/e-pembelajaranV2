@@ -126,7 +126,7 @@
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="header">LAPORAN</li>
-				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+				<li class="<?= $page === 'report' ? "active" : "" ?>">
 					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
 						<i class="fa fa-clipboard"></i> <span>Laporan</span>
 					</a>
@@ -134,7 +134,7 @@
 			<?php endif; ?>
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
 				<li class="header">LAPORAN</li>
-				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+				<li class="<?= $page === 'report' ? "active" : "" ?>">
 					<a href="<?= base_url('report') ?>" rel="noopener noreferrer">
 						<i class="fa fa-clipboard"></i> <span>Laporan Belajar</span>
 					</a>

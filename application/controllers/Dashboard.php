@@ -11,6 +11,7 @@ class Dashboard extends CI_Controller
 			redirect('auth');
 		}
 		$this->load->model('Dashboard_model', 'dashboard');
+		$this->load->model('Kelas_model', 'kelas');
 		$this->user = $this->ion_auth->user()->row();
 	}
 
@@ -61,7 +62,7 @@ class Dashboard extends CI_Controller
 			$mapel = ['mapel' => 'guru.mapel_id=mapel.id_mapel']; //join
 			$data['guru'] = $this->dashboard->get_where('guru', 'nip', $user->username, $mapel)->row();
 			$kelas_id = explode(',', $data['guru']->kelas_id);
-			$data['kelas'] = $this->dashboard->getKelas($kelas_id)->result();
+			$data['kelas'] = $this->kelas->getKelas($kelas_id)->result();
 		} else {
 			$join = [
 				'kelas b' 	=> 'a.kelas_id = b.id_kelas',

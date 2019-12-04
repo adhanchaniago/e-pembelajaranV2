@@ -14,7 +14,8 @@ class Tugas extends CI_Controller
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->helper('my');
-		$this->load->model('Master_model', 'master');
+		// $this->load->model('Master_model', 'master');
+		$this->load->model('Topik_model', 'topik');
 		$this->load->model('Soal_model', 'soal');
 		$this->load->model('Tugas_model', 'tugas');
 		$this->form_validation->set_error_delimiters('', '');
@@ -90,7 +91,7 @@ class Tugas extends CI_Controller
 			'mapel'	=> $this->soal->getMapelGuru($user->username),
 			'guru'		=> $this->tugas->getIdGuru($user->username)
 		];
-		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
+		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
 
 		// $data['soal'] = $this->tugas->getSoalEssay();
 
@@ -114,7 +115,7 @@ class Tugas extends CI_Controller
 			'guru'		=> $this->tugas->getIdGuru($user->username),
 			'tugas'		=> $this->tugas->getTugasById($id),
 		];
-		$data['topik'] = $this->master->getTopikByMapel($data['mapel']->mapel_id);
+		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
 		$data['soal'] = $this->tugas->getSoalEssay($data['tugas']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -222,10 +223,10 @@ class Tugas extends CI_Controller
 				$input['guru_id']	= $guru_id;
 				$input['mapel_id'] 	= $mapel_id;
 				$input['token']		= $token;
-				$action = $this->master->create('tugas', $input);
+				$action = $this->tugas->create('tugas', $input);
 			} else if ($method === 'edit') {
 				$id_tugas = $this->input->post('id_tugas', true);
-				$action = $this->master->update('tugas', $input, 'id_tugas', $id_tugas);
+				$action = $this->tugas->update('tugas', $input, 'id_tugas', $id_tugas);
 			}
 			$data['status'] = $action ? TRUE : FALSE;
 		}
@@ -240,7 +241,7 @@ class Tugas extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('tugas', $chk, 'id_tugas')) {
+			if ($this->tugas->delete('tugas', $chk, 'id_tugas')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
@@ -251,7 +252,7 @@ class Tugas extends CI_Controller
 	{
 		$this->load->helper('string');
 		$data['token'] = strtoupper(random_string('alpha', 5));
-		$refresh = $this->master->update('tugas', $data, 'id_tugas', $id);
+		$refresh = $this->tugas->update('tugas', $data, 'id_tugas', $id);
 		$data['status'] = $refresh ? TRUE : FALSE;
 		$this->output_json($data);
 	}
@@ -408,7 +409,7 @@ class Tugas extends CI_Controller
 					'status'		=> 'Y'
 				];
 			}
-			$this->master->create('hasil_tugas', $input);
+			$this->tugas->create('hasil_tugas', $input);
 
 			// Setelah insert wajib refresh dulu
 			redirect('tugas/?key=' . urlencode($key), 'location', 301);
@@ -539,7 +540,7 @@ class Tugas extends CI_Controller
 		];
 
 		// Simpan jawaban
-		$this->master->update('hasil_tugas', $d_simpan, 'id', $id_tes);
+		$this->tugas->update('hasil_tugas', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status' => true]);
 	}
 
@@ -585,7 +586,7 @@ class Tugas extends CI_Controller
 				'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
 				'status'		=> 'N'
 			];
-			$this->master->update('hasil_tugas', $d_update, 'id', $id_tes);
+			$this->tugas->update('hasil_tugas', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		} else {
 			$jawab = $this->input->post('jawaban', true);
@@ -595,7 +596,7 @@ class Tugas extends CI_Controller
 				'status'		=> 'N'
 			];
 
-			$this->master->update('hasil_tugas', $d_update, 'id', $id_tes);
+			$this->tugas->update('hasil_tugas', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
 	}

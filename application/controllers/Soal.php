@@ -14,7 +14,9 @@ class Soal extends CI_Controller
         }
         $this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
         $this->load->helper('my'); // Load Library Ignited-Datatables
-        $this->load->model('Master_model', 'master');
+        // $this->load->model('Master_model', 'master');
+        $this->load->model('Mapel_model', 'mapel');
+        $this->load->model('Topik_model', 'topik');
         $this->load->model('Soal_model', 'soal');
         $this->form_validation->set_error_delimiters('', '');
     }
@@ -36,7 +38,7 @@ class Soal extends CI_Controller
 
         if ($this->ion_auth->is_admin()) {
             //Jika admin maka tampilkan semua mapel
-            $data['mapel'] = $this->master->getAllMapel();
+            $data['mapel'] = $this->mapel->getAllMapel();
         } else {
             //Jika bukan maka mapel dipilih otomatis sesuai mapel guru
             $data['mapel'] = $this->soal->getMapelGuru($user->username);
@@ -78,7 +80,7 @@ class Soal extends CI_Controller
             //Jika bukan maka mapel dipilih otomatis sesuai mapel guru
             $data['guru'] = $this->soal->getMapelGuru($user->username);
             $mapel = $this->soal->getMapelGuru($user->username);
-            $data['topik'] = $this->master->getTopikByMapel($mapel->mapel_id);
+            $data['topik'] = $this->topik->getTopikByMapel($mapel->mapel_id);
         }
 
         $this->load->view('_templates/dashboard/_header.php', $data);
@@ -100,7 +102,7 @@ class Soal extends CI_Controller
             'judul'        => 'Soal',
             'subjudul'  => 'Edit Soal',
             'soal'      => $this->soal->getSoalById($id),
-            'all_topik'        => $this->master->getTopikByMapel($mapel->mapel_id),
+            'all_topik'        => $this->topik->getTopikByMapel($mapel->mapel_id),
             'topik'            => $top
         ];
 
@@ -263,9 +265,9 @@ class Soal extends CI_Controller
                 $data['updated_on'] = time();
                 //insert data
                 if ($this->input->post('jenis_soal') == 'pilgan') {
-                    $this->master->create('soal', $data);
+                    $this->soal->create('soal', $data);
                 } else {
-                    $this->master->create('soal', $data);
+                    $this->soal->create('soal', $data);
                 }
             } else if ($method === 'edit') {
                 //push array
@@ -273,10 +275,10 @@ class Soal extends CI_Controller
                 //update data
                 if ($this->input->post('jenis_soal') == 'pilgan') {
                     $id_soal = $this->input->post('id_soal', true);
-                    $this->master->update('soal', $data, 'id_soal', $id_soal);
+                    $this->soal->update('soal', $data, 'id_soal', $id_soal);
                 } else {
                     $id_soal = $this->input->post('id_soal', true);
-                    $this->master->update('soal', $data, 'id_soal', $id_soal);
+                    $this->soal->update('soal', $data, 'id_soal', $id_soal);
                 }
             } else {
                 show_error('Method tidak diketahui', 404);
@@ -315,7 +317,7 @@ class Soal extends CI_Controller
         if (!$chk) {
             $this->output_json(['status' => false]);
         } else {
-            if ($this->master->delete('soal', $chk, 'id_soal')) {
+            if ($this->soal->delete('soal', $chk, 'id_soal')) {
                 $this->output_json(['status' => true, 'total' => count($chk)]);
             }
         }

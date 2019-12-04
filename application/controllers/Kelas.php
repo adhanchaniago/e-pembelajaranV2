@@ -12,6 +12,7 @@ class Kelas extends CI_Controller
 		}
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->model('Master_model', 'master');
+		$this->load->model('Kelas_model', 'kelas');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 	public function output_json($data, $encode = true)
@@ -32,7 +33,7 @@ class Kelas extends CI_Controller
 	}
 	public function data()
 	{
-		$this->output_json($this->master->getDataKelas(), false);
+		$this->output_json($this->kelas->getDataKelas(), false);
 	}
 	public function add()
 	{
@@ -41,7 +42,7 @@ class Kelas extends CI_Controller
 			'judul'		=> 'Tambah Kelas',
 			'subjudul'	=> 'Tambah Data Kelas',
 			'banyak'	=> $this->input->post('banyak', true),
-			'jurusan'	=> $this->master->getAllJurusan()
+			'jurusan'	=> $this->kelas->getAllJurusan()
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/kelas/add');
@@ -53,12 +54,12 @@ class Kelas extends CI_Controller
 		if (!$chk) {
 			redirect('admin/kelas');
 		} else {
-			$kelas = $this->master->getKelasById($chk);
+			$kelas = $this->kelas->getKelasById($chk);
 			$data = [
 				'user' 		=> $this->ion_auth->user()->row(),
 				'judul'		=> 'Edit Kelas',
 				'subjudul'	=> 'Edit Data Kelas',
-				'jurusan'	=> $this->master->getAllJurusan(),
+				'jurusan'	=> $this->kelas->getAllJurusan(),
 				'kelas'		=> $kelas
 			];
 			$this->load->view('_templates/dashboard/_header.php', $data);
@@ -101,10 +102,10 @@ class Kelas extends CI_Controller
 		}
 		if ($status) {
 			if ($mode == 'add') {
-				$this->master->create('kelas', $insert, true);
+				$this->kelas->create('kelas', $insert, true);
 				$data['insert']	= $insert;
 			} else if ($mode == 'edit') {
-				$this->master->update('kelas', $update, 'id_kelas', null, true);
+				$this->kelas->update('kelas', $update, 'id_kelas', null, true);
 				$data['update'] = $update;
 			}
 		} else {
@@ -121,14 +122,14 @@ class Kelas extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->master->delete('kelas', $chk, 'id_kelas')) {
+			if ($this->kelas->delete('kelas', $chk, 'id_kelas')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
 	}
 	public function kelas_by_jurusan($id)
 	{
-		$data = $this->master->getKelasByJurusan($id);
+		$data = $this->kelas->getKelasByJurusan($id);
 		$this->output_json($data);
 	}
 	public function import($import_data = null)
@@ -137,7 +138,7 @@ class Kelas extends CI_Controller
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Kelas',
 			'subjudul' => 'Import Kelas',
-			'jurusan' => $this->master->getAllJurusan()
+			'jurusan' => $this->kelas->getAllJurusan()
 		];
 		if ($import_data != null) $data['import'] = $import_data;
 		$this->load->view('_templates/dashboard/_header', $data);
@@ -192,7 +193,7 @@ class Kelas extends CI_Controller
 		foreach ($input as $d) {
 			$data[] = ['nama_kelas' => $d->kelas, 'jurusan_id' => $d->jurusan];
 		}
-		$save = $this->master->create('kelas', $data, true);
+		$save = $this->kelas->create('kelas', $data, true);
 		if ($save) {
 			redirect('kelas');
 		} else {
