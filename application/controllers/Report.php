@@ -56,16 +56,22 @@ class Report extends CI_Controller
 		$user = $this->ion_auth->user()->row();
 		$guru = $this->report->getGuru($user->username)->row();
 		$topik = $this->topik->getTopikByMapel(['mapel_id' => $guru->mapel_id, 'kelas' => $kelas], true);
+		// print_r($this->report->getDataReport($guru->id_guru, $guru->mapel_id, $id_kelas, $topik));
 		echo $this->output_json($this->report->getDataReport($guru->id_guru, $guru->mapel_id, $id_kelas, $topik), false);
 	}
+
 	public function data_siswa($id_siswa, $kelas)
 	{
 		$topik = $this->topik->getTopik($kelas);
 		// print_r($topik);
 		$mapel = $this->topik->getTopik($kelas, true);
-		// print_r($mapel);
+		// echo $this->output_json($this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel), false);
+		$data["draw"] = 0;
+		$data["recordsTotal"] =  $this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel)->num_rows();
+		$data["recordsFiltered"] = $this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel)->num_rows();
+		$data["data"] = $this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel)->result();
+		echo $this->output_json($data); //converts an array to JSON string
 		// die;
-		echo $this->output_json($this->report->getDataReportSiswa($id_siswa, $kelas, $topik, $mapel), false);
 	}
 
 	// fungsi untuk menampilkan seluruh daftar tugas yang dibuat untuk guru

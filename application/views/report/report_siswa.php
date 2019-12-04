@@ -63,7 +63,7 @@
         let url = ''
         $(document).ready(function() {
             let sel = document.getElementById("kelas_filter");
-            let id_siswa = <?= $siswa->id_siswa ?>;
+            let id_siswa = '<?= $siswa->id_siswa ?>';
             let kelas = sel.value;
             let src = '<?= base_url() ?>report/data_siswa';
             url = src + '/' + id_siswa + '/' + kelas;
@@ -77,7 +77,7 @@
     <script type="text/javascript">
         $('#kelas_filter').on('change', function() {
             let sel = document.getElementById("kelas_filter");
-            let id_siswa = <?= $siswa->id_siswa ?>;
+            let id_siswa = '<?= $siswa->id_siswa ?>';
             let kelas = sel.value;
             let src = '<?= base_url() ?>report/data_siswa';
             let url = src + '/' + id_siswa + '/' + kelas;

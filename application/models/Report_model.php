@@ -74,35 +74,53 @@ class Report_model extends CI_Model
 
     public function getDataReportSiswa($id_siswa, $kelas, $topik, $mapel)
     {
-        $from = '';
+        $query = "";
         $lengthArr = count($mapel);
         foreach ($mapel as $key => $value) {
-            $from .= " select * from (SELECT nama_mapel, mapel_id FROM hasil_ujian h JOIN ujian k ON h.ujian_id = k.id_ujian JOIN mapel m ON m.id_mapel=k.mapel_id where siswa_id = {$id_siswa} AND mapel_id = {$value->mapel_id} GROUP BY mapel_id
+            $query .= " select * from (SELECT nama_mapel, mapel_id FROM hasil_ujian h JOIN ujian k ON h.ujian_id = k.id_ujian JOIN mapel m ON m.id_mapel=k.mapel_id where siswa_id = {$id_siswa} AND mapel_id = {$value->mapel_id} GROUP BY mapel_id
             UNION
-            SELECT nama_mapel, mapel_id FROM hasil_tugas h JOIN tugas t ON h.tugas_id = t.id_tugas JOIN mapel m ON m.id_mapel=t.mapel_id where siswa_id = {$id_siswa} AND mapel_id = {$value->mapel_id} GROUP BY mapel_id) mapel{$key}";
+            SELECT nama_mapel, mapel_id FROM hasil_tugas h JOIN tugas t ON h.tugas_id = t.id_tugas JOIN mapel m ON m.id_mapel=t.mapel_id where siswa_id = {$id_siswa} AND mapel_id = {$value->mapel_id} GROUP BY mapel_id ) mapel{$key}";
             foreach ($topik as $key2 => $value2) {
                 if ($value2->mapel_id == $value->mapel_id) {
-                    $from .= " LEFT JOIN
-                    (SELECT round(avg(nilai)) as tugas{$key2}, t.mapel_id FROM hasil_tugas ht 
-                    JOIN tugas t ON ht.tugas_id = t.id_tugas
-                    JOIN topik tp ON tp.id_topik = t.topik_id
-                    JOIN siswa s ON s.id_siswa = ht.siswa_id
-                    where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) t{$key2}
-                    using(mapel_id)
-                    LEFT JOIN
-                    (SELECT round(avg(nilai)) as ujian{$key2}, k.mapel_id FROM hasil_ujian hk 
-                    JOIN ujian k ON hk.ujian_id = k.id_ujian
-                    JOIN topik tp ON tp.id_topik = k.topik_id
-                    JOIN siswa s ON s.id_siswa = hk.siswa_id
-                    where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) k{$key2}
-                    using(mapel_id)";
+                    if ($value2->nama_topik == 'UTS') {
+                        $query .= " LEFT JOIN
+                        (SELECT round(avg(nilai)) as uts, k.mapel_id FROM hasil_ujian hk 
+                        JOIN ujian k ON hk.ujian_id = k.id_ujian
+                        JOIN topik tp ON tp.id_topik = k.topik_id
+                        JOIN siswa s ON s.id_siswa = hk.siswa_id
+                        where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) k{$key2}
+                        using(mapel_id)";
+                    } else if ($value2->nama_topik == 'UAS') {
+                        $query .= " LEFT JOIN
+                        (SELECT round(avg(nilai)) as uas, k.mapel_id FROM hasil_ujian hk 
+                        JOIN ujian k ON hk.ujian_id = k.id_ujian
+                        JOIN topik tp ON tp.id_topik = k.topik_id
+                        JOIN siswa s ON s.id_siswa = hk.siswa_id
+                        where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) k{$key2}
+                        using(mapel_id)";
+                    } else {
+                        $query .= " LEFT JOIN
+                        (SELECT round(avg(nilai)) as tugas{$key2}, t.mapel_id FROM hasil_tugas ht 
+                        JOIN tugas t ON ht.tugas_id = t.id_tugas
+                        JOIN topik tp ON tp.id_topik = t.topik_id
+                        JOIN siswa s ON s.id_siswa = ht.siswa_id
+                        where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) t{$key2}
+                        using(mapel_id)
+                        LEFT JOIN
+                        (SELECT round(avg(nilai)) as ujian{$key2}, k.mapel_id FROM hasil_ujian hk 
+                        JOIN ujian k ON hk.ujian_id = k.id_ujian
+                        JOIN topik tp ON tp.id_topik = k.topik_id
+                        JOIN siswa s ON s.id_siswa = hk.siswa_id
+                        where tp.mapel_id = {$value2->mapel_id} AND id_siswa = {$id_siswa} AND topik_id = {$value2->id_topik}) k{$key2}
+                        using(mapel_id)";
+                    }
                 }
             }
             if ($key != $lengthArr - 1) {
-                $from .= " UNION";
+                $query .= " UNION";
             }
         };
-        echo $from;
-        die;
+        $data = $this->db->query($query);
+        return $data;
     }
 }

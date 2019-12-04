@@ -51,13 +51,13 @@ $(document).ready(function () {
       type: "POST"
     },
     columns: [{
-        data: "id_siswa",
+        data: "mapel_id",
         render: function (data, type, row, meta) {
           return meta.row + meta.settings._iDisplayStart + 1;
         }
       },
       {
-        data: "nama"
+        data: "nama_mapel"
       },
       {
         data: "tugas0",

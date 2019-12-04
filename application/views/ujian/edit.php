@@ -137,7 +137,7 @@
             })
             .done(function(result) {
                 document.getElementById('soal').innerHTML = '';
-                var soal_id = <?= $ujian->id_soal_essay ?>;
+                var soal_id = '<?= $ujian->id_soal_essay ?>';
                 result.forEach(function(val) {
                     var checked = val.id_soal == soal_id ? 'checked' : '';
                     document.getElementById('soal').innerHTML += `<input type="radio" name="soal" class="flat-red" ${checked} value="${val.id_soal}"> ${removeTags(val.soal)}<br><br>`;
@@ -154,6 +154,7 @@
             return false;
         else
             str = str.toString();
+
         return str.replace(/(<([^>]+)>)/ig, '');
     }
 </script>

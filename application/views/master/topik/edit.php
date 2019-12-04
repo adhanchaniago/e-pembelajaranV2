@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th># No</th>
+                            <th>Kelas</th>
                             <th>Topik</th>
                             <th>Mapel</th>
                         </tr>
@@ -36,11 +37,27 @@
                                 <td><?= $i ?></td>
                                 <td>
                                     <div class="form-group">
+
+                                        <select required="required" name="kelas[<?= $i ?>]" class="input-sm form-control select2" style="width: 100%!important">
+                                            <option value="" disabled>-- Pilih --</option>
+
+                                            <option <?= $row->kelas == '10' ? "selected='selected'" : "" ?> value="10">10</option>
+                                            <option <?= $row->kelas == '11' ? "selected='selected'" : "" ?> value="11">11</option>
+                                            <option <?= $row->kelas == '12' ? "selected='selected'" : "" ?> value="12">12</option>
+
+                                        </select>
+                                        <small class="help-block text-right"></small>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
                                         <?= form_hidden('id_topik[' . $i . ']', $row->id_topik); ?>
                                         <input required="required" autofocus="autofocus" onfocus="this.select()" value="<?= $row->nama_topik ?>" type="text" name="nama_topik[<?= $i ?>]" class="form-control">
                                         <small class="help-block text-right"></small>
                                     </div>
                                 </td>
+
                                 <td>
                                     <div class="form-group">
                                         <?php if ($this->ion_auth->is_admin()) { ?>
