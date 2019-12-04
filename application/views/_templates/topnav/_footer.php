@@ -8,7 +8,7 @@
 	<div class="container">
 		<?= strftime('%A, %d %B %Y') ?>, <span class="live-clock"><?= date('H:i:s') ?></span>
 		<div class="pull-right hidden-xs">
-			<b>Kuis Online</b> v2
+			<b>Ujian Online</b> v2
 		</div>
 	</div>
 	<!-- /.container -->

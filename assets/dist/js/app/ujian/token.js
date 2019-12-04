@@ -3,16 +3,16 @@ $(document).ready(function () {
 
     $('#btncek').on('click', function () {
         var token = $('#token').val();
-        var idKuis = $(this).data('id');
+        var idUjian = $(this).data('id');
         if (token === '') {
             Swal('Gagal', 'Token harus diisi', 'error');
         } else {
-            var key = $('#id_kuis').data('key');
+            var key = $('#id_ujian').data('key');
             $.ajax({
-                url: base_url + 'kuis/cektoken/',
+                url: base_url + 'ujian/cektoken/',
                 type: 'POST',
                 data: {
-                    id_kuis: idKuis,
+                    id_ujian: idUjian,
                     token: token
                 },
                 cache: false,
@@ -23,7 +23,7 @@ $(document).ready(function () {
                         "text": result.status ? "Token Benar" : "Token Salah"
                     }).then((data) => {
                         if (result.status) {
-                            location.href = base_url + 'kuis/?key=' + key;
+                            location.href = base_url + 'ujian/?key=' + key;
                         }
                     });
                 }

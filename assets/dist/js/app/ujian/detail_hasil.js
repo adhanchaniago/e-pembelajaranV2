@@ -19,7 +19,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            "url": base_url + "hasilkuis/NilaiMhs/" + id,
+            "url": base_url + "hasilujian/NilaiMhs/" + id,
             "type": "POST",
         },
         columns: [{
@@ -47,7 +47,7 @@ $(document).ready(function () {
                 if (jenis_soal === 'essay') {
                     return `
                           <div class="text-center">
-                              <a class="btn btn-xs bg-blue" href="${base_url}hasilkuis/essay/${data}" >
+                              <a class="btn btn-xs bg-blue" href="${base_url}hasilujian/essay/${data}" >
                                   <i class="fa fa-search"></i> Lihat Jawaban
                               </a>
                           </div>

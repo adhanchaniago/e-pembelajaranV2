@@ -160,7 +160,7 @@ function cek_terakhir(id_soal) {
 }
 
 function simpan_sementara() {
-    var f_asal = $("#kuis");
+    var f_asal = $("#ujian");
     var form = getFormData(f_asal);
     //form = JSON.stringify(form);
     var jml_soal = form.jml_soal;
@@ -197,11 +197,11 @@ function simpan_sementara() {
 
 function simpan() {
     simpan_sementara();
-    var form = $("#kuis");
+    var form = $("#ujian");
 
     $.ajax({
         type: "POST",
-        url: base_url + "kuis/simpan_satu",
+        url: base_url + "ujian/simpan_satu",
         data: form.serialize(),
         dataType: 'json',
         success: function (data) {
@@ -219,7 +219,7 @@ function selesai() {
 
         $.ajax({
             type: "POST",
-            url: base_url + "kuis/simpan_akhir",
+            url: base_url + "ujian/simpan_akhir",
             data: {
                 id: id_tes,
                 jenis: jenis
@@ -231,7 +231,7 @@ function selesai() {
             success: function (r) {
                 console.log(r);
                 if (r.status) {
-                    window.location.href = base_url + 'kuis/list';
+                    window.location.href = base_url + 'ujian/list';
                 }
             }
         });
@@ -242,7 +242,7 @@ function selesai() {
         // console.log(jawab);
         $.ajax({
             type: "POST",
-            url: base_url + "kuis/simpan_akhir",
+            url: base_url + "ujian/simpan_akhir",
             data: {
                 id: id_tes,
                 jawaban: jawab,
@@ -251,7 +251,7 @@ function selesai() {
             success: function (r) {
                 console.log(r);
                 if (r.status) {
-                    window.location.href = base_url + 'kuis/list';
+                    window.location.href = base_url + 'ujian/list';
                 }
             }
         });
@@ -260,7 +260,7 @@ function selesai() {
 
 function waktuHabis() {
     selesai();
-    alert('Waktu kuis telah habis!');
+    alert('Waktu ujian telah habis!');
 }
 
 function simpan_akhir() {

@@ -73,12 +73,12 @@ INSERT INTO `guru` (`id_guru`, `id_user`, `nip`, `nama_guru`, `email`, `mapel_id
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hasil_kuis`
+-- Table structure for table `hasil_ujian`
 --
 
-CREATE TABLE `hasil_kuis` (
+CREATE TABLE `hasil_ujian` (
   `id` int(11) NOT NULL,
-  `kuis_id` int(11) NOT NULL,
+  `ujian_id` int(11) NOT NULL,
   `siswa_id` int(11) NOT NULL,
   `jenis_soal` enum('pilgan','essay') NOT NULL,
   `list_soal` longtext NOT NULL,
@@ -92,10 +92,10 @@ CREATE TABLE `hasil_kuis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `hasil_kuis`
+-- Dumping data for table `hasil_ujian`
 --
 
-INSERT INTO `hasil_kuis` (`id`, `kuis_id`, `siswa_id`, `jenis_soal`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
+INSERT INTO `hasil_ujian` (`id`, `ujian_id`, `siswa_id`, `jenis_soal`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
 (39, 25, 6, 'pilgan', '20,18,19', '20:B:N,18:A:N,19:C:N', 3, '100.00', '100.00', '2019-11-30 19:44:52', '2019-11-30 21:44:52', 'N'),
 (40, 26, 6, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya tampan</p>', 0, '95.00', '0.00', '2019-11-30 19:45:20', '2019-11-30 20:00:20', 'N'),
 (41, 26, 7, 'essay', '<p>Jelaskan tentang diri anda !</p>', '<p>saya baik kok</p>', 0, '78.00', '0.00', '2019-11-30 19:48:18', '2019-11-30 20:03:18', 'N'),
@@ -197,15 +197,15 @@ INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `jurusan_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kuis`
+-- Table structure for table `ujian`
 --
 
-CREATE TABLE `kuis` (
-  `id_kuis` int(11) NOT NULL,
+CREATE TABLE `ujian` (
+  `id_ujian` int(11) NOT NULL,
   `guru_id` int(11) NOT NULL,
   `mapel_id` int(11) NOT NULL,
   `topik_id` int(11) NOT NULL,
-  `nama_kuis` varchar(200) NOT NULL,
+  `nama_ujian` varchar(200) NOT NULL,
   `jumlah_soal` int(11) NOT NULL,
   `waktu` int(11) NOT NULL,
   `jenis_soal` enum('pilgan','essay') NOT NULL,
@@ -217,10 +217,10 @@ CREATE TABLE `kuis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `kuis`
+-- Dumping data for table `ujian`
 --
 
-INSERT INTO `kuis` (`id_kuis`, `guru_id`, `mapel_id`, `topik_id`, `nama_kuis`, `jumlah_soal`, `waktu`, `jenis_soal`, `id_soal_essay`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
+INSERT INTO `ujian` (`id_ujian`, `guru_id`, `mapel_id`, `topik_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis_soal`, `id_soal_essay`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
 (25, 10, 8, 18, 'Ulangan Bab 1', 3, 120, 'pilgan', 0, 'acak', '2019-11-30 18:50:32', '2019-12-01 18:50:36', 'UKIMM'),
 (26, 10, 8, 18, 'Ulangan Bab 1', 1, 15, 'essay', 21, 'acak', '2019-11-30 18:52:22', '2019-12-01 18:52:24', 'BZXLM'),
 (27, 10, 8, 19, 'Ujian KD2', 1, 7, 'essay', 22, 'acak', '2019-11-30 22:30:36', '2019-12-01 22:30:38', 'DUMPJ'),
@@ -521,11 +521,11 @@ ALTER TABLE `guru`
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indexes for table `hasil_kuis`
+-- Indexes for table `hasil_ujian`
 --
-ALTER TABLE `hasil_kuis`
+ALTER TABLE `hasil_ujian`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `ujian_id` (`kuis_id`),
+  ADD KEY `ujian_id` (`ujian_id`),
   ADD KEY `mahasiswa_id` (`siswa_id`);
 
 --
@@ -547,10 +547,10 @@ ALTER TABLE `kelas`
   ADD PRIMARY KEY (`id_kelas`);
 
 --
--- Indexes for table `kuis`
+-- Indexes for table `ujian`
 --
-ALTER TABLE `kuis`
-  ADD PRIMARY KEY (`id_kuis`) USING BTREE,
+ALTER TABLE `ujian`
+  ADD PRIMARY KEY (`id_ujian`) USING BTREE,
   ADD KEY `matkul_id` (`mapel_id`),
   ADD KEY `dosen_id` (`guru_id`),
   ADD KEY `topik_id` (`topik_id`);
@@ -631,9 +631,9 @@ ALTER TABLE `guru`
   MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT for table `hasil_kuis`
+-- AUTO_INCREMENT for table `hasil_ujian`
 --
-ALTER TABLE `hasil_kuis`
+ALTER TABLE `hasil_ujian`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
@@ -655,10 +655,10 @@ ALTER TABLE `kelas`
   MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `kuis`
+-- AUTO_INCREMENT for table `ujian`
 --
-ALTER TABLE `kuis`
-  MODIFY `id_kuis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+ALTER TABLE `ujian`
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
@@ -713,19 +713,19 @@ ALTER TABLE `users_groups`
 --
 
 --
--- Constraints for table `hasil_kuis`
+-- Constraints for table `hasil_ujian`
 --
-ALTER TABLE `hasil_kuis`
-  ADD CONSTRAINT `hasil_kuis_ibfk_1` FOREIGN KEY (`kuis_id`) REFERENCES `kuis` (`id_kuis`),
-  ADD CONSTRAINT `hasil_kuis_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
+ALTER TABLE `hasil_ujian`
+  ADD CONSTRAINT `hasil_ujian_ibfk_1` FOREIGN KEY (`ujian_id`) REFERENCES `ujian` (`id_ujian`),
+  ADD CONSTRAINT `hasil_ujian_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id_siswa`);
 
 --
--- Constraints for table `kuis`
+-- Constraints for table `ujian`
 --
-ALTER TABLE `kuis`
-  ADD CONSTRAINT `kuis_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
-  ADD CONSTRAINT `kuis_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
-  ADD CONSTRAINT `kuis_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
+ALTER TABLE `ujian`
+  ADD CONSTRAINT `ujian_ibfk_1` FOREIGN KEY (`guru_id`) REFERENCES `guru` (`id_guru`),
+  ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`mapel_id`) REFERENCES `mapel` (`id_mapel`),
+  ADD CONSTRAINT `ujian_ibfk_3` FOREIGN KEY (`topik_id`) REFERENCES `topik` (`id_topik`);
 
 --
 -- Constraints for table `soal`

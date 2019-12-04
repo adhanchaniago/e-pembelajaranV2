@@ -18,7 +18,7 @@
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th>Nama Kuis</th>
+                    <th>Nama Ujian</th>
                     <th>Topik</th>
                     <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
@@ -32,7 +32,7 @@
             <tfoot>
                 <tr>
                     <th>No.</th>
-                    <th>Nama Kuis</th>
+                    <th>Nama Ujian</th>
                     <th>Topik</th>
                     <th>Tipe Soal</th>
                     <th>Jumlah Soal</th>
@@ -47,4 +47,4 @@
     </div>
 </div>
 
-<script src="<?= base_url() ?>assets/dist/js/app/kuis/hasil.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/ujian/hasil.js"></script>

@@ -9,12 +9,12 @@ $(document).ready(function () {
     });
 
 
-    $('#formkuis input, #formkuis select').on('change', function () {
+    $('#formujian input, #formujian select').on('change', function () {
         $(this).closest('.form-group').eq(0).removeClass('has-error');
         $(this).nextAll('.help-block').eq(0).text('');
     });
 
-    $('#formkuis').on('submit', function (e) {
+    $('#formujian').on('submit', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -30,7 +30,7 @@ $(document).ready(function () {
                         "type": "success",
                         "text": "Data berhasil disimpan"
                     }).then(result => {
-                        window.location.href = base_url+"kuis/master";
+                        window.location.href = base_url+"ujian/master";
                     });
                 } else {
                     if (data.errors) {

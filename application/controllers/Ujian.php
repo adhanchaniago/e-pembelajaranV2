@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kuis extends CI_Controller
+class Ujian extends CI_Controller
 {
 
 	public $mhs, $user;
@@ -17,11 +17,11 @@ class Kuis extends CI_Controller
 		// $this->load->model('Master_model', 'master');
 		$this->load->model('Topik_model', 'topik');
 		$this->load->model('Soal_model', 'soal');
-		$this->load->model('Kuis_model', 'kuis');
+		$this->load->model('Ujian_model', 'ujian');
 		$this->form_validation->set_error_delimiters('', '');
 
 		$this->user = $this->ion_auth->user()->row();
-		$this->mhs 	= $this->kuis->getIdSiswa($this->user->username);
+		$this->mhs 	= $this->ujian->getIdSiswa($this->user->username);
 	}
 
 	public function akses_guru()
@@ -34,7 +34,7 @@ class Kuis extends CI_Controller
 	public function akses_siswa()
 	{
 		if (!$this->ion_auth->in_group('siswa')) {
-			show_error('Halaman ini khusus untuk siswa mengikuti kuis, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
+			show_error('Halaman ini khusus untuk siswa mengikuti ujian, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 	}
 
@@ -50,22 +50,22 @@ class Kuis extends CI_Controller
 	{
 		$this->akses_guru();
 
-		$this->output_json($this->kuis->getDataKuis($id), false);
+		$this->output_json($this->ujian->getDataUjian($id), false);
 	}
 
-	// fungsi untuk menampilkan seluruh daftar kuis yang dibuat untuk guru
+	// fungsi untuk menampilkan seluruh daftar ujian yang dibuat untuk guru
 	public function master()
 	{
 		$this->akses_guru();
 		$user = $this->ion_auth->user()->row();
 		$data = [
 			'user' => $user,
-			'judul'	=> 'Kuis',
-			'subjudul' => 'Data Kuis',
-			'guru' => $this->kuis->getIdGuru($user->username),
+			'judul'	=> 'Ujian',
+			'subjudul' => 'Data Ujian',
+			'guru' => $this->ujian->getIdGuru($user->username),
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/data');
+		$this->load->view('ujian/data');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
@@ -74,10 +74,10 @@ class Kuis extends CI_Controller
 	{
 		$this->akses_guru();
 		$topik = $this->input->get('topik');
-		$this->output_json($this->kuis->getSoalEssay($topik));
+		$this->output_json($this->ujian->getSoalEssay($topik));
 	}
 
-	// fungsi untuk tampilan edit kuis
+	// fungsi untuk tampilan edit ujian
 	public function add()
 	{
 		$this->akses_guru();
@@ -86,21 +86,21 @@ class Kuis extends CI_Controller
 
 		$data = [
 			'user' 		=> $user,
-			'judul'		=> 'Kuis',
-			'subjudul'	=> 'Tambah Kuis',
+			'judul'		=> 'Ujian',
+			'subjudul'	=> 'Tambah Ujian',
 			'mapel'	=> $this->soal->getMapelGuru($user->username),
-			'guru'		=> $this->kuis->getIdGuru($user->username)
+			'guru'		=> $this->ujian->getIdGuru($user->username)
 		];
 		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
 
-		// $data['soal'] = $this->kuis->getSoalEssay();
+		// $data['soal'] = $this->ujian->getSoalEssay();
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/add');
+		$this->load->view('ujian/add');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
-	// fungsi untuk menampilkan tampilan edit kuis
+	// fungsi untuk menampilkan tampilan edit ujian
 	public function edit($id)
 	{
 		$this->akses_guru();
@@ -109,17 +109,17 @@ class Kuis extends CI_Controller
 
 		$data = [
 			'user' 		=> $user,
-			'judul'		=> 'Kuis',
-			'subjudul'	=> 'Edit Kuis',
+			'judul'		=> 'Ujian',
+			'subjudul'	=> 'Edit Ujian',
 			'mapel'	=> $this->soal->getMapelGuru($user->username),
-			'guru'		=> $this->kuis->getIdGuru($user->username),
-			'kuis'		=> $this->kuis->getKuisById($id),
+			'guru'		=> $this->ujian->getIdGuru($user->username),
+			'ujian'		=> $this->ujian->getUjianById($id),
 		];
 		$data['topik'] = $this->topik->getTopikByMapel($data['mapel']->mapel_id);
-		$data['soal'] = $this->kuis->getSoalEssay($data['kuis']->topik_id);
+		$data['soal'] = $this->ujian->getSoalEssay($data['ujian']->topik_id);
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/edit');
+		$this->load->view('ujian/edit');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
@@ -133,10 +133,10 @@ class Kuis extends CI_Controller
 	{
 		$this->akses_guru();
 
-		$jml 	= $this->kuis->getJumlahSoal($m, $t)->jml_soal;
+		$jml 	= $this->ujian->getJumlahSoal($m, $t)->jml_soal;
 		$jml_a 	= $jml + 1; // Jika tidak mengerti, silahkan baca user_guide codeigniter tentang form_validation pada bagian less_than
 
-		$this->form_validation->set_rules('nama_kuis', 'Nama Kuis', 'required|alpha_numeric_spaces|max_length[50]');
+		$this->form_validation->set_rules('nama_ujian', 'Nama Ujian', 'required|alpha_numeric_spaces|max_length[50]');
 		$this->form_validation->set_rules('topik', 'Topik', 'required');
 		$this->form_validation->set_rules('jumlah_soal', 'Jumlah Soal', "required|integer|less_than[{$jml_a}]|greater_than[0]", ['less_than' => "Soal tidak cukup, hanya ada {$jml} soal untuk topik ini"]);
 		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
@@ -150,10 +150,10 @@ class Kuis extends CI_Controller
 	{
 		$this->akses_guru();
 
-		// $jml 	= $this->kuis->getJumlahSoal($m, $t)->jml_soal;
+		// $jml 	= $this->ujian->getJumlahSoal($m, $t)->jml_soal;
 		// $jml_a 	= $jml + 1; // Jika tidak mengerti, silahkan baca user_guide codeigniter tentang form_validation pada bagian less_than
 
-		$this->form_validation->set_rules('nama_kuis', 'Nama Kuis', 'required|alpha_numeric_spaces|max_length[50]');
+		$this->form_validation->set_rules('nama_ujian', 'Nama Ujian', 'required|alpha_numeric_spaces|max_length[50]');
 		$this->form_validation->set_rules('topik', 'Topik', 'required');
 		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
 		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
@@ -178,7 +178,7 @@ class Kuis extends CI_Controller
 		$topik_id	 	= $this->input->post('topik', true);
 		$method 		= $this->input->post('method', true);
 		$guru_id 		= $this->input->post('guru_id', true);
-		$nama_kuis 	= $this->input->post('nama_kuis', true);
+		$nama_ujian 	= $this->input->post('nama_ujian', true);
 		$jumlah_soal 	= $this->input->post('jumlah_soal', true);
 		$tgl_mulai 		= $this->convert_tgl($this->input->post('tgl_mulai', 	true));
 		$tgl_selesai	= $this->convert_tgl($this->input->post('tgl_selesai', true));
@@ -191,7 +191,7 @@ class Kuis extends CI_Controller
 		if ($this->form_validation->run() === FALSE) {
 			$data['status'] = false;
 			$data['errors'] = [
-				'nama_kuis' 	=> form_error('nama_kuis'),
+				'nama_ujian' 	=> form_error('nama_ujian'),
 				'topik'		 	=> form_error('topik'),
 				'jumlah_soal' 	=> form_error('jumlah_soal'),
 				'tgl_mulai' 	=> form_error('tgl_mulai'),
@@ -204,7 +204,7 @@ class Kuis extends CI_Controller
 		} else {
 			if ($jenis_soal == 'pilgan') {
 				$input = [
-					'nama_kuis' 	=> $nama_kuis,
+					'nama_ujian' 	=> $nama_ujian,
 					'topik_id'	 	=> $topik_id,
 					'jumlah_soal' 	=> $jumlah_soal,
 					'tgl_mulai' 	=> $tgl_mulai,
@@ -215,7 +215,7 @@ class Kuis extends CI_Controller
 				];
 			} else {
 				$input = [
-					'nama_kuis' 	=> $nama_kuis,
+					'nama_ujian' 	=> $nama_ujian,
 					'topik_id'	 	=> $topik_id,
 					'tgl_mulai' 	=> $tgl_mulai,
 					'terlambat' 	=> $tgl_selesai,
@@ -229,17 +229,17 @@ class Kuis extends CI_Controller
 				$input['guru_id']	= $guru_id;
 				$input['mapel_id'] 	= $mapel_id;
 				$input['token']		= $token;
-				$action = $this->kuis->create('kuis', $input);
+				$action = $this->ujian->create('ujian', $input);
 			} else if ($method === 'edit') {
-				$id_kuis = $this->input->post('id_kuis', true);
-				$action = $this->kuis->update('kuis', $input, 'id_kuis', $id_kuis);
+				$id_ujian = $this->input->post('id_ujian', true);
+				$action = $this->ujian->update('ujian', $input, 'id_ujian', $id_ujian);
 			}
 			$data['status'] = $action ? TRUE : FALSE;
 		}
 		$this->output_json($data);
 	}
 
-	// fungsi untuk menghapus kuis
+	// fungsi untuk menghapus ujian
 	public function delete()
 	{
 		$this->akses_guru();
@@ -247,18 +247,18 @@ class Kuis extends CI_Controller
 		if (!$chk) {
 			$this->output_json(['status' => false]);
 		} else {
-			if ($this->kuis->delete('kuis', $chk, 'id_kuis')) {
+			if ($this->ujian->delete('ujian', $chk, 'id_ujian')) {
 				$this->output_json(['status' => true, 'total' => count($chk)]);
 			}
 		}
 	}
 
-	// fungsi untuk memberikan token baru pada kuis
+	// fungsi untuk memberikan token baru pada ujian
 	public function refresh_token($id)
 	{
 		$this->load->helper('string');
 		$data['token'] = strtoupper(random_string('alpha', 5));
-		$refresh = $this->kuis->update('kuis', $data, 'id_kuis', $id);
+		$refresh = $this->ujian->update('ujian', $data, 'id_ujian', $id);
 		$data['status'] = $refresh ? TRUE : FALSE;
 		$this->output_json($data);
 	}
@@ -272,11 +272,11 @@ class Kuis extends CI_Controller
 	{
 		$this->akses_siswa();
 
-		$list = $this->kuis->getListKuis($this->mhs->id_siswa, $this->mhs->kelas_id);
+		$list = $this->ujian->getListUjian($this->mhs->id_siswa, $this->mhs->kelas_id);
 		$this->output_json($list, false);
 	}
 
-	// ini fungsi untuk menampilkan daftar kuis di siswa
+	// ini fungsi untuk menampilkan daftar ujian di siswa
 	public function list()
 	{
 		$this->akses_siswa();
@@ -285,16 +285,16 @@ class Kuis extends CI_Controller
 
 		$data = [
 			'user' 		=> $user,
-			'judul'		=> 'Kuis',
-			'subjudul'	=> 'List Kuis',
-			'mhs' 		=> $this->kuis->getIdSiswa($user->username),
+			'judul'		=> 'Ujian',
+			'subjudul'	=> 'List Ujian',
+			'mhs' 		=> $this->ujian->getIdSiswa($user->username),
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/list');
+		$this->load->view('ujian/list');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
-	// ketika menekan tombol ikuti kuis, akan mengakses fungsi token
+	// ketika menekan tombol ikuti ujian, akan mengakses fungsi token
 	public function token($id)
 	{
 		$this->akses_siswa();
@@ -302,23 +302,23 @@ class Kuis extends CI_Controller
 
 		$data = [
 			'user' 		=> $user,
-			'judul'		=> 'Kuis',
-			'subjudul'	=> 'Token Kuis',
-			'mhs' 		=> $this->kuis->getIdSiswa($user->username),
-			'kuis'		=> $this->kuis->getKuisById($id),
+			'judul'		=> 'Ujian',
+			'subjudul'	=> 'Token Ujian',
+			'mhs' 		=> $this->ujian->getIdSiswa($user->username),
+			'ujian'		=> $this->ujian->getUjianById($id),
 			'encrypted_id' => urlencode($this->encryption->encrypt($id))
 		];
 		$this->load->view('_templates/topnav/_header.php', $data);
-		$this->load->view('kuis/token');
+		$this->load->view('ujian/token');
 		$this->load->view('_templates/topnav/_footer.php');
 	}
 
 	// untuk memvalidasi inputan token dari siswa
 	public function cektoken()
 	{
-		$id = $this->input->post('id_kuis', true);
+		$id = $this->input->post('id_ujian', true);
 		$token = $this->input->post('token', true);
-		$cek = $this->kuis->getKuisById($id);
+		$cek = $this->ujian->getUjianById($id);
 
 		$data['status'] = $token === $cek->token ? TRUE : FALSE;
 		$this->output_json($data);
@@ -332,26 +332,26 @@ class Kuis extends CI_Controller
 		$this->output_json(['key' => $key]);
 	}
 
-	// fungsi index untuk halaman soal kuis dan jawaban
+	// fungsi index untuk halaman soal ujian dan jawaban
 	public function index()
 	{
 		$this->akses_siswa();
 		$key = $this->input->get('key', true);
 		$id  = $this->encryption->decrypt(rawurldecode($key));
 
-		// mengambil data kuis dan soal berdasarkan id
-		$kuis 		= $this->kuis->getKuisById($id);
-		$soal 		= $this->kuis->getSoal($id);
+		// mengambil data ujian dan soal berdasarkan id
+		$ujian 		= $this->ujian->getUjianById($id);
+		$soal 		= $this->ujian->getSoal($id);
 
 		$mhs		= $this->mhs;
-		$hasil_kuis 	= $this->kuis->HslKuis($id, $mhs->id_siswa);
+		$hasil_ujian 	= $this->ujian->HslUjian($id, $mhs->id_siswa);
 
-		$cek_sudah_ikut = $hasil_kuis->num_rows();
+		$cek_sudah_ikut = $hasil_ujian->num_rows();
 
 		// dicek apakah siswa sudah pernah ambil atau belum
 		if ($cek_sudah_ikut < 1) {
-			// dicek apakah kuis pilgan atau essay
-			if ($kuis->jenis_soal == "pilgan") { //jika pilgan
+			// dicek apakah ujian pilgan atau essay
+			if ($ujian->jenis_soal == "pilgan") { //jika pilgan
 				$soal_urut_ok 	= array();
 				$i = 0;
 				foreach ($soal as $s) {
@@ -380,11 +380,11 @@ class Kuis extends CI_Controller
 				}
 				$list_id_soal 	= substr($list_id_soal, 0, -1);
 				$list_jw_soal 	= substr($list_jw_soal, 0, -1);
-				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$kuis->waktu} minute"));
+				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
 				$time_mulai		= date('Y-m-d H:i:s');
 
 				$input = [
-					'kuis_id' 		=> $id,
+					'ujian_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
@@ -398,13 +398,13 @@ class Kuis extends CI_Controller
 			} else { //jika essay
 				$list_id_soal 	= $soal->soal;
 				$list_jw_soal 	= "";
-				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$kuis->waktu} minute"));
+				$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
 				$time_mulai		= date('Y-m-d H:i:s');
 
 				$input = [
-					'kuis_id' 		=> $id,
+					'ujian_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
-					'jenis_soal'	=> $kuis->jenis_soal,
+					'jenis_soal'	=> $ujian->jenis_soal,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
 					'jml_benar'		=> 0,
@@ -415,21 +415,21 @@ class Kuis extends CI_Controller
 					'status'		=> 'Y'
 				];
 			}
-			$this->kuis->create('hasil_kuis', $input);
+			$this->ujian->create('hasil_ujian', $input);
 
 			// Setelah insert wajib refresh dulu
-			redirect('kuis/?key=' . urlencode($key), 'location', 301);
+			redirect('ujian/?key=' . urlencode($key), 'location', 301);
 		}
 
-		if ($kuis->jenis_soal == 'pilgan') {
-			$q_soal = $hasil_kuis->row();
+		if ($ujian->jenis_soal == 'pilgan') {
+			$q_soal = $hasil_ujian->row();
 
 			$urut_soal 		= explode(",", $q_soal->list_jawaban);
 			$soal_urut_ok	= array();
 			for ($i = 0; $i < sizeof($urut_soal); $i++) {
 				$pc_urut_soal	= explode(":", $urut_soal[$i]);
 				$pc_urut_soal1 	= empty($pc_urut_soal[1]) ? "''" : "'{$pc_urut_soal[1]}'";
-				$ambil_soal 	= $this->kuis->ambilSoal($pc_urut_soal1, $pc_urut_soal[0]);
+				$ambil_soal 	= $this->ujian->ambilSoal($pc_urut_soal1, $pc_urut_soal[0]);
 				$soal_urut_ok[] = $ambil_soal;
 			}
 
@@ -476,23 +476,23 @@ class Kuis extends CI_Controller
 			// Enkripsi Id Tes
 			$id_tes = $this->encryption->encrypt($detail_tes->id);
 			$data = [
-				'jenis_soal' => $kuis->jenis_soal,
+				'jenis_soal' => $ujian->jenis_soal,
 				'user' 		=> $this->user,
 				'mhs'		=> $this->mhs,
-				'judul'		=> 'Kuis',
-				'subjudul'	=> 'Lembar Kuis',
+				'judul'		=> 'Ujian',
+				'subjudul'	=> 'Lembar Ujian',
 				'soal'		=> $detail_tes,
 				'no' 		=> $no,
 				'html' 		=> $html,
 				'id_tes'	=> $id_tes
 			];
 			$this->load->view('_templates/topnav/_header.php', $data);
-			$this->load->view('kuis/sheet');
+			$this->load->view('ujian/sheet');
 			$this->load->view('_templates/topnav/_footer.php');
 		} else {
 
-			// menyimpan id hasil kuis
-			$detail_tes = $hasil_kuis->row();
+			// menyimpan id hasil ujian
+			$detail_tes = $hasil_ujian->row();
 
 			$html = '';
 			$no = 1;
@@ -509,18 +509,18 @@ class Kuis extends CI_Controller
 			// Enkripsi Id Tes
 			$id_tes = $this->encryption->encrypt($detail_tes->id);
 			$data = [
-				'jenis_soal' => $kuis->jenis_soal,
+				'jenis_soal' => $ujian->jenis_soal,
 				'user' 		=> $this->user,
 				'mhs'		=> $this->mhs,
-				'judul'		=> 'Kuis',
-				'subjudul'	=> 'Lembar Kuis',
+				'judul'		=> 'Ujian',
+				'subjudul'	=> 'Lembar Ujian',
 				'soal'		=> $detail_tes,
 				'no' 		=> $no,
 				'html' 		=> $html,
 				'id_tes'	=> $id_tes
 			];
 			$this->load->view('_templates/topnav/_header.php', $data);
-			$this->load->view('kuis/sheet');
+			$this->load->view('ujian/sheet');
 			$this->load->view('_templates/topnav/_footer.php');
 		}
 	}
@@ -546,7 +546,7 @@ class Kuis extends CI_Controller
 		];
 
 		// Simpan jawaban
-		$this->kuis->update('hasil_kuis', $d_simpan, 'id', $id_tes);
+		$this->ujian->update('hasil_ujian', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status' => true]);
 	}
 
@@ -559,7 +559,7 @@ class Kuis extends CI_Controller
 
 		if ($jenis_soal == 'pilgan') {
 			// Get Jawaban
-			$list_jawaban = $this->kuis->getJawaban($id_tes);
+			$list_jawaban = $this->ujian->getJawaban($id_tes);
 
 			// Pecah Jawaban
 			$pc_jawaban = explode(",", $list_jawaban);
@@ -592,7 +592,7 @@ class Kuis extends CI_Controller
 				'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
 				'status'		=> 'N'
 			];
-			$this->kuis->update('hasil_kuis', $d_update, 'id', $id_tes);
+			$this->ujian->update('hasil_ujian', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		} else {
 			$jawab = $this->input->post('jawaban', true);
@@ -602,7 +602,7 @@ class Kuis extends CI_Controller
 				'status'		=> 'N'
 			];
 
-			$this->kuis->update('hasil_kuis', $d_update, 'id', $id_tes);
+			$this->ujian->update('hasil_ujian', $d_update, 'id', $id_tes);
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
 	}

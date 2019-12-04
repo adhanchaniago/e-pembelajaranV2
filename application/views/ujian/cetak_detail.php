@@ -9,7 +9,7 @@ class MYPDF extends TCPDF
         $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         $this->SetFont('helvetica', 'B', 18);
         $this->SetY(13);
-        $this->Cell(0, 15, 'Hasil Kuis', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(0, 15, 'Hasil Ujian', 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
     public function Footer()
@@ -26,7 +26,7 @@ $pdf = new MYPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('Hasil Kuis');
+$pdf->SetTitle('Hasil Ujian');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -63,8 +63,8 @@ $pdf->SetFont('helvetica', '', 10);
 // add a page
 $pdf->AddPage();
 
-$mulai = strftime('%A, %d %B %Y', strtotime($kuis->tgl_mulai));
-$selesai = strftime('%A, %d %B %Y', strtotime($kuis->terlambat));
+$mulai = strftime('%A, %d %B %Y', strtotime($ujian->tgl_mulai));
+$selesai = strftime('%A, %d %B %Y', strtotime($ujian->terlambat));
 
 // create some HTML content
 $html = <<<EOD
@@ -74,20 +74,20 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
 </p>
 <table>
     <tr>
-        <th>Nama Kuis</th>
-        <td>{$kuis->nama_kuis}</td>
+        <th>Nama Ujian</th>
+        <td>{$ujian->nama_ujian}</td>
         <th>Mata Pelajaran</th>
-        <td>{$kuis->nama_mapel}</td> 
+        <td>{$ujian->nama_mapel}</td> 
     </tr>
     <tr>
         <th>Jumlah Soal</th>
-        <td>{$kuis->jumlah_soal}</td>
+        <td>{$ujian->jumlah_soal}</td>
         <th>Topik</th>
-        <td>{$kuis->nama_topik}</td>
+        <td>{$ujian->nama_topik}</td>
     </tr>
     <tr>
         <th>Waktu</th>
-        <td>{$kuis->waktu} Menit</td>
+        <td>{$ujian->waktu} Menit</td>
         <th>Nilai Terendah</th>
         <td>{$nilai->min_nilai}</td>
     </tr>
@@ -105,7 +105,7 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
     </tr>
     <tr>
         <th>Guru</th>
-        <td>{$kuis->nama_guru}</td>
+        <td>{$ujian->nama_guru}</td>
     </tr>
 </table>
 EOD;
@@ -131,25 +131,25 @@ $html .= <<<EOD
         </tr>        
         <tr align="center">
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
             <th width="4%">Tugas</th>
-            <th width="4%">Kuis</th>
+            <th width="4%">Ujian</th>
         </tr>        
     </thead>
     <tbody>

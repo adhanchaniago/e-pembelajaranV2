@@ -64,7 +64,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis0",
+        data: "ujian0",
         "className": "text-center"
       },
       {
@@ -72,7 +72,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis1",
+        data: "ujian1",
         "className": "text-center"
       },
       {
@@ -80,7 +80,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis2",
+        data: "ujian2",
         "className": "text-center"
       },
       {
@@ -88,7 +88,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis3",
+        data: "ujian3",
         "className": "text-center"
       },
       {
@@ -96,7 +96,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis4",
+        data: "ujian4",
         "className": "text-center"
       },
       {
@@ -104,7 +104,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis5",
+        data: "ujian5",
         "className": "text-center"
       },
       {
@@ -112,7 +112,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis6",
+        data: "ujian6",
         "className": "text-center"
       },
       {
@@ -120,7 +120,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis7",
+        data: "ujian7",
         "className": "text-center"
       },
       {
@@ -128,7 +128,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis8",
+        data: "ujian8",
         "className": "text-center"
       },
       {
@@ -136,7 +136,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "kuis9",
+        data: "ujian9",
         "className": "text-center"
       },
       {

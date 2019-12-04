@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kuis_model extends CI_Model
+class Ujian_model extends CI_Model
 {
 
     public function create($table, $data, $batch = false)
@@ -30,10 +30,10 @@ class Kuis_model extends CI_Model
         return $this->db->delete($table);
     }
 
-    public function getDataKuis($id)
+    public function getDataUjian($id)
     {
-        $this->datatables->select('a.id_kuis, a.token, a.nama_kuis, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
-        $this->datatables->from('kuis a');
+        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
+        $this->datatables->from('ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
         if ($id !== null) {
@@ -42,10 +42,10 @@ class Kuis_model extends CI_Model
         return $this->datatables->generate();
     }
 
-    public function getListKuis($id, $kelas)
+    public function getListUjian($id, $kelas)
     {
-        $this->datatables->select("a.id_kuis, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_kuis, b.nama_mapel, d.nama_topik, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu, (SELECT COUNT(id) FROM hasil_kuis h WHERE h.siswa_id = {$id} AND h.kuis_id = a.id_kuis) AS ada");
-        $this->datatables->from('kuis a');
+        $this->datatables->select("a.id_ujian, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_ujian, b.nama_mapel, d.nama_topik, a.jumlah_soal, CONCAT(a.tgl_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu, (SELECT COUNT(id) FROM hasil_ujian h WHERE h.siswa_id = {$id} AND h.ujian_id = a.id_ujian) AS ada");
+        $this->datatables->from('ujian a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('guru c', 'a.guru_id = c.id_guru');
         $this->datatables->join('topik d', 'd.id_topik = a.topik_id');
@@ -53,14 +53,14 @@ class Kuis_model extends CI_Model
         return $this->datatables->generate();
     }
 
-    public function getKuisById($id)
+    public function getUjianById($id)
     {
         $this->db->select('*');
-        $this->db->from('kuis a');
+        $this->db->from('ujian a');
         $this->db->join('guru b', 'a.guru_id=b.id_guru');
         $this->db->join('mapel c', 'a.mapel_id=c.id_mapel');
         $this->db->join('topik d', 'd.id_topik = a.topik_id');
-        $this->db->where('id_kuis', $id);
+        $this->db->where('id_ujian', $id);
         return $this->db->get()->row();
     }
 
@@ -89,11 +89,11 @@ class Kuis_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    public function HslKuis($id, $mhs)
+    public function HslUjian($id, $mhs)
     {
         $this->db->select('*, UNIX_TIMESTAMP(tgl_selesai) as waktu_habis');
-        $this->db->from('hasil_kuis');
-        $this->db->where('kuis_id', $id);
+        $this->db->from('hasil_ujian');
+        $this->db->where('ujian_id', $id);
         $this->db->where('siswa_id', $mhs);
         return $this->db->get();
     }
@@ -101,10 +101,10 @@ class Kuis_model extends CI_Model
     public function getHasilEssay($id)
     {
         $this->db->select('*');
-        $this->db->from('hasil_kuis a');
+        $this->db->from('hasil_ujian a');
         $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
         $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
-        $this->db->join('kuis d', 'a.kuis_id=d.id_kuis');
+        $this->db->join('ujian d', 'a.ujian_id=d.id_ujian');
         $this->db->where('id', $id);
         return $this->db->get();
     }
@@ -112,10 +112,10 @@ class Kuis_model extends CI_Model
     function getAllJawabanByIdSoal($id_soal_essay, $id)
     {
         $this->db->select('*');
-        $this->db->from('hasil_kuis a');
+        $this->db->from('hasil_ujian a');
         $this->db->join('siswa b', 'a.siswa_id=b.id_siswa');
         $this->db->join('kelas c', 'b.kelas_id=c.id_kelas');
-        $this->db->join('kuis d', 'a.kuis_id=d.id_kuis');
+        $this->db->join('ujian d', 'a.ujian_id=d.id_ujian');
         $this->db->where('id_soal_essay', $id_soal_essay);
         $this->db->where_not_in('id', $id);
         return $this->db->get();
@@ -123,24 +123,24 @@ class Kuis_model extends CI_Model
 
     public function getSoal($id)
     {
-        $kuis = $this->getKuisById($id);
-        if ($kuis->jenis_soal === "pilgan") {
-            $order = $kuis->jenis === "acak" ? 'rand()' : 'id_soal';
+        $ujian = $this->getUjianById($id);
+        if ($ujian->jenis_soal === "pilgan") {
+            $order = $ujian->jenis === "acak" ? 'rand()' : 'id_soal';
 
             $this->db->select('id_soal, soal, file, tipe_file, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, jawaban');
             $this->db->from('soal');
-            $this->db->where('mapel_id', $kuis->mapel_id);
-            $this->db->where("FIND_IN_SET({$kuis->topik_id}, topik)", null);
+            $this->db->where('mapel_id', $ujian->mapel_id);
+            $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
             $this->db->where('jenis_soal', 'pilgan');
             $this->db->order_by($order);
-            $this->db->limit($kuis->jumlah_soal);
+            $this->db->limit($ujian->jumlah_soal);
             return $this->db->get()->result();
         } else {
             $this->db->select('id_soal, soal, file, tipe_file');
             $this->db->from('soal');
-            $this->db->where('mapel_id', $kuis->mapel_id);
-            $this->db->where("FIND_IN_SET({$kuis->topik_id}, topik)", null);
-            $this->db->where('id_soal', $kuis->id_soal_essay);
+            $this->db->where('mapel_id', $ujian->mapel_id);
+            $this->db->where("FIND_IN_SET({$ujian->topik_id}, topik)", null);
+            $this->db->where('id_soal', $ujian->id_soal_essay);
             return $this->db->get()->row();
         }
     }
@@ -165,28 +165,28 @@ class Kuis_model extends CI_Model
     public function getJawaban($id_tes)
     {
         $this->db->select('list_jawaban');
-        $this->db->from('hasil_kuis');
+        $this->db->from('hasil_ujian');
         $this->db->where('id', $id_tes);
         return $this->db->get()->row()->list_jawaban;
     }
 
-    public function getHasilKuis($nip = null)
+    public function getHasilUjian($nip = null)
     {
-        $this->datatables->select('b.id_kuis, b.nama_kuis, e.nama_topik, b.jenis_soal, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
+        $this->datatables->select('b.id_ujian, b.nama_ujian, e.nama_topik, b.jenis_soal, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
         $this->datatables->select('c.nama_mapel, d.nama_guru');
-        $this->datatables->from('hasil_kuis a');
-        $this->datatables->join('kuis b', 'a.kuis_id = b.id_kuis');
+        $this->datatables->from('hasil_ujian a');
+        $this->datatables->join('ujian b', 'a.ujian_id = b.id_ujian');
         $this->datatables->join('mapel c', 'b.mapel_id = c.id_mapel');
         $this->datatables->join('guru d', 'b.guru_id = d.id_guru');
         $this->datatables->join('topik e', 'b.topik_id = e.id_topik');
         if ($nip !== null) {
             $this->datatables->where('d.nip', $nip);
         }
-        $this->datatables->group_by('b.id_kuis');
+        $this->datatables->group_by('b.id_ujian');
         return $this->datatables->generate();
     }
 
-    public function HslKuisById($id, $dt = false)
+    public function HslUjianById($id, $dt = false)
     {
         if ($dt === false) {
             $db = "db";
@@ -200,8 +200,8 @@ class Kuis_model extends CI_Model
         $this->$db->from('siswa a');
         $this->$db->join('kelas b', 'a.kelas_id=b.id_kelas');
         $this->$db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');
-        $this->$db->join('hasil_kuis d', 'a.id_siswa=d.siswa_id');
-        $this->$db->where(['d.kuis_id' => $id]);
+        $this->$db->join('hasil_ujian d', 'a.id_siswa=d.siswa_id');
+        $this->$db->where(['d.ujian_id' => $id]);
         return $this->$db->$get();
     }
 
@@ -210,7 +210,7 @@ class Kuis_model extends CI_Model
         $this->db->select_min('nilai', 'min_nilai');
         $this->db->select_max('nilai', 'max_nilai');
         $this->db->select_avg('FORMAT(FLOOR(nilai),0)', 'avg_nilai');
-        $this->db->where('kuis_id', $id);
-        return $this->db->get('hasil_kuis')->row();
+        $this->db->where('ujian_id', $id);
+        return $this->db->get('hasil_ujian')->row();
     }
 }

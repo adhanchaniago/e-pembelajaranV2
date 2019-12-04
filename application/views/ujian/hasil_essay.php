@@ -9,7 +9,7 @@
     <div class="box-body">
         <div class="row">
             <div class="col-sm-12 mb-4">
-                <a href="<?= base_url('hasilkuis/detail/') . $essay->kuis_id ?>" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
+                <a href="<?= base_url('hasilujian/detail/') . $essay->ujian_id ?>" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
 
             </div>
             <div class="col-sm-6">
@@ -34,7 +34,7 @@
                         <th>Kelas</th>
                         <td><?= $essay->nama_kelas ?></td>
                     </tr>
-                    <?= form_open('hasilkuis/savenilai', array('id' => 'simpan_nilai'), array('id' => $essay->id)) ?>
+                    <?= form_open('hasilujian/savenilai', array('id' => 'simpan_nilai'), array('id' => $essay->id)) ?>
                     <tr>
                         <th>Nilai</th>
                         <td>
@@ -69,7 +69,7 @@
                 <div class="table-responsive px-4 pb-3" style="border: 0">
 
                     <?php if (!empty($plagiasi)) { ?>
-                        <table id="kuis" class="w-100 table table-striped table-bordered table-hover">
+                        <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -104,6 +104,6 @@
     <!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
-    var back = '<?= base_url('hasilkuis/detail/') . $essay->kuis_id ?>';
+    var back = '<?= base_url('hasilujian/detail/') . $essay->ujian_id ?>';
 </script>
-<script src="<?= base_url() ?>assets/dist/js/app/kuis/hasil_essay.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/ujian/hasil_essay.js"></script>

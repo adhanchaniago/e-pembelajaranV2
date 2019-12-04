@@ -4,10 +4,10 @@ $(document).ready(function () {
 
     ajaxcsrf();
 
-    table = $("#kuis").DataTable({
+    table = $("#ujian").DataTable({
         initComplete: function () {
             var api = this.api();
-            $('#kuis_filter input')
+            $('#ujian_filter input')
                 .off('.DT')
                 .on('keyup.DT', function (e) {
                     api.search(this.value).draw();
@@ -19,21 +19,21 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            "url": base_url + "kuis/json",
+            "url": base_url + "ujian/json",
             "type": "POST",
         },
         columns: [{
-                "data": "id_kuis",
+                "data": "id_ujian",
                 "orderable": false,
                 "searchable": false
             },
             {
-                "data": "id_kuis",
+                "data": "id_ujian",
                 "orderable": false,
                 "searchable": false
             },
             {
-                "data": 'nama_kuis'
+                "data": 'nama_ujian'
             },
             {
                 "data": 'nama_mapel'
@@ -60,7 +60,7 @@ $(document).ready(function () {
         ],
         columnDefs: [{
                 "targets": 0,
-                "data": "id_kuis",
+                "data": "id_ujian",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">
 									<input name="checked[]" class="check" value="${data}" type="checkbox">
@@ -78,13 +78,13 @@ $(document).ready(function () {
             },
             {
                 "targets": 10,
-                "data": "id_kuis",
+                "data": "id_ujian",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">
 									<button type="button" data-id="${data}" class="btn btn-token btn-xs bg-purple">
 										<i class="fa fa-refresh"></i>
 									</button>
-									<a href="${base_url}kuis/edit/${data}" class="btn btn-xs btn-warning">
+									<a href="${base_url}ujian/edit/${data}" class="btn btn-xs btn-warning">
 										<i class="fa fa-edit"></i>
 									</a>
 								</div>`;
@@ -120,9 +120,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#kuis tbody').on('click', 'tr .check', function () {
-        var check = $('#kuis tbody tr .check').length;
-        var checked = $('#kuis tbody tr .check:checked').length;
+    $('#ujian tbody').on('click', 'tr .check', function () {
+        var check = $('#ujian tbody tr .check').length;
+        var checked = $('#ujian tbody tr .check:checked').length;
         if (check === checked) {
             $('.select_all').prop('checked', true);
         } else {
@@ -130,12 +130,12 @@ $(document).ready(function () {
         }
     });
 
-    $('#kuis').on('click', '.btn-token', function () {
+    $('#ujian').on('click', '.btn-token', function () {
         let id = $(this).data('id');
 
         $(this).attr('disabled', 'disabled').children().addClass('fa-spin');
         $.ajax({
-            url: base_url + 'kuis/refresh_token/' + id,
+            url: base_url + 'ujian/refresh_token/' + id,
             type: 'get',
             dataType: 'json',
             success: function (data) {
@@ -181,11 +181,11 @@ $(document).ready(function () {
         });
     });
 
-    table.ajax.url(base_url + 'kuis/json/' + id_guru).load();
+    table.ajax.url(base_url + 'ujian/json/' + id_guru).load();
 });
 
 function bulk_delete() {
-    if ($('#kuis tbody tr .check:checked').length == 0) {
+    if ($('#ujian tbody tr .check:checked').length == 0) {
         Swal({
             title: "Gagal",
             text: 'Tidak ada data yang dipilih',

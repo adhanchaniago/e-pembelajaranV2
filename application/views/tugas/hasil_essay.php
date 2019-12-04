@@ -68,7 +68,7 @@
             <div class="modal-body">
                 <div class="table-responsive px-4 pb-3" style="border: 0">
                     <?php if (!empty($plagiasi)) { ?>
-                        <table id="kuis" class="w-100 table table-striped table-bordered table-hover">
+                        <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>No.</th>

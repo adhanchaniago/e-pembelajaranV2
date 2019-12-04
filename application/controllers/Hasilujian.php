@@ -6,7 +6,7 @@ include_once('application/libraries/vendor/autoloader.php');
 use NlpTools\Tokenizers\WhitespaceTokenizer;
 use NlpTools\Similarity\CosineSimilarity;
 
-class HasilKuis extends CI_Controller
+class HasilUjian extends CI_Controller
 {
 
 	public function __construct()
@@ -18,7 +18,7 @@ class HasilKuis extends CI_Controller
 
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		// $this->load->model('Master_model', 'master');
-		$this->load->model('Kuis_model', 'kuis');
+		$this->load->model('Ujian_model', 'ujian');
 
 		$this->user = $this->ion_auth->user()->row();
 	}
@@ -44,47 +44,47 @@ class HasilKuis extends CI_Controller
 			$nip_guru = $this->user->username;
 		}
 
-		$this->output_json($this->kuis->getHasilKuis($nip_guru), false);
+		$this->output_json($this->ujian->getHasilUjian($nip_guru), false);
 	}
 
 	public function NilaiMhs($id)
 	{
-		$this->output_json($this->kuis->HslKuisById($id, true), false);
+		$this->output_json($this->ujian->HslUjianById($id, true), false);
 	}
 
 	public function index()
 	{
 		$data = [
 			'user' => $this->user,
-			'judul'	=> 'Kuis',
-			'subjudul' => 'Hasil Kuis',
+			'judul'	=> 'Ujian',
+			'subjudul' => 'Hasil Ujian',
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/hasil');
+		$this->load->view('ujian/hasil');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
 	public function detail($id)
 	{
-		$kuis = $this->kuis->getKuisById($id);
-		$nilai = $this->kuis->bandingNilai($id);
+		$ujian = $this->ujian->getUjianById($id);
+		$nilai = $this->ujian->bandingNilai($id);
 
 		$data = [
 			'user' => $this->user,
-			'judul'	=> 'Kuis',
-			'subjudul' => 'Detail Hasil Kuis',
-			'kuis'	=> $kuis,
+			'judul'	=> 'Ujian',
+			'subjudul' => 'Detail Hasil Ujian',
+			'ujian'	=> $ujian,
 			'nilai'	=> $nilai
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/detail_hasil');
+		$this->load->view('ujian/detail_hasil');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
 	public function essay($id)
 	{
-		$essay = $this->kuis->getHasilEssay($id)->row();
+		$essay = $this->ujian->getHasilEssay($id)->row();
 		$data = [
 			'user' => $this->user,
 			'judul'	=> 'Hasil',
@@ -94,7 +94,7 @@ class HasilKuis extends CI_Controller
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('kuis/hasil_essay');
+		$this->load->view('ujian/hasil_essay');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
@@ -102,7 +102,7 @@ class HasilKuis extends CI_Controller
 	{
 		$jwb_A = strip_tags($jawaban);
 		//memanggil jawaban
-		$jwb_B = $this->kuis->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
+		$jwb_B = $this->ujian->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
 		$tokenizer = new WhitespaceTokenizer();
 		$cosine = new CosineSimilarity();
 		$tok_A = $tokenizer->tokenize($jwb_A);
@@ -134,7 +134,7 @@ class HasilKuis extends CI_Controller
 				'id' 		=> $id,
 				'nilai' 	=> $nilai
 			];
-			$action = $this->kuis->update('hasil_kuis', $input, 'id', $id);
+			$action = $this->ujian->update('hasil_ujian', $input, 'id', $id);
 			$data['status'] = $action ? TRUE : FALSE;
 		}
 		$this->output_json($data);
@@ -144,33 +144,33 @@ class HasilKuis extends CI_Controller
 	{
 		$this->load->library('Pdf');
 
-		$mhs 	= $this->kuis->getIdSiswa($this->user->username);
-		$hasil 	= $this->kuis->HslKuis($id, $mhs->id_siswa)->row();
-		$kuis 	= $this->kuis->getKuisById($id);
+		$mhs 	= $this->ujian->getIdSiswa($this->user->username);
+		$hasil 	= $this->ujian->HslUjian($id, $mhs->id_siswa)->row();
+		$ujian 	= $this->ujian->getUjianById($id);
 
 		$data = [
-			'kuis' => $kuis,
+			'ujian' => $ujian,
 			'hasil' => $hasil,
 			'mhs'	=> $mhs
 		];
 
-		$this->load->view('kuis/cetak', $data);
+		$this->load->view('ujian/cetak', $data);
 	}
 
 	public function cetak_detail($id)
 	{
 		$this->load->library('Pdf');
 
-		$kuis = $this->kuis->getKuisById($id);
-		$nilai = $this->kuis->bandingNilai($id);
-		$hasil = $this->kuis->HslKuisById($id)->result();
+		$ujian = $this->ujian->getUjianById($id);
+		$nilai = $this->ujian->bandingNilai($id);
+		$hasil = $this->ujian->HslUjianById($id)->result();
 
 		$data = [
-			'kuis'	=> $kuis,
+			'ujian'	=> $ujian,
 			'nilai'	=> $nilai,
 			'hasil'	=> $hasil
 		];
 
-		$this->load->view('kuis/cetak_detail', $data);
+		$this->load->view('ujian/cetak_detail', $data);
 	}
 }

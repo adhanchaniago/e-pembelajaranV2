@@ -1,6 +1,6 @@
-# Kuis Online Codeigniter
+# Ujian Online Codeigniter
 
-Aplikasi Kuis Online Menggunakan CodeIgniter
+Aplikasi Ujian Online Menggunakan CodeIgniter
 
 <h1>Catatan</h1>
 <p>Disarankan upgrade PHP ke versi terbaru (7.3 atau lebih tinggi)</p>

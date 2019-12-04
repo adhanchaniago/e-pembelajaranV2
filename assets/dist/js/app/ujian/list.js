@@ -4,10 +4,10 @@ $(document).ready(function () {
 
     ajaxcsrf();
 
-    table = $("#kuis").DataTable({
+    table = $("#ujian").DataTable({
         initComplete: function () {
             var api = this.api();
-            $('#kuis_filter input')
+            $('#ujian_filter input')
                 .off('.DT')
                 .on('keyup.DT', function (e) {
                     api.search(this.value).draw();
@@ -19,16 +19,16 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            "url": base_url + "kuis/list_json",
+            "url": base_url + "ujian/list_json",
             "type": "POST",
         },
         columns: [{
-                "data": "id_kuis",
+                "data": "id_ujian",
                 "orderable": false,
                 "searchable": false
             },
             {
-                "data": 'nama_kuis'
+                "data": 'nama_ujian'
             },
             {
                 "data": 'nama_mapel'
@@ -53,19 +53,19 @@ $(document).ready(function () {
         columnDefs: [{
             "targets": 7,
             "data": {
-                "id_kuis": "id_kuis",
+                "id_ujian": "id_ujian",
                 "ada": "ada"
             },
             "render": function (data, type, row, meta) {
                 var btn;
                 if (data.ada > 0) {
                     btn = `
-								<a class="btn btn-xs btn-success" href="${base_url}hasilkuis/cetak/${data.id_kuis}" target="_blank">
+								<a class="btn btn-xs btn-success" href="${base_url}hasilujian/cetak/${data.id_ujian}" target="_blank">
 									<i class="fa fa-print"></i> Cetak Hasil
 								</a>`;
                 } else {
-                    btn = `<a class="btn btn-xs btn-primary" href="${base_url}kuis/token/${data.id_kuis}">
-								<i class="fa fa-pencil"></i> Ikut Kuis
+                    btn = `<a class="btn btn-xs btn-primary" href="${base_url}ujian/token/${data.id_ujian}">
+								<i class="fa fa-pencil"></i> Ikut Ujian
 							</a>`;
                 }
                 return `<div class="text-center">

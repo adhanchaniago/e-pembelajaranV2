@@ -46,16 +46,16 @@ $(document).ready(function () {
     processing: true,
     serverSide: true,
     ajax: {
-      url: base_url + "hasilkuis/data",
+      url: base_url + "hasilujian/data",
       type: "POST"
     },
     columns: [{
-        data: "id_kuis",
+        data: "id_ujian",
         orderable: false,
         searchable: false
       },
       {
-        data: "nama_kuis"
+        data: "nama_ujian"
       },
       {
         data: "nama_topik"
@@ -79,11 +79,11 @@ $(document).ready(function () {
     ],
     columnDefs: [{
       targets: 7,
-      data: "id_kuis",
+      data: "id_ujian",
       render: function (data, type, row, meta) {
         return `
                     <div class="text-center">
-                        <a class="btn btn-xs bg-maroon" href="${base_url}hasilkuis/detail/${data}" >
+                        <a class="btn btn-xs bg-maroon" href="${base_url}hasilujian/detail/${data}" >
                             <i class="fa fa-search"></i> Lihat Hasil
                         </a>
                     </div>

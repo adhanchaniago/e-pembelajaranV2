@@ -9,20 +9,20 @@
     <div class="box-body">
         <button type="button" onclick="bulk_delete()" class="btn btn-sm btn-flat btn-danger"><i class="fa fa-trash"></i> Bulk Delete</button>
         <div class="pull-right">
-            <a href="<?= base_url('kuis/add') ?>" class="btn bg-purple btn-sm btn-flat"><i class="fa fa-file-text-o"></i> Kuis Baru</a>
+            <a href="<?= base_url('ujian/add') ?>" class="btn bg-purple btn-sm btn-flat"><i class="fa fa-file-text-o"></i> Ujian Baru</a>
             <button type="button" onclick="reload_ajax()" class="btn btn-sm btn-flat bg-maroon"><i class="fa fa-refresh"></i> Reload</button>
         </div>
     </div>
-    <?= form_open('kuis/delete', array('id' => 'bulk')) ?>
+    <?= form_open('ujian/delete', array('id' => 'bulk')) ?>
     <div class="table-responsive px-4 pb-3" style="border: 0">
-        <table id="kuis" class="w-100 table table-striped table-bordered table-hover">
+        <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th class="text-center">
                         <input type="checkbox" class="select_all">
                     </th>
                     <th>No.</th>
-                    <th>Nama Kuis</th>
+                    <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
                     <th>Topik</th>
                     <th>Tipe Soal</th>
@@ -39,7 +39,7 @@
                         <input type="checkbox" class="select_all">
                     </th>
                     <th>No.</th>
-                    <th>Nama Kuis</th>
+                    <th>Nama Ujian</th>
                     <th>Mata Pelajaran</th>
                     <th>Topik</th>
                     <th>Tipe Soal</th>
@@ -59,4 +59,4 @@
     var id_guru = '<?= $guru->id_guru ?>';
 </script>
 
-<script src="<?= base_url() ?>assets/dist/js/app/kuis/data.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/ujian/data.js"></script>
