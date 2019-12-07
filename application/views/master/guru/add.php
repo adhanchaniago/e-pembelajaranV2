@@ -1,4 +1,3 @@
-<?= form_open('guru/save', array('id' => 'formguru'), array('method' => 'add')); ?>
 <div class="box">
     <div class="box-header with-border">
         <h3 class="box-title">Form <?= $subjudul ?></h3>
@@ -11,6 +10,7 @@
     <div class="box-body">
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
+                <?= form_open('guru/save', array('id' => 'formguru'), array('method' => 'add')); ?>
                 <div class="form-group">
                     <label for="nip">NIP</label>
                     <input autofocus="autofocus" onfocus="this.select()" type="number" id="nip" class="form-control" name="nip" placeholder="NIP">

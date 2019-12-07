@@ -10,22 +10,25 @@ $(document).ready(function () {
             url: $(this).attr('action'),
             data: $(this).serialize(),
             type: 'POST',
-            success: function (response) {
+            success: function (data) {
                 btn.removeAttr('disabled').text('Simpan');
-                if (response.status) {
-                    Swal('Sukses', 'Data Berhasil disimpan', 'success')
-                        .then((result) => {
-                            if (result.value) {
-                                window.location.href = base_url + 'guru';
-                            }
-                        });
+                if (data.status) {
+                    Swal({
+                        "title": "Sukses",
+                        "text": "Data Berhasil disimpan",
+                        "type": "success"
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = base_url + 'guru';
+                        }
+                    });
                 } else {
-                    $.each(response.errors, function (key, val) {
+                    $.each(data.errors, function (key, value) {
+                        $('[name="' + key + '"]').nextAll('.help-block').eq(0).text(value);
                         $('[name="' + key + '"]').closest('.form-group').addClass('has-error');
-                        $('[name="' + key + '"]').nextAll('.help-block').eq(0).text(val);
-                        if (val === '') {
-                            $('[name="' + key + '"]').closest('.form-group').removeClass('has-error').addClass('has-success');
+                        if (value == '') {
                             $('[name="' + key + '"]').nextAll('.help-block').eq(0).text('');
+                            $('[name="' + key + '"]').closest('.form-group').removeClass('has-error').addClass('has-success');
                         }
                     });
                 }

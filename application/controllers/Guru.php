@@ -79,16 +79,8 @@ class Guru extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
-	public function save()
+	public function validasi_guru($method, $id_guru, $nip, $email)
 	{
-		$method 	= $this->input->post('method', true);
-		$id_guru 	= $this->input->post('id_guru', true);
-		$nip 		= $this->input->post('nip', true);
-		$nama_guru = $this->input->post('nama_guru', true);
-		$email 		= $this->input->post('email', true);
-		$mapel 	= $this->input->post('mapel', true);
-		$k = $this->input->post('kelas_id', true);
-		$kelas = implode(",", $k);
 		if ($method == 'add') {
 			$u_nip = '|is_unique[guru.nip]';
 			$u_email = '|is_unique[guru.email]';
@@ -102,6 +94,20 @@ class Guru extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email' . $u_email);
 		$this->form_validation->set_rules('mapel', 'Mata Pelajaran', 'required');
 
+		$this->form_validation->set_message('required', 'Kolom {field} wajib diisi');
+	}
+
+	public function save()
+	{
+		$method 	= $this->input->post('method', true);
+		$id_guru 	= $this->input->post('id_guru', true);
+		$nip 		= $this->input->post('nip', true);
+		$nama_guru = $this->input->post('nama_guru', true);
+		$email 		= $this->input->post('email', true);
+		$mapel 	= $this->input->post('mapel', true);
+		$k = $this->input->post('kelas_id', true);
+		if ($k !== null) $kelas = implode(",", $k);
+		$this->validasi_guru($method, $id_guru, $nip, $email);
 		if ($this->form_validation->run() == FALSE) {
 			$data = [
 				'status'	=> false,
