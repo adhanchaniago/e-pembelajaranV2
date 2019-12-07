@@ -24,6 +24,7 @@
 			$users = ["users"];
 			?>
 			<li class="<?= $page === 'dashboard' ? "active" : "" ?>"><a href="<?= base_url('dashboard') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+			<!-- ini menu admin -->
 			<?php if ($this->ion_auth->is_admin()) : ?>
 				<li class="treeview <?= in_array($page, $master)  ? "active menu-open" : ""  ?>">
 					<a href="#"><i class="fa fa-folder"></i> <span>Data</span>
@@ -32,7 +33,6 @@
 						</span>
 					</a>
 					<ul class="treeview-menu">
-
 
 						<li class="<?= $page === 'kelas' ? "active" : "" ?>">
 							<a href="<?= base_url('kelas') ?>">
@@ -68,6 +68,7 @@
 				</li>
 
 			<?php endif; ?>
+			<!-- ini menu topik guru -->
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="<?= $page === 'topik' ? "active" : "" ?>">
 					<a href="<?= base_url('topik') ?>" rel="noopener noreferrer">
@@ -76,6 +77,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu bank soal guru -->
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="<?= $page === 'soal' ? "active" : "" ?>">
 					<a href="<?= base_url('soal') ?>" rel="noopener noreferrer">
@@ -83,7 +85,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
-
+			<!-- ini menu tugas guru -->
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="header">TUGAS</li>
 				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
@@ -97,6 +99,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu tugas siswa -->
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
 				<li class="<?= $page === 'tugas' ? "active" : "" ?>">
 					<a href="<?= base_url('tugas/list') ?>" rel="noopener noreferrer">
@@ -104,6 +107,29 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu kuis guru -->
+			<?php if ($this->ion_auth->in_group('guru')) : ?>
+				<li class="header">Kuis</li>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+					<a href="<?= base_url('kuis/master') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Kuis</span>
+					</a>
+				</li>
+				<li class="<?= $page === 'hasilkuis' ? "active" : "" ?>">
+					<a href="<?= base_url('hasilkuis') ?>" rel="noopener noreferrer">
+						<i class="fa fa-file"></i> <span>Hasil Kuis</span>
+					</a>
+				</li>
+			<?php endif; ?>
+			<!-- ini menu kuis siswa -->
+			<?php if ($this->ion_auth->in_group('siswa')) : ?>
+				<li class="<?= $page === 'kuis' ? "active" : "" ?>">
+					<a href="<?= base_url('kuis/list') ?>" rel="noopener noreferrer">
+						<i class="fa fa-clipboard"></i> <span>Kuis</span>
+					</a>
+				</li>
+			<?php endif; ?>
+			<!-- ini menu ujian guru -->
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="header">UJIAN</li>
 				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
@@ -117,6 +143,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu ujian siswa -->
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
 				<li class="<?= $page === 'ujian' ? "active" : "" ?>">
 					<a href="<?= base_url('ujian/list') ?>" rel="noopener noreferrer">
@@ -124,6 +151,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu laporan guru -->
 			<?php if ($this->ion_auth->in_group('guru')) : ?>
 				<li class="header">LAPORAN</li>
 				<li class="<?= $page === 'report' ? "active" : "" ?>">
@@ -132,6 +160,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu laporan siswa -->
 			<?php if ($this->ion_auth->in_group('siswa')) : ?>
 				<li class="header">LAPORAN</li>
 				<li class="<?= $page === 'report' ? "active" : "" ?>">
@@ -140,6 +169,7 @@
 					</a>
 				</li>
 			<?php endif; ?>
+			<!-- ini menu admin -->
 			<?php if ($this->ion_auth->is_admin()) : ?>
 				<li class="header">ADMINISTRATOR</li>
 				<li class="<?= $page === 'users' ? "active" : "" ?>">

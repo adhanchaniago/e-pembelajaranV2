@@ -54,3 +54,6 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'Auth/index';
 $route['logout'] = 'Auth/logout';
+$route['kuis/master'] = 'tugas/master_kuis';
+$route['hasilkuis'] = 'hasiltugas/index_kuis';
+$route['kuis/list'] = 'tugas/list_kuis';

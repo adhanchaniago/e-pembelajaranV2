@@ -69,6 +69,21 @@ class Tugas extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	public function master_kuis()
+	{
+		$this->akses_guru();
+		$user = $this->ion_auth->user()->row();
+		$data = [
+			'user' => $user,
+			'judul'	=> 'Kuis',
+			'subjudul' => 'Data Kuis',
+			'guru' => $this->tugas->getIdGuru($user->username),
+		];
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('kuis/data');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
 	// fungsi untuk jquery mengambil soal essay berdasar topik
 	public function getSoalByTopic()
 	{
