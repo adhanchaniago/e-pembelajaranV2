@@ -205,4 +205,38 @@ class Mapel extends CI_Controller
 			redirect('mapel/import');
 		}
 	}
+
+	public function save2()
+	{
+		$rows = count($this->input->post('nama_mapel', true)); //1
+		for ($i = 1; $i <= $rows; $i++) { //2
+			$nama_mapel = 'nama_mapel[' . $i . ']';
+			$this->form_validation->set_rules($nama_mapel, 'Mata Pelajaran', 'required');
+			$this->form_validation->set_message('required', '{field} Wajib diisi'); //3
+
+			if ($this->form_validation->run() === FALSE) {
+				$error[] = [
+					$nama_mapel => form_error($nama_mapel) //4
+				];
+				$status = FALSE;
+			} else {
+				$insert[] = [
+					'nama_mapel' => $this->input->post($nama_mapel, true) //5
+				];
+				$status = TRUE;
+			} //6
+		}
+		if ($status) {
+			$this->mapel->create('mapel', $insert, true); //7
+			$data['insert']	= $insert;
+		} else {
+			$data['errors'] = $error; //8
+		} //9
+		$data['status'] = $status;
+		$this->output_json($data); //10
+	}
 }
+// 1 = 1,2,7,8,10 ===========> tidak ada mapel yang ditambahkan
+// 2 = 1,2,7,9,10 ===========> 
+// 3 = 1,2,3,4,6,7,8,10
+// 4 = 1,2,3,5,6,7,8,10
