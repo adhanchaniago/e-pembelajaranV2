@@ -9,7 +9,7 @@ class MYPDF extends TCPDF
         $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         $this->SetFont('helvetica', 'B', 18);
         $this->SetY(13);
-        $this->Cell(0, 15, 'Hasil Ujian', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(0, 15, 'Hasil Kuis', 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
     public function Footer()
@@ -26,7 +26,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('Hasil Ujian');
+$pdf->SetTitle('Hasil Kuis');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -88,22 +88,22 @@ Dolore distinctio, at consequuntur magnam cupiditate voluptate hic ratione ea il
         <td>{$mhs->nama_jurusan}</td>
     </tr>
 </table>
-<h2>Data Ujian</h2>
+<h2>Data Kuis</h2>
 <table id="data-hasil">
     <tr>
         <th>Mata Pelajaran</th>
-        <td>{$ujian->nama_mapel}</td>
+        <td>{$tugas->nama_mapel}</td>
     </tr>
     <tr>
-        <th>Nama Ujian</th>
-        <td>{$ujian->nama_ujian}</td>
+        <th>Nama Kuis</th>
+        <td>{$tugas->nama_tugas}</td>
     </tr>
     <tr>
         <th>Jumlah Soal</th>
-        <td>{$ujian->jumlah_soal}</td>
+        <td>{$tugas->jumlah_soal}</td>
     </tr>
 </table>
-<h2>Hasil Ujian</h2>
+<h2>Hasil Kuis</h2>
 <table>
     <tr>
         <th>Jawab Benar</th>
@@ -122,4 +122,4 @@ $pdf->lastPage();
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output($ujian->nama_ujian . '_' . $mhs->nis . '.pdf', 'I');
+$pdf->Output($tugas->nama_tugas . '_' . $mhs->nis . '.pdf', 'I');

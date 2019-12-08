@@ -40,11 +40,11 @@
                 </div>
             </div>
             <div class="table-responsive px-4 pb-3" style="border: 0">
-                <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
+                <table id="kuis" class="w-100 table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Nama Ujian</th>
+                            <th>Nama Kuis</th>
                             <th>Mata Pelajaran</th>
                             <th>Topik</th>
                             <th>Guru</th>
@@ -56,7 +56,7 @@
                     <tfoot>
                         <tr>
                             <th>No.</th>
-                            <th>Nama Ujian</th>
+                            <th>Nama Kuis</th>
                             <th>Mata Pelajaran</th>
                             <th>Topik</th>
                             <th>Guru</th>
@@ -71,4 +71,4 @@
     </div>
 </div>
 
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/list.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/kuis/list.js"></script>

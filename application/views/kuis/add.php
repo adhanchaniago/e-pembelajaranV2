@@ -2,7 +2,7 @@
     <div class="box-header with-border">
         <h3 class="box-title"><?= $subjudul ?></h3>
         <div class="box-tools pull-right">
-            <a href="<?= base_url() ?>ujian/master" class="btn btn-sm btn-flat btn-warning">
+            <a href="<?= base_url() ?>kuis/master" class="btn btn-sm btn-flat btn-warning">
                 <i class="fa fa-arrow-left"></i> Batal
             </a>
         </div>
@@ -20,10 +20,10 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <?= form_open('ujian/save', array('id' => 'formujian'), array('method' => 'add', 'guru_id' => $guru->id_guru, 'mapel_id' => $mapel->mapel_id)) ?>
+                <?= form_open('tugas/save_kuis', array('id' => 'formkuis'), array('method' => 'add', 'guru_id' => $guru->id_guru, 'mapel_id' => $mapel->mapel_id, 'jenis_tugas' => 'kuis')) ?>
                 <div class="form-group">
-                    <label for="nama_ujian">Nama Ujian</label>
-                    <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Ujian" type="text" class="form-control" name="nama_ujian">
+                    <label for="nama_kuis">Nama Kuis</label>
+                    <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Kuis" type="text" class="form-control" name="nama_tugas">
                     <small class="help-block"></small>
                 </div>
                 <div class="form-group">
@@ -99,7 +99,7 @@
     </div>
 </div>
 <script src="<?= base_url() ?>assets/plugins/iCheck/icheck.min.js"></script>
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/add.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/kuis/add.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -126,7 +126,7 @@
         var topik = $('#topik').val();
         // console.log(topik)
 
-        $.get(base_url + 'ujian/getSoalByTopic', {
+        $.get(base_url + 'tugas/getSoalByTopic', {
                 topik: topik
             })
             .done(function(result) {

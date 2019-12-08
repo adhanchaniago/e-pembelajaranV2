@@ -19,6 +19,7 @@ class HasilTugas extends CI_Controller
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		// $this->load->model('Master_model', 'master');
 		$this->load->model('Tugas_model', 'tugas');
+		$this->load->model('Kuis_model', 'kuis');
 
 		$this->user = $this->ion_auth->user()->row();
 	}
@@ -44,10 +45,25 @@ class HasilTugas extends CI_Controller
 		$this->output_json($this->tugas->getHasilTugas($nip_guru), false);
 	}
 
+	public function data_kuis()
+	{
+		$nip_guru = null;
+		if ($this->ion_auth->in_group('guru')) {
+			$nip_guru = $this->user->username;
+		}
+		$this->output_json($this->kuis->getHasilTugas($nip_guru), false);
+	}
+
 	public function NilaiMhs($id)
 	{
 
 		$this->output_json($this->tugas->HslTugasById($id, true), false);
+	}
+
+	public function NilaiMhs_kuis($id)
+	{
+
+		$this->output_json($this->kuis->HslTugasById($id, true), false);
 	}
 
 	public function index()
@@ -62,6 +78,17 @@ class HasilTugas extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	public function index_kuis()
+	{
+		$data = [
+			'user' => $this->user,
+			'judul'	=> 'Kuis',
+			'subjudul' => 'Hasil Kuis',
+		];
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('kuis/hasil');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
 
 	public function detail($id)
 	{
@@ -81,6 +108,24 @@ class HasilTugas extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	public function detail_kuis($id)
+	{
+		$tugas = $this->tugas->getTugasById($id);
+		$nilai = $this->tugas->bandingNilai($id);
+
+		$data = [
+			'user' => $this->user,
+			'judul'	=> 'Kuis',
+			'subjudul' => 'Detail Hasil Kuis',
+			'tugas'	=> $tugas,
+			'nilai'	=> $nilai
+		];
+
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('kuis/detail_hasil');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
 	public function essay($id)
 	{
 		$essay = $this->tugas->getHasilEssay($id)->row();
@@ -97,11 +142,27 @@ class HasilTugas extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	public function essay_kuis($id)
+	{
+		$essay = $this->kuis->getHasilEssay($id)->row();
+
+		$data = [
+			'user' => $this->user,
+			'judul'	=> 'Hasil',
+			'subjudul' => 'Hasil Essay',
+			'essay'	=> $essay,
+			'plagiasi' => $this->cekplagiat($essay->id_soal_essay, $essay->id, $essay->list_jawaban)
+		];
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('kuis/hasil_essay');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
 	function cekplagiat($id_soal_essay, $id, $jawaban)
 	{
 		$jwb_A = strip_tags($jawaban);
 		//memanggil jawaban
-		$jwb_B = $this->tugas->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
+		$jwb_B = $this->kuis->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
 		$tokenizer = new WhitespaceTokenizer();
 		$cosine = new CosineSimilarity();
 		$tok_A = $tokenizer->tokenize($jwb_A);
@@ -157,6 +218,23 @@ class HasilTugas extends CI_Controller
 		$this->load->view('tugas/cetak', $data);
 	}
 
+	public function cetak_kuis($id)
+	{
+		$this->load->library('Pdf');
+
+		$mhs 	= $this->kuis->getIdSiswa($this->user->username);
+		$hasil 	= $this->kuis->HslTugas($id, $mhs->id_siswa)->row();
+		$tugas 	= $this->kuis->getTugasById($id);
+
+		$data = [
+			'tugas' => $tugas,
+			'hasil' => $hasil,
+			'mhs'	=> $mhs
+		];
+
+		$this->load->view('kuis/cetak', $data);
+	}
+
 	public function cetak_detail($id)
 	{
 		$this->load->library('Pdf');
@@ -172,5 +250,22 @@ class HasilTugas extends CI_Controller
 		];
 
 		$this->load->view('tugas/cetak_detail', $data);
+	}
+
+	public function cetak_detail_kuis($id)
+	{
+		$this->load->library('Pdf');
+
+		$tugas = $this->kuis->getTugasById($id);
+		$nilai = $this->kuis->bandingNilai($id);
+		$hasil = $this->kuis->HslTugasById($id)->result();
+
+		$data = [
+			'tugas'	=> $tugas,
+			'nilai'	=> $nilai,
+			'hasil'	=> $hasil
+		];
+
+		$this->load->view('kuis/cetak_detail', $data);
 	}
 }

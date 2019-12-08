@@ -1,6 +1,6 @@
 <?php
 if (time() >= $soal->waktu_habis) {
-    redirect('ujian/list', 'location', 301);
+    redirect('kuis/list', 'location', 301);
 }
 ?>
 <div class="row">
@@ -20,7 +20,7 @@ if (time() >= $soal->waktu_habis) {
         </div>
     <?php } ?>
     <?php echo $jenis_soal != 'essay' ? '<div class="col-sm-9">' : '<div class="col-sm-12">'; ?>
-    <?= form_open('', array('id' => 'ujian'), array('id' => $id_tes)); ?>
+    <?= form_open('', array('id' => 'kuis'), array('id' => $id_tes)); ?>
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>
@@ -53,4 +53,4 @@ if (time() >= $soal->waktu_habis) {
     var total_widget = widget.length;
 </script>
 
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/sheet.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/kuis/sheet.js"></script>

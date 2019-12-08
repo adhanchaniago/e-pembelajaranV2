@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Tugas_model extends CI_Model
+class Kuis_model extends CI_Model
 {
 
     public function create($table, $data, $batch = false)
@@ -32,11 +32,11 @@ class Tugas_model extends CI_Model
 
     public function getDataTugas($id)
     {
-        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, a.jenis');
+        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, a.jenis, a.waktu');
         $this->datatables->from('tugas a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
-        $this->datatables->where('a.jenis_tugas', 'tugas');
+        $this->datatables->where('a.jenis_tugas', 'kuis');
         if ($id !== null) {
             $this->datatables->where('guru_id', $id);
         }
@@ -45,13 +45,13 @@ class Tugas_model extends CI_Model
 
     public function getListTugas($id, $kelas)
     {
-        $this->datatables->select("a.id_tugas, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_tugas, b.nama_mapel, d.nama_topik, a.jumlah_soal, (SELECT COUNT(id) FROM hasil_tugas h WHERE h.siswa_id = {$id} AND h.tugas_id = a.id_tugas) AS ada");
+        $this->datatables->select("a.id_tugas, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_tugas, b.nama_mapel, d.nama_topik, a.jumlah_soal, a.waktu, (SELECT COUNT(id) FROM hasil_tugas h WHERE h.siswa_id = {$id} AND h.tugas_id = a.id_tugas) AS ada");
         $this->datatables->from('tugas a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('guru c', 'a.guru_id = c.id_guru');
         $this->datatables->join('topik d', 'd.id_topik = a.topik_id');
         $this->datatables->where("a.guru_id IN (select id_guru from guru where FIND_IN_SET({$kelas}, kelas_id))", null);
-        $this->datatables->where('a.jenis_tugas', 'tugas');
+        $this->datatables->where('a.jenis_tugas', 'kuis');
         return $this->datatables->generate();
     }
 
@@ -181,7 +181,7 @@ class Tugas_model extends CI_Model
         $this->datatables->join('mapel c', 'b.mapel_id = c.id_mapel');
         $this->datatables->join('guru d', 'b.guru_id = d.id_guru');
         $this->datatables->join('topik e', 'b.topik_id = e.id_topik');
-        $this->datatables->where('a.jenis_tugas', 'tugas');
+        $this->datatables->where('a.jenis_tugas', 'kuis');
         if ($nip !== null) {
             $this->datatables->where('d.nip', $nip);
         }
@@ -205,7 +205,7 @@ class Tugas_model extends CI_Model
         $this->$db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');
         $this->$db->join('hasil_tugas d', 'a.id_siswa=d.siswa_id');
         $this->$db->where(['d.tugas_id' => $id]);
-        $this->datatables->where('d.jenis_tugas', 'tugas');
+        $this->datatables->where('d.jenis_tugas', 'kuis');
         return $this->$db->$get();
     }
 
