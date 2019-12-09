@@ -30,15 +30,22 @@ class Ujian_model extends CI_Model
         return $this->db->delete($table);
     }
 
-    public function getDataUjian($id)
+    public function getKelas($kelas)
     {
-        $this->datatables->select('a.id_ujian, a.token, a.nama_ujian, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, CONCAT(a.tgl_mulai, " <br/> (", a.waktu, " Menit)") as waktu, a.jenis');
-        $this->datatables->from('ujian a');
-        $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
-        $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
-        if ($id !== null) {
-            $this->datatables->where('guru_id', $id);
-        }
+        $this->datatables->select("id_kelas, nama_kelas");
+        $this->datatables->from("kelas");
+        $this->datatables->where("id_kelas IN ({$kelas})", null);
+        return $this->datatables->generate();
+    }
+
+    public function getDataUjian($guru, $mapel, $kelas)
+    {
+        $this->datatables->select('IF(id_ujian IS NULL,0,id_ujian) as id_ujian, id_siswa, nama, nama_kelas, nilai_uts, nilai_uas');
+        $this->datatables->from("(select id_siswa, nama, nama_kelas from siswa s JOIN kelas k ON s.kelas_id = k.id_kelas where kelas_id ={$kelas} ) a
+        LEFT JOIN
+        (select id_ujian, id_siswa, nilai_uts, nilai_uas from ujian where kelas_id ={$kelas} AND mapel_id = {$mapel} AND guru_id = {$guru}) b
+        using(id_siswa)");
+
         return $this->datatables->generate();
     }
 
@@ -66,7 +73,7 @@ class Ujian_model extends CI_Model
 
     public function getIdGuru($nip)
     {
-        $this->db->select('id_guru, nama_guru')->from('guru')->where('nip', $nip);
+        $this->db->select('id_guru, nama_guru, mapel_id, kelas_id')->from('guru')->where('nip', $nip);
         return $this->db->get()->row();
     }
 

@@ -116,6 +116,7 @@ class Kelas extends CI_Controller
 		$data['status'] = $status;
 		$this->output_json($data);
 	}
+
 	public function delete()
 	{
 		$chk = $this->input->post('checked', true);
