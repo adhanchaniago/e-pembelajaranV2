@@ -32,7 +32,7 @@ class Kuis_model extends CI_Model
 
     public function getDataTugas($id)
     {
-        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, a.jenis, a.waktu');
+        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, b.nama_mapel, c.nama_topik, a.jumlah_soal, a.jenis_soal, a.jenis, CONCAT(a.waktu, " Menit") as waktu');
         $this->datatables->from('tugas a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('topik c', 'c.id_topik = a.topik_id ');
@@ -45,7 +45,7 @@ class Kuis_model extends CI_Model
 
     public function getListTugas($id, $kelas)
     {
-        $this->datatables->select("a.id_tugas, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_tugas, b.nama_mapel, d.nama_topik, a.jumlah_soal, a.waktu, (SELECT COUNT(id) FROM hasil_tugas h WHERE h.siswa_id = {$id} AND h.tugas_id = a.id_tugas) AS ada");
+        $this->datatables->select("a.id_tugas, c.nama_guru, (select nama_kelas from kelas where id_kelas = {$kelas}) as nama_kelas, a.nama_tugas, b.nama_mapel, d.nama_topik, a.jumlah_soal, CONCAT(a.waktu, ' Menit') as waktu, (SELECT COUNT(id) FROM hasil_tugas h WHERE h.siswa_id = {$id} AND h.tugas_id = a.id_tugas) AS ada");
         $this->datatables->from('tugas a');
         $this->datatables->join('mapel b', 'a.mapel_id = b.id_mapel');
         $this->datatables->join('guru c', 'a.guru_id = c.id_guru');
@@ -174,7 +174,7 @@ class Kuis_model extends CI_Model
 
     public function getHasilTugas($nip = null)
     {
-        $this->datatables->select('b.id_tugas, b.nama_tugas, e.nama_topik, b.jenis_soal, b.jumlah_soal, b.tgl_mulai');
+        $this->datatables->select('b.id_tugas, b.nama_tugas, e.nama_topik, b.jenis_soal, b.jumlah_soal, b.tgl_mulai, CONCAT(b.waktu, " Menit") as waktu');
         $this->datatables->select('c.nama_mapel, d.nama_guru');
         $this->datatables->from('hasil_tugas a');
         $this->datatables->join('tugas b', 'a.tugas_id = b.id_tugas');

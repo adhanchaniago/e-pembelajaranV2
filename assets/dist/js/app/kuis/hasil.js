@@ -105,8 +105,3 @@ $(document).ready(function () {
     }
   });
 });
-
-table
-  .buttons()
-  .container()
-  .appendTo("#hasil_wrapper .col-md-6:eq(0)");

@@ -581,6 +581,7 @@ class Tugas extends CI_Controller
 				$input = [
 					'tugas_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
+					'jenis_tugas'	=> $tugas->jenis_tugas,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
 					'jml_benar'		=> 0,
@@ -599,6 +600,7 @@ class Tugas extends CI_Controller
 				$input = [
 					'tugas_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
+					'jenis_tugas'	=> $tugas->jenis_tugas,
 					'jenis_soal'	=> $tugas->jenis_soal,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
@@ -774,7 +776,7 @@ class Tugas extends CI_Controller
 				$input = [
 					'tugas_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
-                    'jenis_tugas'	=> $tugas->jenis_tugas,
+					'jenis_tugas'	=> $tugas->jenis_tugas,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,
 					'jml_benar'		=> 0,
@@ -793,7 +795,7 @@ class Tugas extends CI_Controller
 				$input = [
 					'tugas_id' 		=> $id,
 					'siswa_id'		=> $mhs->id_siswa,
-                    'jenis_tugas'	=> $tugas->jenis_tugas,
+					'jenis_tugas'	=> $tugas->jenis_tugas,
 					'jenis_soal'	=> $tugas->jenis_soal,
 					'list_soal'		=> $list_id_soal,
 					'list_jawaban' 	=> $list_jw_soal,

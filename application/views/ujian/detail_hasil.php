@@ -10,7 +10,7 @@
     <div class="box-body">
         <div class="row">
             <div class="col-sm-12 mb-4">
-                <a href="<?= base_url() ?>hasilujian" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
+                <a href="<?= base_url() ?>ujian" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
                 <div class="pull-right">
                     <button type="submit" class="mb-4 btn btn-block btn-flat bg-purple">
                         <i class="fa fa-save"></i> Simpan

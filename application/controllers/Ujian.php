@@ -78,14 +78,14 @@ class Ujian extends CI_Controller
 	}
 
 	// fungsi untuk menampilkan seluruh daftar ujian yang dibuat untuk guru
-	public function master()
+	public function index()
 	{
 		$this->akses_guru();
 		$user = $this->ion_auth->user()->row();
 		$data = [
 			'user' => $user,
 			'judul'	=> 'Ujian',
-			'subjudul' => 'Data Ujian',
+			'subjudul' => 'Data Nilai Ujian',
 			'guru' => $this->ujian->getIdGuru($user->username),
 		];
 		$kelas_id = explode(',', $data['guru']->kelas_id);

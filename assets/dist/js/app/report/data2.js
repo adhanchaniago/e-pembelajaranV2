@@ -64,7 +64,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian0",
+        data: "kuis0",
         "className": "text-center"
       },
       {
@@ -72,7 +72,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian1",
+        data: "kuis1",
         "className": "text-center"
       },
       {
@@ -80,7 +80,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian2",
+        data: "kuis2",
         "className": "text-center"
       },
       {
@@ -88,7 +88,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian3",
+        data: "kuis3",
         "className": "text-center"
       },
       {
@@ -96,7 +96,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian4",
+        data: "kuis4",
         "className": "text-center"
       },
       {
@@ -104,7 +104,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian5",
+        data: "kuis5",
         "className": "text-center"
       },
       {
@@ -112,7 +112,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian6",
+        data: "kuis6",
         "className": "text-center"
       },
       {
@@ -120,7 +120,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian7",
+        data: "kuis7",
         "className": "text-center"
       },
       {
@@ -128,7 +128,7 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian8",
+        data: "kuis8",
         "className": "text-center"
       },
       {
@@ -136,15 +136,15 @@ $(document).ready(function () {
         "className": "text-center"
       },
       {
-        data: "ujian9",
+        data: "kuis9",
         "className": "text-center"
       },
       {
-        data: "uts",
+        data: "nilai_uts",
         "className": "text-center"
       },
       {
-        data: "uas",
+        data: "nilai_uas",
         "className": "text-center"
       }
     ],
