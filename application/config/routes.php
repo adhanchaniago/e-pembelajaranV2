@@ -54,6 +54,18 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'Auth/index';
 $route['logout'] = 'Auth/logout';
+
+// kuis
 $route['kuis/master'] = 'tugas/master_kuis';
-$route['hasilkuis'] = 'hasiltugas/index_kuis';
 $route['kuis/list'] = 'tugas/list_kuis';
+$route['kuis/add'] = 'tugas/add_kuis';
+$route['kuis/edit/(:num)'] = 'tugas/edit_kuis/$1';
+$route['kuis'] = 'tugas/index_kuis/$1';
+$route['kuis/token/(:num)'] = 'tugas/token_kuis/$1';
+
+// hasil kuis
+$route['hasilkuis'] = 'hasiltugas/index_kuis';
+$route['hasilkuis/detail/(:num)'] = 'hasiltugas/detail_kuis/$1';
+$route['hasilkuis/essay/(:num)'] = 'hasiltugas/essay_kuis/$1';
+$route['hasilkuis/cetak/(:num)'] = 'hasiltugas/cetak_kuis/$1';
+$route['hasilkuis/cetak_detail/(:num)'] = 'hasiltugas/cetak_detail_kuis/$1';

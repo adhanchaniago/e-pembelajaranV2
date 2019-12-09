@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <?= form_open('tugas/save', array('id' => 'formtugas'), array('method' => 'add', 'guru_id' => $guru->id_guru, 'mapel_id' => $mapel->mapel_id)) ?>
+                <?= form_open('tugas/save', array('id' => 'formtugas'), array('method' => 'add', 'guru_id' => $guru->id_guru, 'mapel_id' => $mapel->mapel_id, 'jenis_tugas' => 'tugas')) ?>
                 <div class="form-group">
                     <label for="nama_tugas">Nama Tugas</label>
                     <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Tugas" type="text" class="form-control" name="nama_tugas">

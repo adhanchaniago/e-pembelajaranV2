@@ -9,10 +9,10 @@
     <div class="box-body">
         <div class="row">
             <div class="col-sm-12 mb-4">
-                <a href="<?= base_url() ?>hasilujian" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
+                <a href="<?= base_url() ?>hasilkuis" class="btn btn-flat btn-sm btn-default"><i class="fa fa-arrow-left"></i> Kembali</a>
                 <button type="button" onclick="reload_ajax()" class="btn btn-flat btn-sm bg-purple"><i class="fa fa-refresh"></i> Reload</button>
                 <div class="pull-right">
-                    <a target="_blank" href="<?= base_url() ?>hasilujian/cetak_detail/<?= $this->uri->segment(3) ?>" class="btn bg-maroon btn-flat btn-sm">
+                    <a target="_blank" href="<?= base_url() ?>hasilkuis/cetak_detail/<?= $this->uri->segment(3) ?>" class="btn bg-maroon btn-flat btn-sm">
                         <i class="fa fa-print"></i> Print
                     </a>
                 </div>
@@ -20,24 +20,24 @@
             <div class="col-sm-6">
                 <table class="table w-100">
                     <tr>
-                        <th>Nama Ujian</th>
-                        <td><?= $ujian->nama_ujian ?></td>
+                        <th>Nama Kuis</th>
+                        <td><?= $tugas->nama_tugas ?></td>
                     </tr>
                     <tr>
                         <th>Jumlah Soal</th>
-                        <td><?= $ujian->jumlah_soal ?></td>
+                        <td><?= $tugas->jumlah_soal ?></td>
                     </tr>
                     <tr>
                         <th>Waktu</th>
-                        <td><?= $ujian->waktu ?> Menit</td>
+                        <td><?= $tugas->waktu ?> Menit</td>
                     </tr>
                     <tr>
                         <th>Tanggal Mulai</th>
-                        <td><?= strftime('%A, %d %B %Y', strtotime($ujian->tgl_mulai)) ?></td>
+                        <td><?= strftime('%A, %d %B %Y', strtotime($tugas->tgl_mulai)) ?></td>
                     </tr>
                     <tr>
                         <th>Tanggal Selesai</th>
-                        <td><?= strftime('%A, %d %B %Y', strtotime($ujian->terlambat)) ?></td>
+                        <td><?= strftime('%A, %d %B %Y', strtotime($tugas->terlambat)) ?></td>
                     </tr>
                 </table>
             </div>
@@ -45,11 +45,11 @@
                 <table class="table w-100">
                     <tr>
                         <th>Topik</th>
-                        <td><?= $ujian->nama_topik ?></td>
+                        <td><?= $tugas->nama_topik ?></td>
                     </tr>
                     <tr>
                         <th>Guru</th>
-                        <td><?= $ujian->nama_guru ?></td>
+                        <td><?= $tugas->nama_guru ?></td>
                     </tr>
                     <tr>
                         <th>Nilai Terendah</th>
@@ -99,7 +99,7 @@
 
 <script type="text/javascript">
     var id = '<?= $this->uri->segment(3) ?>';
-    var jenis_soal = '<?= $ujian->jenis_soal ?>';
+    var jenis_soal = '<?= $tugas->jenis_soal ?>';
 </script>
 
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/detail_hasil.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/kuis/detail_hasil.js"></script>

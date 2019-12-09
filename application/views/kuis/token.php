@@ -1,5 +1,5 @@
 <div class="callout callout-info">
-    <h4>Peraturan Ujian!</h4>
+    <h4>Peraturan Kuis!</h4>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime minus dolores accusantium fugiat debitis modi voluptates non consequuntur nemo expedita nihil laudantium commodi voluptatum voluptatem molestiae consectetur incidunt animi, qui exercitationem? Nisi illo, magnam perferendis commodi consequuntur impedit, et nihil excepturi quas iste cum sunt debitis odio beatae placeat nemo..</p>
 </div>
 <div class="box box-primary">
@@ -7,7 +7,7 @@
         <h3 class="box-title">Konfirmasi Data</h3>
     </div>
     <div class="box-body">
-        <span id="id_ujian" data-key="<?= $encrypted_id ?>"></span>
+        <span id="id_kuis" data-key="<?= $encrypted_id ?>"></span>
         <div class="row">
             <div class="col-sm-6">
                 <table class="table table-bordered">
@@ -17,33 +17,33 @@
                     </tr>
                     <tr>
                         <th>Guru</th>
-                        <td><?= $ujian->nama_guru ?></td>
+                        <td><?= $tugas->nama_guru ?></td>
                     </tr>
                     <tr>
                         <th>Kelas/Jurusan</th>
                         <td><?= $mhs->nama_kelas ?> / <?= $mhs->nama_jurusan ?></td>
                     </tr>
                     <tr>
-                        <th>Nama Ujian</th>
-                        <td><?= $ujian->nama_ujian ?></td>
+                        <th>Nama Kuis</th>
+                        <td><?= $tugas->nama_tugas ?></td>
                     </tr>
                     <tr>
                         <th>Topik</th>
-                        <td><?= $ujian->nama_topik ?></td>
+                        <td><?= $tugas->nama_topik ?></td>
                     </tr>
                     <tr>
                         <th>Jumlah Soal</th>
-                        <td><?= $ujian->jumlah_soal ?></td>
+                        <td><?= $tugas->jumlah_soal ?></td>
                     </tr>
                     <tr>
                         <th>Waktu</th>
-                        <td><?= $ujian->waktu ?> Menit</td>
+                        <td><?= $tugas->waktu ?> Menit</td>
                     </tr>
                     <tr>
                         <th>Deadline</th>
                         <td>
-                            <?= strftime('%d %B %Y', strtotime($ujian->terlambat)) ?>
-                            <?= date('H:i:s', strtotime($ujian->terlambat)) ?>
+                            <?= strftime('%d %B %Y', strtotime($tugas->terlambat)) ?>
+                            <?= date('H:i:s', strtotime($tugas->terlambat)) ?>
                         </td>
                     </tr>
                     <tr>
@@ -59,32 +59,32 @@
                     <div class="box-body pb-0">
                         <div class="callout callout-info">
                             <p>
-                                Waktu boleh mengerjakan ujian adalah saat tombol "MULAI" berwarna hijau.
+                                Waktu boleh mengerjakan kuis adalah saat tombol "MULAI" berwarna hijau.
                             </p>
                         </div>
                         <?php
-                        $mulai = strtotime($ujian->tgl_mulai);
-                        $terlambat = strtotime($ujian->terlambat);
+                        $mulai = strtotime($tugas->tgl_mulai);
+                        $terlambat = strtotime($tugas->terlambat);
                         $now = time();
                         if ($mulai > $now) :
                             ?>
                             <div class="callout callout-success">
-                                <strong><i class="fa fa-clock-o"></i> Ujian akan dimulai pada</strong>
+                                <strong><i class="fa fa-clock-o"></i> Kuis akan dimulai pada</strong>
                                 <br>
-                                <span class="countdown" data-time="<?= date('Y-m-d H:i:s', strtotime($ujian->tgl_mulai)) ?>">00 Hari, 00 Jam, 00 Menit, 00 Detik</strong><br />
+                                <span class="countdown" data-time="<?= date('Y-m-d H:i:s', strtotime($tugas->tgl_mulai)) ?>">00 Hari, 00 Jam, 00 Menit, 00 Detik</strong><br />
                             </div>
                         <?php elseif ($terlambat > $now) : ?>
-                            <button id="btncek" data-id="<?= $ujian->id_ujian ?>" class="btn btn-success btn-lg mb-4">
+                            <button id="btncek" data-id="<?= $tugas->id_tugas ?>" class="btn btn-success btn-lg mb-4">
                                 <i class="fa fa-pencil"></i> Mulai
                             </button>
                             <div class="callout callout-danger">
-                                <i class="fa fa-clock-o"></i> <strong class="countdown" data-time="<?= date('Y-m-d H:i:s', strtotime($ujian->terlambat)) ?>">00 Hari, 00 Jam, 00 Menit, 00 Detik</strong><br />
+                                <i class="fa fa-clock-o"></i> <strong class="countdown" data-time="<?= date('Y-m-d H:i:s', strtotime($tugas->terlambat)) ?>">00 Hari, 00 Jam, 00 Menit, 00 Detik</strong><br />
                                 Batas waktu menekan tombol mulai.
                             </div>
                         <?php else : ?>
                             <div class="callout callout-danger">
                                 Waktu untuk menekan tombol <strong>"MULAI"</strong> sudah habis.<br />
-                                Silahkan hubungi guru anda untuk bisa mengikuti ujian pengganti.
+                                Silahkan hubungi guru anda untuk bisa mengikuti kuis pengganti.
                             </div>
                         <?php endif; ?>
                     </div>
@@ -94,4 +94,4 @@
     </div>
 </div>
 
-<script src="<?= base_url() ?>assets/dist/js/app/ujian/token.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/app/kuis/token.js"></script>
