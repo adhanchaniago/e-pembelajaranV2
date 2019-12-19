@@ -142,6 +142,7 @@ class HasilTugas extends CI_Controller
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+
 	public function dummy_essay($id)
 	{
 		$essay = $this->tugas->getHasilEssay($id)->row();
