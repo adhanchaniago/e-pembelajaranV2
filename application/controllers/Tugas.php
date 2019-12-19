@@ -12,6 +12,7 @@ class Tugas extends CI_Controller
 		if (!$this->ion_auth->logged_in()) {
 			redirect('auth');
 		}
+
 		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->helper('my');
 		// $this->load->model('Master_model', 'master');
