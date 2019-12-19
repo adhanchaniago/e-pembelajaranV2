@@ -160,7 +160,7 @@ class Siswa extends CI_Controller
 		$additional_data = [
 			'first_name'	=> $first_name,
 			'last_name'		=> $last_name
-		];
+		]; 
 		$group = array('3'); // Sets user to guru.
 
 		if ($this->ion_auth->username_check($username)) {
