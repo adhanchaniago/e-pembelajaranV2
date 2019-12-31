@@ -1,52 +1,54 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Users extends CI_Controller {
+class Users extends CI_Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
-		if (!$this->ion_auth->logged_in()){
+		if (!$this->ion_auth->logged_in()) {
 			redirect('auth');
 		}
-		$this->load->library(['datatables', 'form_validation']);// Load Library Ignited-Datatables
+		$this->load->library(['datatables', 'form_validation']); // Load Library Ignited-Datatables
 		$this->load->model('Users_model', 'users');
 		$this->load->model('Master_model', 'master');
-		$this->form_validation->set_error_delimiters('','');
+		$this->form_validation->set_error_delimiters('', '');
 	}
-	
+
 	public function is_admin()
 	{
-		if (!$this->ion_auth->is_admin()){
-			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="'.base_url('dashboard').'">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
+		if (!$this->ion_auth->is_admin()) {
+			show_error('Hanya Administrator yang diberi hak untuk mengakses halaman ini, <a href="' . base_url('dashboard') . '">Kembali ke menu awal</a>', 403, 'Akses Terlarang');
 		}
 	}
 
 	public function output_json($data, $encode = true)
 	{
-        if($encode) $data = json_encode($data);
-        $this->output->set_content_type('application/json')->set_output($data);
+		if ($encode) $data = json_encode($data);
+		$this->output->set_content_type('application/json')->set_output($data);
 	}
-	
 
-    public function data($id = null)
-    {
+
+	public function data($id = null)
+	{
 		$this->is_admin();
-        $this->output_json($this->users->getDataUsers($id), false);
-    }
+		$this->output_json($this->users->getDataUsers($id), false);
+	}
 
-    public function index()
+	public function index()
 	{
 		$this->is_admin();
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'User Management',
-			'subjudul'=> 'Data User'
+			'subjudul' => 'Data User'
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('users/data');
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
-	
+
 	public function edit($id)
 	{
 		$level = $this->ion_auth->get_users_groups($id)->result();
@@ -60,7 +62,7 @@ class Users extends CI_Controller {
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('users/edit');
-		$this->load->view('_templates/dashboard/_footer.php');		
+		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
 	public function edit_info()
@@ -72,11 +74,12 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('last_name', 'Last Name', 'required');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 		} else {
-			$this->form_validation->set_rules('fullname', 'Name', 'required');
+			$this->form_validation->set_rules('first_name', 'First Name', 'required');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'required');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 		}
 
-		if($this->form_validation->run()===FALSE){
+		if ($this->form_validation->run() === FALSE) {
 			$data['status'] = false;
 			$data['errors'] = [
 				'username' => form_error('username'),
@@ -84,7 +87,7 @@ class Users extends CI_Controller {
 				'last_name' => form_error('last_name'),
 				'email' => form_error('email'),
 			];
-		}else{
+		} else {
 			$id = $this->input->post('id', true);
 			if ($this->ion_auth->is_admin()) {
 				$input = [
@@ -93,12 +96,12 @@ class Users extends CI_Controller {
 					'last_name'		=> $this->input->post('last_name', true),
 					'email'			=> $this->input->post('email', true)
 				];
-			} elseif ($this->ion_auth->in_group('guru')) {
-				$nama = explode(' ', $this->input->post('fullname', true));
-				$first_name = $nama[0];
-				$last_name = end($nama);
+			} else if ($this->ion_auth->in_group('guru')) {
+				$first_name =  $this->input->post('first_name', true);
+				$last_name = $this->input->post('last_name', true);
+				$fullname = $first_name . '' . $last_name;
 				$input_guru = [
-					'nama_guru'			=> $this->input->post('fullname', true),
+					'nama_guru'		=> $fullname,
 					'email'			=> $this->input->post('email', true)
 				];
 
@@ -108,26 +111,24 @@ class Users extends CI_Controller {
 					'email'			=> $this->input->post('email', true)
 				];
 
-				$this->master->update('guru', $input_guru, 'id_user', $id);
-
-			} else {
-				$nama = explode(' ', $this->input->post('fullname', true));
-				$first_name = $nama[0];
-				$last_name = end($nama);
+				$this->master->update('guru', $input_guru, 'nip', $id);
+			} else if ($this->ion_auth->in_group('siswa')) {
+				$first_name =  $this->input->post('first_name', true);
+				$last_name = $this->input->post('last_name', true);
+				$fullname = $first_name . ' ' . $last_name;
 				$input_siswa = [
-					'nama'			=> $this->input->post('fullname', true),
+					'nama'			=> $fullname,
 					'email'			=> $this->input->post('email', true)
 				];
-
 				$input = [
 					'first_name'	=> $first_name,
 					'last_name'		=> $last_name,
 					'email'			=> $this->input->post('email', true)
 				];
 
-				$this->master->update('siswa', $input_siswa, 'id_user', $id);
+				$this->master->update('siswa', $input_siswa, 'nis', $id);
 			}
-			$update = $this->master->update('users', $input, 'id', $id);
+			$update = $this->master->update('users', $input, 'username', $id);
 
 			$data['status'] = $update ? true : false;
 		}
@@ -138,13 +139,13 @@ class Users extends CI_Controller {
 	{
 		$this->is_admin();
 		$this->form_validation->set_rules('status', 'Status', 'required');
-		
-		if($this->form_validation->run()===FALSE){
+
+		if ($this->form_validation->run() === FALSE) {
 			$data['status'] = false;
 			$data['errors'] = [
 				'status' => form_error('status'),
 			];
-		}else{
+		} else {
 			$id = $this->input->post('id', true);
 			$input = [
 				'active' 		=> $this->input->post('status', true),
@@ -154,18 +155,18 @@ class Users extends CI_Controller {
 		}
 		$this->output_json($data);
 	}
-	
+
 	public function edit_level()
 	{
 		$this->is_admin();
 		$this->form_validation->set_rules('level', 'Level', 'required');
-		
-		if($this->form_validation->run()===FALSE){
+
+		if ($this->form_validation->run() === FALSE) {
 			$data['status'] = false;
 			$data['errors'] = [
 				'level' => form_error('level'),
 			];
-		}else{
+		} else {
 			$id = $this->input->post('id', true);
 			$input = [
 				'group_id' 		=> $this->input->post('level', true),
@@ -181,8 +182,8 @@ class Users extends CI_Controller {
 		$this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
 		$this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[new_confirm]');
 		$this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
-		
-		if ($this->form_validation->run() === FALSE){
+
+		if ($this->form_validation->run() === FALSE) {
 			$data = [
 				'status' => false,
 				'errors' => [
@@ -191,13 +192,12 @@ class Users extends CI_Controller {
 					'new_confirm' => form_error('new_confirm')
 				]
 			];
-		}else{
+		} else {
 			$identity = $this->session->userdata('identity');
 			$change = $this->ion_auth->change_password($identity, $this->input->post('old'), $this->input->post('new'));
-			if($change){
+			if ($change) {
 				$data['status'] = true;
-			}
-			else{
+			} else {
 				$data = [
 					'status' 	=> false,
 					'msg'		=> $this->ion_auth->errors()
