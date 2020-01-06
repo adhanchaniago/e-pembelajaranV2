@@ -21,7 +21,7 @@ class Tugas extends CI_Controller
 		$this->load->model('Tugas_model', 'tugas');
 		$this->load->model('Kuis_model', 'kuis');
 		$this->form_validation->set_error_delimiters('', '');
-
+		$this->load->library('unit_test');
 		$this->user = $this->ion_auth->user()->row();
 		$this->mhs 	= $this->tugas->getIdSiswa($this->user->username);
 	}
@@ -227,7 +227,6 @@ class Tugas extends CI_Controller
 		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
 		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
 		$this->form_validation->set_rules('jenis_soal', 'Tipe Soal', 'required|in_list[pilgan,essay]');
-		$this->form_validation->set_rules('soal', 'Soal', 'required');
 	}
 
 	// save tugas
@@ -999,4 +998,173 @@ class Tugas extends CI_Controller
 			$this->output_json(['status' => TRUE, 'data' => $d_update, 'id' => $id_tes]);
 		}
 	}
+
+	//===============================================================
+	//-----------------------PENGUJIAN UNIT 2------------------------
+	//===============================================================
+
+	public function save_kuis_test($m = 24, $t = 13, $n = null, $j = null)
+	{
+		$this->load->helper('string');
+		$form = array(
+			'mapel_id' => $m,
+			'topik' => $t,
+			'jenis_soal' => $j,
+			'guru_id' => 11,
+			'nama_tugas' => $n,
+			'jumlah_soal' => 1,
+			'tgl_mulai' => '2020-01-05 12:14:47',
+			'tgl_selesai' => '2020-01-06 12:14:47',
+			'waktu' => 5,
+			'jenis_tugas' => 'tugas',
+			'jenis' => 'acak',
+			'id_soal' => 4,
+			'token' => strtoupper(random_string('alpha', 5))
+		);
+		$this->form_validation->set_data($form);
+		if ($form['jenis_soal'] == 'pilgan') {
+			$this->validasi($form['mapel_id'], $form['topik']);
+			$this->form_validation->set_rules('waktu', 'Waktu', 'required|integer|max_length[4]|greater_than[0]');
+		} else {
+			$this->validasi_essay();
+			$this->form_validation->set_rules('waktu', 'Waktu', 'required|integer|max_length[4]|greater_than[0]');
+		}
+		$mapel_id 		= $form['mapel_id'];
+		$topik_id	 	= $form['topik'];
+		$guru_id 		= $form['guru_id'];
+		$nama_tugas 	= $form['nama_tugas'];
+		$jumlah_soal 	= $form['jumlah_soal'];
+		$tgl_mulai 		= $form['tgl_mulai'];
+		$tgl_selesai	= $form['tgl_selesai'];
+		$waktu			= $form['waktu'];
+		$jenis_tugas	= $form['jenis_tugas'];
+		$jenis_soal		= $form['jenis_soal'];
+		$jenis			= $form['jenis'];
+		$id_soal		= $form['id_soal'];
+		$token 			= $form['token'];
+
+		if ($this->form_validation->run() === FALSE) {
+			$data['status'] = false;
+			$data['errors'] = [
+				'nama_tugas' 	=> form_error('nama_tugas'),
+				'topik'		 	=> form_error('topik'),
+				'jumlah_soal' 	=> form_error('jumlah_soal'),
+				'tgl_mulai' 	=> form_error('tgl_mulai'),
+				'tgl_selesai' 	=> form_error('tgl_selesai'),
+				'waktu' 		=> form_error('waktu'),
+				'jenis_soal'	=> form_error('jenis_soal'),
+				'jenis' 		=> form_error('jenis')
+			];
+		} else {
+			if ($jenis_soal == 'pilgan') {
+				$input = [
+					'nama_tugas' 	=> $nama_tugas,
+					'topik_id'	 	=> $topik_id,
+					'tgl_mulai' 	=> $tgl_mulai,
+					'terlambat' 	=> $tgl_selesai,
+					'waktu' 		=> $waktu,
+					'jumlah_soal' 	=> $jumlah_soal,
+					'jenis_tugas'	=> $jenis_tugas,
+					'jenis_soal'	=> $jenis_soal,
+					'jenis' 		=> $jenis,
+				];
+			} else {
+				$input = [
+					'nama_tugas' 	=> $nama_tugas,
+					'topik_id'	 	=> $topik_id,
+					'tgl_mulai' 	=> $tgl_mulai,
+					'terlambat' 	=> $tgl_selesai,
+					'waktu' 		=> $waktu,
+					'jumlah_soal' 	=> 1,
+					'jenis_tugas'	=> $jenis_tugas,
+					'jenis_soal'	=> $jenis_soal,
+					'id_soal_essay'	=> $id_soal,
+				];
+			}
+			$input['guru_id']	= $guru_id;
+			$input['mapel_id'] 	= $mapel_id;
+			$input['token']		= $token;
+			$action = $this->tugas->create('tugas', $input);
+
+			$data['status'] = $action ? TRUE : FALSE;
+		}
+		return $data;
+	}
+
+	public function unit_test_B_1() //TEST CASE 1 : JENIS SOAL PILGAN, TAPI JUDUL TIDAK DIISI (GAGAL)
+	{
+		$test = $this->save_kuis_test(24, 13, null, "pilgan");  //isi parameter 1 dengan mapel id, parameter 2 dengan topik id, parameter 3 dengan judul tp dikosongi, parmeter 4 "pilgan"
+		// print_r($test);
+		$data['status'] = FALSE;
+		$data['errors'] = [
+			'nama_tugas' 	=> "The Nama Tugas/Kuis field is required.",
+			'topik'		 	=> "",
+			'jumlah_soal' 	=> "",
+			'tgl_mulai' 	=> "",
+			'tgl_selesai' 	=> "",
+			'waktu' 		=> "",
+			'jenis_soal'	=> "",
+			'jenis' 		=> ""
+		];
+		$expected_result = $data;
+		$test_name = 'TAMBAH TUGAS GAGAL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+
+
+	public function unit_test_B_2()  //TEST CASE 1 : JENIS SOAL ESSAY, TAPI JUDUL TIDAK DIISI (GAGAL)
+	{
+		$test = $this->save_kuis_test(24, 13, null, "essay"); //isi parameter 1 dengan mapel id, parameter 2 dengan topik id, parameter 3 dengan judul tp dikosongi, parmeter 4 "essay"
+		// print_r($test);
+		$data['status'] = FALSE;
+		$data['errors'] = [
+			'nama_tugas' 	=> "The Nama Tugas/Kuis field is required.",
+			'topik'		 	=> "",
+			'jumlah_soal' 	=> "",
+			'tgl_mulai' 	=> "",
+			'tgl_selesai' 	=> "",
+			'waktu' 		=> "",
+			'jenis_soal'	=> "",
+			'jenis' 		=> ""
+		];
+		$expected_result = $data;
+		$test_name = 'TAMBAH TUGAS GAGAL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	public function unit_test_B_3()  //TEST CASE 1 : JENIS SOAL PILGAN (BERHASIL)
+	{
+		$test = $this->save_kuis_test(24, 13, "KD 1 Pilgan", "pilgan"); //isi parameter 1 dengan mapel id, parameter 2 dengan topik id, parameter 3 dengan judul "KD 1 Pilgan", parmeter 4 "pilgan"
+		// print_r($test);
+		$data['status'] = TRUE;
+
+		$expected_result = $data;
+		$test_name = 'TAMBAH TUGAS BERHASIL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	public function unit_test_B_4() //TEST CASE 1 : JENIS SOAL ESSAY (BERHASIL)
+	{
+		$test = $this->save_kuis_test(24, 13, "KD 1 Essay", "essay"); //isi parameter 1 dengan mapel id, parameter 2 dengan topik id, parameter 3 dengan judul "KD 1 Essay", parmeter 4 "essay"
+		// print_r($test);
+		$data['status'] = TRUE;
+
+		$expected_result = $data;
+		$test_name = 'TAMBAH TUGAS BERHASIL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	/** DISCLAIMER : DI CLASS INI ADA 1 PENGUJIAN UNIT SAJA
+	 *  
+	 * CARA MELAKUKAN PENGUJIAN UNIT:
+	 * 
+	 * 1. ISI PARAMETER SESUAI PETUNJUK
+	 * 2. JALANKAN DI BROWSER DENGAN ALAMAT http://localhost/epembelajaranV2/{nama controller}/{unit test yg mau diuji}
+	 * 	 contoh : http://localhost/epembelajaranV2/tugas/unit_test_B_1
+	 * 3. variabel $test menampung hasil pengujian
+	 *  	 variabel $expected_result menampung hasil yang diharapkan
+	 *  	 variabel $test_name menampung nama pengujian (bisa diisi bebas)
+	 * 	 $this->unit->run() berfungsi untuk menjalankan library unit_test pada CI
+	 */
 }

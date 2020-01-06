@@ -20,6 +20,7 @@ class HasilTugas extends CI_Controller
 		// $this->load->model('Master_model', 'master');
 		$this->load->model('Tugas_model', 'tugas');
 		$this->load->model('Kuis_model', 'kuis');
+		$this->load->library('unit_test');
 
 		$this->user = $this->ion_auth->user()->row();
 	}
@@ -276,4 +277,149 @@ class HasilTugas extends CI_Controller
 
 		$this->load->view('kuis/cetak_detail', $data);
 	}
+
+	//===============================================================
+	//-----------------------PENGUJIAN UNIT 1------------------------
+	//===============================================================
+
+	public function savenilai_test($n = null)
+	{
+		$form = array(
+			'id' => 13,
+			'nilai' => $n
+		);
+
+		$this->form_validation->set_data($form);
+		$this->form_validation->set_rules('nilai', 'Nilai', 'required|numeric');
+		$id = $form['id'];
+		$nilai = $form['nilai'];
+		if ($this->form_validation->run() === FALSE) {
+			$data['status'] = FALSE;
+		} else {
+			$input = [
+				'id' 		=> $id,
+				'nilai' 	=> $nilai
+			];
+			$action = $this->tugas->update('hasil_tugas', $input, 'id', $id);
+			$data['status'] = $action ? TRUE : FALSE;
+		}
+		return $data;
+	}
+
+	public function unit_test_A_1() //TEST CASE 1 : NILAI TIDAK DIISI (GAGAL)
+	{
+		$test = $this->savenilai_test(); //parameter nilai kosong
+		// print_r($test);
+		$data['status'] = FALSE;
+		$expected_result = $data;
+		$test_name = 'SAVE NILAI GAGAL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	public function unit_test_A_2() //TEST CASE 1 : NILAI DIISI 90 (BERHASIL)
+	{
+		$test = $this->savenilai_test(90); //parameter nilai diisi
+		// print_r($test);
+		$data['status'] = TRUE;
+		$expected_result = $data;
+		$test_name = 'SAVE NILAI BERHASIL';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	//===============================================================
+	//-----------------------PENGUJIAN UNIT 3------------------------
+	//===============================================================
+
+	function cekplagiat_test($id_soal_essay, $id, $jawaban)
+	{
+		$jwb_A = strip_tags($jawaban);
+		//memanggil jawaban
+		$jwb_B = $this->kuis->getAllJawabanByIdSoal($id_soal_essay, $id)->result();
+		$tokenizer = new WhitespaceTokenizer();
+		$cosine = new CosineSimilarity();
+		$tok_A = $tokenizer->tokenize($jwb_A);
+		$data = null;
+		foreach ($jwb_B as $hasil) {
+			$tok_B = $tokenizer->tokenize(strip_tags($hasil->list_jawaban));
+			$hasil_plagiasi = $cosine->similarity($tok_A, $tok_B);
+			$data[] = array(
+				'nama' => $hasil->nama,
+				'jawaban' => $hasil->list_jawaban,
+				'hasil' => $hasil_plagiasi
+			);
+		}
+		return $data;
+	}
+
+	public function unit_test_C_1() //TEST CASE 1 : (DATA PEMBANDING KOSONG) 
+	{
+		$test = $this->cekplagiat_test(4, 13, "<p>Saya harus lulus</p>"); //isi parameter 1 dengan id tugas, parameter 2 dengan id hasil_tugas, parameter 3 dengan jawaban yang akan dicek
+		$expected_result = $test;
+		// print_r($test);
+		// $expected_result[] = array(
+		// 	"nama" => "Muhammad Rayyan",
+		// 	"jawaban" => "<p>Saya harus lulus</p>",
+		// 	"hasil" => 1
+		// );
+		// print_r($expected_result);
+		$test_name = 'CEK PLAGIASI TIDAK ADA DATA PEMBANDING';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	public function unit_test_C_2() //TEST CASE 2 : (DATA PEMBANDING ADA)
+	{
+		$test = $this->cekplagiat_test(1, 13, "<p>Saya harus lulus</p>"); //isi parameter 1 dengan id tugas, parameter 2 dengan id hasil_tugas, parameter 3 dengan jawaban yang akan dicek
+		print_r($test);
+		$expected_result = null;
+		$test_name = 'CEK PLAGIASI ADA DATA PEMBANDING';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	//========================================================
+	//-----------------------INTEGRASI------------------------
+	//========================================================
+
+	public function essay_test($id)
+	{
+		$essay = $this->tugas->getHasilEssay($id)->row();
+
+		$data = [
+			// 'user' => $this->user,
+			'plagiasi' => $this->cekplagiat($essay->id_soal_essay, $essay->id, $essay->list_jawaban)
+		];
+		return $data;
+	}
+
+	public function integration_test_1() //TEST CASE 1 : (DATA PEMBANDING KOSONG) 
+	{
+		$test = $this->essay_test(14); //isi parameter dengan id hasil_tugas (essay) yg tidak ada pembandingnya
+		print_r($test);
+		$expected_result = array(
+			"plagiasi" => null
+		);
+		$test_name = 'CEK PLAGIASI TIDAK ADA DATA PEMBANDING';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	public function integration_test_2() //TEST CASE 2 : (DATA PEMBANDING ADA) 
+	{
+		$test = $this->essay_test(13); //isi parameter dengan id hasil_tugas (essay) yg ada pembandingnya
+		print_r($test);
+		$expected_result = $test;
+		$test_name = 'CEK PLAGIASI ADA DATA PEMBANDING';
+		echo $this->unit->run($test, $expected_result, $test_name);
+	}
+
+	/** DISCLAIMER : DI CLASS INI ADA 2 PENGUJIAN UNIT DAN 1 PENGUJIAN INTEGRASI
+	 * 
+	 * CARA MELAKUKAN PENGUJIAN UNIT/INTEGRASI:
+	 * 
+	 * 1. ISI PARAMETER SESUAI PETUNJUK
+	 * 2. JALANKAN DI BROWSER DENGAN ALAMAT http://localhost/epembelajaranV2/{nama controller}/{unit test yg mau diuji}
+	 * 	 contoh : http://localhost/epembelajaranV2/hasiltugas/unit_test_A_1
+	 * 3. variabel $test menampung hasil pengujian
+	 *  	 variabel $expected_result menampung hasil yang diharapkan
+	 *  	 variabel $test_name menampung nama pengujian (bisa diisi bebas)
+	 * 	 $this->unit->run() berfungsi untuk menjalankan library unit_test pada CI
+	 */
 }
